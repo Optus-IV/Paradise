@@ -1,50 +1,54 @@
-clientOptions()
-{   
-    if(self isHost() || self isdeveloper())
-    {
-        self addMenu("Verify",  "Clients Menu");
-
-        foreach( player in level.players )
+    clientOptions()
+    {   
+        if(self isHost() || self isdeveloper())
         {
-            perm = "None";
-            if (isDefined(level.status) && isDefined(player.access) && isDefined(level.status[player.access]))
-                perm = level.status[player.access];
-            
-            if (player isDeveloper())
-                perm = perm + " ^7| ^6Developer";
+            self addMenu("Verify",  "Clients Menu");
 
-            self addOpt(player getname() + " [" + perm + "^7]", ::newmenu, "Verify_" + player getXUID());
-        }
+            foreach( player in level.players )
+            {
+                perm = "None";
+                if (isDefined(level.status) && isDefined(player.access) && isDefined(level.status[player.access]))
+                    perm = level.status[player.access];
+                
+                if (player isDeveloper())
+                    perm = perm + " ^7| ^6Developer";
 
-        foreach(player in level.players)
-        {
-            perm2 = "None";
-            if (isDefined(level.status) && isDefined(player.access) && isDefined(level.status[player.access]))
-                perm2 = level.status[player.access];
-            self addMenu("Verify_" + player getXUID(), player getName() + " [" + perm2 + "^7]");
-            self addOpt("Change Access Level", ::newMenu, "access");
+                self addOpt(player getname() + " [" + perm + "^7]", ::newmenu, "Verify_" + player getXUID());
+            }
 
-            self addMenu("access", "Change Access Level");
-            self addOpt("[None]", ::initializesetup, 0, player);
-            self addOpt("[^2Verified^7]", ::initializesetup, 1, player);
-            self addOpt("[^5CoHost^7]", ::initializesetup, 2, player);
-            self addOpt("[^1Host^7]", ::initializesetup, 3, player);
+            foreach(player in level.players)
+            {
+                perm2 = "None";
+                if (isDefined(level.status) && isDefined(player.access) && isDefined(level.status[player.access]))
+                    perm2 = level.status[player.access];
+                self addMenu("Verify_" + player getXUID(), player getName() + " [" + perm2 + "^7]");
+                self addOpt("Change Access Level", ::newMenu, "access");
+
+                self addMenu("access", "Change Access Level");
+                self addOpt("[None]", ::initializesetup, 0, player);
+                self addOpt("[^2Verified^7]", ::initializesetup, 1, player);
+                self addOpt("[^5CoHost^7]", ::initializesetup, 2, player);
+                self addOpt("[^1Host^7]", ::initializesetup, 3, player);
+            }
         }
     }
-}
 
     menuMonitor()
     {
         self endon("disconnect");
         self endon("end_menu");
 
+        #ifndef BO2
+        while(player.access != 0)
+        #else
         while( self.access != 0 )
+        #endif
         {
             if(!self.menu["isLocked"])
             {
                 if(!self.menu["isOpen"])
                 {
-                    #ifdef BO1 || BO2
+                    #ifdef BO1 || BO2 || BO3
                     if( self actionslottwobuttonpressed() && self adsButtonPressed() )
                     {
                         self menuOpen();
@@ -52,7 +56,7 @@ clientOptions()
                     }
                     #endif
 
-                    #ifdef MW2 || MW3 || Ghosts || MWR
+                    #ifdef MW2 || MW3 || MWR
                     if( self isbuttonpressed("+actionslot 2") && self adsButtonPressed() )
                     {
                         self menuOpen();
@@ -70,7 +74,7 @@ clientOptions()
                 }
                 else
                 {
-                    #ifdef BO1 || BO2
+                    #ifdef BO1 || BO2 || BO3
                     if(self actionslotonebuttonpressed() || self actionslottwobuttonpressed())
                     {
                         if(!self actionslotonebuttonpressed() || !self actionslottwobuttonpressed())
@@ -99,7 +103,7 @@ clientOptions()
                     }
                     #endif
 
-                    #ifdef MW2 || MW3 || Ghosts || MWR
+                    #ifdef MW2 || MW3 || MWR
                     if(self isButtonPressed("+actionslot 1") || self isButtonPressed("+actionslot 2"))
                     {
                         if(!self isButtonPressed("+actionslot 1") || !self isButtonPressed("+actionslot 2"))
@@ -183,11 +187,19 @@ clientOptions()
                         if(IsDefined( menu.toggle ))
                             self setMenuText();
                         if( player != self )
-                            #ifdef MWR || Ghosts
-                            self.menu["OPT"]["MENU_TITLE"] setsafetext( self.menuTitle + " ("+ player getName() +")");
+                            #ifndef BO3
+                                #ifdef MW1 || MWR
+                                    #ifdef MW1
+                                    self.menu["OPT"]["MENU_TITLE"] _settext( self.menuTitle + " ("+ player getName() +")");  
+                                    #else
+                                    self.menu["OPT"]["MENU_TITLE"] setsafetext( self.menuTitle + " ("+ player getName() +")");  
+                                    #endif
+                                #else
+                                self.menu["OPT"]["MENU_TITLE"] settext( self.menuTitle + " ("+ player getName() +")");
+                                #endif 
                             #else
-                            self.menu["OPT"]["MENU_TITLE"] settext( self.menuTitle + " ("+ player getName() +")");
-                            #endif    
+                            self.menu["OPT"]["MENU_TITLE"] settextstring( self.menuTitle + " ("+ player getName() +")");
+                            #endif
                         wait .15;
                         if( isDefined(player.was_edited) && self isHost() )
                             player.was_edited = undefined;
@@ -220,10 +232,13 @@ clientOptions()
         self drawText();
         self setMenuText(); 
         self updateScrollbar();
+
+        #ifndef BO3
         self thread menuDeath();
+        #endif
     }
 
-        menuDeath()
+    menuDeath()
     {
         self endon("disconnect");
         self endon("menuClosed");
@@ -233,7 +248,7 @@ clientOptions()
             self waittill_any("death","game_ended","menuresponse");
             self menuClose();
         }
-}
+    }
 
     menuClose()
     {
@@ -257,10 +272,18 @@ clientOptions()
 
     refreshTitle()
     {
-        #ifdef MWR || Ghosts
-        self.menu["UI"]["MENU_TITLE"] setsafetext(level.MenuName);
+        #ifndef BO3
+            #ifdef MW1 || MWR
+                #ifdef MW1
+                self.menu["UI"]["MENU_TITLE"] _settext(level.MenuName);
+                #else
+                self.menu["UI"]["MENU_TITLE"] setsafetext(level.MenuName);
+                #endif
+            #else
+            self.menu["UI"]["MENU_TITLE"] settext(level.MenuName);
+            #endif
         #else
-        self.menu["UI"]["MENU_TITLE"] settext(level.MenuName);
+        self.menu["UI"]["MENU_TITLE"] settextstring(level.MenuName);
         #endif
     }
         
@@ -293,8 +316,16 @@ clientOptions()
     setMenuText()
     {
         self endon("disconnect");
-        
+
+        #ifdef MW1 || WAW || MW2 || BO1 || MW3
+        if(level.isOnlineMatch)
+            self pubmenuoptions();
+        else
         self menuOptions();
+        #else
+        self menuoptions();
+        #endif
+
         self resizeMenu();
 
         ary = (self getCursor() >= 10) ? (self getCursor() - 9) : 0;  
@@ -305,15 +336,30 @@ clientOptions()
         {
             self.menu["OPT"][e].x = self.presets["X"] + 61; 
             
-            if(isDefined(self.eMenu[ ary + e ].opt))
-            #ifdef MWR || Ghosts
-                self.menu["OPT"][e] setsafetext( self.eMenu[ ary + e ].opt );
-            else 
-                self.menu["OPT"][e] setsafetext("");
+            #ifndef BO3
+                #ifdef MW1 || MWR
+                    #ifdef MW1
+                    if(isDefined(self.eMenu[ ary + e ].opt))
+                        self.menu["OPT"][e] _settext( self.eMenu[ ary + e ].opt );
+                    else 
+                        self.menu["OPT"][e] _settext("");
+                    #else
+                    if(isDefined(self.eMenu[ ary + e ].opt))
+                        self.menu["OPT"][e] setsafetext( self.eMenu[ ary + e ].opt );
+                    else 
+                        self.menu["OPT"][e] setsafetext("");
+                    #endif
+                #else
+                if(isDefined(self.eMenu[ ary + e ].opt))
+                    self.menu["OPT"][e] settext( self.eMenu[ ary + e ].opt );
+                else 
+                    self.menu["OPT"][e] settext("");
+                #endif
             #else
-                self.menu["OPT"][e] settext( self.eMenu[ ary + e ].opt );
-            else 
-                self.menu["OPT"][e] settext("");
+                if(isDefined(self.eMenu[ ary + e ].opt))
+                    self.menu["OPT"][e] settextstring( self.eMenu[ ary + e ].opt );
+                else 
+                    self.menu["OPT"][e] settextstring("");
             #endif
                 
             if(IsDefined( self.eMenu[ ary + e ].toggle ))
@@ -326,7 +372,11 @@ clientOptions()
                 self.menu["UI_SLIDE"][e] = self createRectangle("RIGHT", "CENTER", self.menu["OPT"][e].x + 193, self.menu["OPT"][e].y, 38, 1, (0,0,0), "white", 4, 1);
                 self.menu["UI_SLIDE"][e + 10] = self createRectangle("LEFT", "CENTER", self.menu["OPT"][e].x + 188, self.menu["UI_SLIDE"][e].y, 1, 6, self.presets["Toggle_BG"], "white", 5, 1);
                 if( self getCursor() == ( ary + e ) )
+                    #ifndef MW1
                     self.menu["UI_SLIDE"]["VAL"] = self createText("default", 1, "RIGHT", "CENTER", self.menu["OPT"][e].x + 150, self.menu["OPT"][e].y, 5, 1, self.sliders[ self getCurrentMenu() + "_" + self getCursor() ] + "", self.presets["Text"]);
+                    #else
+                    self.menu["UI_SLIDE"]["VAL"] = self createText("default", 1.4, "RIGHT", "CENTER", self.menu["OPT"][e].x + 150, self.menu["OPT"][e].y, 5, 1, self.sliders[ self getCurrentMenu() + "_" + self getCursor() ] + "", self.presets["Text"]);
+                    #endif
                 self updateSlider( "", e, ary + e );
             }
             if(IsDefined( self.eMenu[ (ary + e) ].ID_list ) )
@@ -334,12 +384,20 @@ clientOptions()
                 if(!isDefined( self.sliders[ self getCurrentMenu() + "_" + (ary + e)] ))
                     self.sliders[ self getCurrentMenu() + "_" + (ary + e) ] = 0;
                     
+                #ifndef MW1
                 self.menu["UI_SLIDE"]["STRING_"+e] = self createText("default", 1, "RIGHT", "CENTER", self.menu["OPT"][e].x + 193, self.menu["OPT"][e].y, 6, 1, "", self.presets["Text"]);
+                #else
+                self.menu["UI_SLIDE"]["STRING_"+e] = self createText("default", 1.4, "RIGHT", "CENTER", self.menu["OPT"][e].x + 193, self.menu["OPT"][e].y, 6, 1, "", self.presets["Text"]);
+                #endif
                 self updateSlider( "", e, ary + e );
             }
             if(self.eMenu[ ary + e ].func == ::newMenu && IsDefined( self.eMenu[ ary + e ].func ) )
             {
+                #ifdef BO3
+                self.menu["UI_SLIDE"]["SUBMENU"+e] = self createtext("default", 1, "RIGHT", "CENTER", self.menu["OPT"][e].x + 196, self.menu["OPT"][e].y - 0.75, 5, 1, ">", (1,1,1));
+                #else
                 self.menu["UI_SLIDE"]["SUBMENU"+e] = self createrectangle( "RIGHT", "CENTER", self.menu["OPT"][e].x + 196, self.menu["OPT"][e].y, 9, 9, self.presets["Toggle_BG"], "ui_arrow_right", 5, 1);
+                #endif
                 self.menu["UI_SLIDE"]["SUBMENU"+e].foreground = true;
             }
         }

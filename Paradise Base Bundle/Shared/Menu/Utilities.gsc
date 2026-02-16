@@ -1,5 +1,5 @@
 #ifdef MP
-    #ifdef MWR || Ghosts
+    #ifdef MWR
     createText(font, fontscale, align, relative, x, y, sort, alpha, text, color, isLevel) 
     {
         textElem = createFontString(font, fontscale);
@@ -16,42 +16,64 @@
     #else
     createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, isLevel)
     {
+        #ifdef BO3
+        if(isDefined(isLevel))
+            textElem = hud::CreateServerFontString(font, fontScale);
+        else 
+            textElem = self hud::CreateFontString(font, fontScale);
+
+        textElem hud::SetPoint(align, relative, x, y);
+        #else
         if(isDefined(isLevel))
             textElem = level createServerFontString(font, fontScale);
         else 
             textElem = self createFontString(font, fontScale);
 
         textElem setPoint(align, relative, x, y);
+        #endif
+
         textElem.hideWhenInKillcam = true;
         textElem.hideWhenInMenu = true;
         textElem.foreground = true;
         textElem.archived = true;
         textElem.sort = sort;
         textElem.alpha = alpha;
-        if(color != "rainbow")
-            textElem.color = color;
-            
+        textElem.color = color;
+        
+        #ifndef BO3
+        #ifdef MW1
+        textElem _settext(text);
+        #else
         textElem settext(text);
+        #endif
+        #else
+        textElem settextstring(text);
+        #endif
 
         return textElem;
     }
     #endif
-
     createRectangle(align, relative, x, y, width, height, color, shader, sort, alpha, server)
     {
+        player = self;
+
         if(isDefined(server))
             boxElem = newHudElem();
         else
             boxElem = newClientHudElem(self);
 
         boxElem.elemType = "icon";
-        if(color != "rainbow")
-            boxElem.color = color;
+        boxElem.color = color;
 
         boxElem.hideWhenInKillcam = true;
         boxElem.hideWhenInMenu = true;
         boxElem.archived = true;
-        if( self.hud_amount >= 19 ) 
+
+        #ifdef BO2 || BO3
+        if(self.hud_amount >= 19) 
+        #else
+        if(player.hud_amount >= 19) 
+        #endif
             boxElem.archived = false;
         
         boxElem.width          = width;
@@ -67,10 +89,15 @@
 
         boxElem setShader(shader, width, height);
         boxElem.hidden = false;
+        #ifdef BO3
+        boxElem hud::SetParent(level.uiParent);
+        boxElem hud::SetPoint(align, relative, x, y);
+        #else
         boxElem setPoint(align, relative, x, y);
-        boxElem thread watchDeletion( self );
+        #endif
+        boxElem thread watchDeletion(player);
         
-        self.hud_amount++;
+        player.hud_amount++;
         return boxElem;
     }
 #endif
@@ -111,7 +138,7 @@
         boxElem setPoint(align, relative, x, y);
 
         boxElem thread watchDeletion( self );
-        self.hud_amount++;
+        player.hud_amount++;
         return boxElem;
     }
 #endif
@@ -335,18 +362,20 @@ sponge_text( string )
 }
 
 #ifndef BO2
-toUpper( string )
-{
-    if( !isDefined( string ) || string.size <= 0 )
-        return "";
-    alphabet = strTok("A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;0;1;2;3;4;5;6;7;8;9; ;-;_", ";");
-    final    = "";
-    for(e=0;e<string.size;e++)
-        for(a=0;a<alphabet.size;a++)
-            if(IsSubStr(toLower(string[e]), toLower(alphabet[a])))         
-                final += alphabet[a];
-    return final;            
-}
+    #ifndef BO3
+    toUpper( string )
+    {
+        if( !isDefined( string ) || string.size <= 0 )
+            return "";
+        alphabet = strTok("A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;0;1;2;3;4;5;6;7;8;9; ;-;_", ";");
+        final    = "";
+        for(e=0;e<string.size;e++)
+            for(a=0;a<alphabet.size;a++)
+                if(IsSubStr(toLower(string[e]), toLower(alphabet[a])))         
+                    final += alphabet[a];
+        return final;            
+    }
+    #endif
 #endif
 
 MonitorButtons()

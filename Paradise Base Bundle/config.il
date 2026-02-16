@@ -1,1 +1,1 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Project><Title>Paradise Bundle</Title><Author>Warn Trxgic, tgh, Optus IV</Author><Game>MWR</Game><Mode>MP</Mode><Platform>Steam</Platform><Symbols>DEBUG;EXAMPLE</Symbols></Project>
+﻿<?xml version="1.0" encoding="utf-8"?><Project><Title>Paradise Bundle</Title><Author>Warn Trxgic, tgh, Optus IV</Author><Game>BO3</Game><Mode>MP</Mode><Platform>Steam</Platform><Symbols>DEBUG;EXAMPLE</Symbols></Project>

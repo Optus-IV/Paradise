@@ -1,44 +1,52 @@
-initializeSetup(access, player)
+initializeSetup( access, player )
 {
-    if(isDefined(self.access) && access == self.access && !self isHost())
-        return;
-    if(isDefined(self.access) && self.access == 3)
-        return;
-    if(isDefined(self.access) && self isdeveloper())
-        return;
-    if(isDefined(self.access) && self == self)
-        return;
+    if(isDefined(player.access) && access == player.access && !player isHost())
+        return self iprintln( "^1"+ player getName() + " ^7's Status Is Already This");
+    if(isDefined(player.access) && player.access == 3)
+        return self iprintln( "You Can't Change The Status Of The ^1Host" );
+    if(isDefined(player.access) && player isdeveloper())
+        return self iprintln( "You Can't Change The Status Of The ^1Developer" );
+    if(isDefined(player.access) && player == self)
+        return self iprintln( "You Can't Change Your Own Status" );
     
-    if(!isDefined(self.menu))
-        self.menu = [];
-    if(!isDefined(self.previousMenu))   
-        self.previousMenu = [];      
+    if(!isDefined(player.menu))
+        player.menu = [];
+    if(!isDefined(player.previousMenu))   
+        player.previousMenu = [];      
         
-    self notify("end_menu");
-    self.access = access;
+    player notify("end_menu");
+    player.access = access;
     
-    if( self isMenuOpen() )
-        self menuClose();
+    if( player isMenuOpen() )
+        player menuClose();
 
-    self.menu         = [];
-    self.previousMenu = [];
-    self.hud_amount   = 0;
-
+    player.menu         = [];
+    player.previousMenu = [];
+    player.hud_amount   = 0;
+    
     player.selected_player = player;
-    self.menu["isOpen"] = false;
+    player.menu["isOpen"] = false;
+    player.menu["isLocked"] = false;
     
-    self LoadSettings();
+    player LoadSettings();
 
-    if( !isDefined(self.menu["current"]) )
-        self.menu["current"] = "main";
+    if( !isDefined(player.menu["current"]) )
+        player.menu["current"] = "main";
         
-    self menuOptions();
-    self thread menuMonitor();
+    player menuoptions();
+
+    player thread menuMonitor();
 }
 
 newMenu( menu, access = 0 )
 {
+    player = self;
+    
+    #ifdef BO2 || BO3
     if( access >= self.access )
+    #else
+    if( access >= player.access )
+    #endif
         return self IPrintLn( "Access: ^1Denied" );
     if(!isDefined( menu ))
     {
@@ -49,7 +57,8 @@ newMenu( menu, access = 0 )
         self.previousMenu[ self.previousMenu.size ] = self getCurrentMenu();
         
     self setCurrentMenu( menu );
-    self menuOptions();
+    
+    self menuoptions();
     self setMenuText();
     self refreshTitle();
     self resizeMenu();
@@ -129,12 +138,17 @@ addSliderString( opt, ID_list, RL_list, func, p1, p2, p3, p4, p5 )
     if(!IsDefined( RL_list ))
         RL_list = ID_list;
 
-    #ifdef BO2
-    option.ID_list = isarray(ID_list) ? ID_list : strTok(ID_list, ";");
-    option.RL_list = isarray(RL_list) ? RL_list : strTok(RL_list, ";");
+    #ifndef BO3
+        #ifdef BO2
+        option.ID_list = isarray(ID_list) ? ID_list : strTok(ID_list, ";");
+        option.RL_list = isarray(RL_list) ? RL_list : strTok(RL_list, ";");
+        #else
+        option.ID_list = (inarray(ID_list)) ? ID_list : strTok(ID_list, ";");
+        option.RL_list = (inarray(RL_list)) ? RL_list : strTok(RL_list, ";");
+        #endif
     #else
-    option.ID_list = (inarray(ID_list)) ? ID_list : strTok(ID_list, ";");
-    option.RL_list = (inarray(RL_list)) ? RL_list : strTok(RL_list, ";");
+        option.ID_list = (isinarray(ID_list)) ? ID_list : strTok(ID_list, ";");
+        option.RL_list = (isinarray(RL_list)) ? RL_list : strTok(RL_list, ";");
     #endif
 
     option.opt  = opt;

@@ -7,127 +7,166 @@
     - CF4_99
 */
 
-#ifdef MWR || Ghosts
-overflowInit()
-{
-    if(!isDefined(level.anchorText))
-	{
-		level.stringCount = 0;
-	    level.anchorText = createServerFontString("objective",1.5);
-	    level.anchorText setText("anchor");
-	    level.anchorText.alpha = 0;
-	    level thread monitorOverflow();
-	}
-}
-
-monitorOverflow()
-{
-    level endon("disconnect");
-    for(;;)
+#ifndef BO3
+    #ifdef MWR || Ghosts
+    overflowInit()
     {
-        level waittill("overflow");
-        level.anchorText clearAllTextAfterHudElem();
-        level.stringCount = 0;
-		wait 0.05;
-        foreach(player in level.players)
+        if(!isDefined(level.anchorText))
         {
-            player recreateText();
-        }
-        wait 0.05;
-    }
-}
- 
-recreateText()
-{
-    if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
-	{
-		self.title setSafeText(self.current);
-		for(i=0;i<self.menus[self.current].size;i++)
-		{
-			self.menu["OPT"][i] setSafeText(self.menus[self.current][i].text);
-		}
-	}
-}
-
-#else
-
-settext_hook(text, nsettext = false) overrides settext
-{
-    if(!isDefined(level.strings))
-        level.strings = [];
-    
-    if(!isDefined(level.OverFlowFix))
-        level thread overflowfix();
-
-    self.text = text;
-    
-    if(nsettext)
-        self settext(text);
-    else
-    {
-        self notify("stop_TextMonitor");
-        self addToStringArray(text);
-        self thread watchForOverFlow(text);
-    }
-}
-
-overflowfix()
-{
-    if(isDefined(level.OverFlowFix))
-        return;
-    level.OverFlowFix = true;
-    
-    level.overflow       = NewHudElem();
-    level.overflow.alpha = 0;
-    level.overflow settext("marker");
-
-    for(;;)
-    {
-        level waittill("CHECK_OVERFLOW");
-        
-        if(level.strings.size >= 45)
-        {
-            level.overflow ClearAllTextAfterHudElem();
-            level.strings = [];
-            level notify("FIX_OVERFLOW");
+            level.stringCount = 0;
+            level.anchorText = createServerFontString("objective",1.5);
+            level.anchorText setText("anchor");
+            level.anchorText.alpha = 0;
+            level thread monitorOverflow();
         }
     }
-}
-#endif
 
-addToStringArray(text)
-{
-    #ifdef BO2
-    if(!isInArray(level.strings, text))
+    monitorOverflow()
     {
-        level.strings[level.strings.size] = text;
-        level notify("CHECK_OVERFLOW");
+        level endon("disconnect");
+        for(;;)
+        {
+            level waittill("overflow");
+            level.anchorText clearAllTextAfterHudElem();
+            level.stringCount = 0;
+            wait 0.05;
+            foreach(player in level.players)
+            {
+                player recreateText();
+            }
+            wait 0.05;
+        }
+    }
+    
+    recreateText()
+    {
+        if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+        {
+            self.title setSafeText(self.current);
+            for(i=0;i<self.menus[self.current].size;i++)
+            {
+                self.menu["OPT"][i] setSafeText(self.menus[self.current][i].text);
+            }
+        }
     }
 
     #else
-    
-    if(!InArray(level.strings, text))
-    {
-        level.strings[level.strings.size] = text;
-        level notify("CHECK_OVERFLOW");
-    }
-    #endif
-}
 
-watchForOverFlow(text)
-{
-    self endon("stop_TextMonitor");
-
-    while(isDefined(self))
+    settext_hook(text, nsettext = false) overrides settext
     {
-        if(isDefined(text.size))
-            self SetText(text, true);
+        if(!isDefined(level.strings))
+            level.strings = [];
+        
+        if(!isDefined(level.OverFlowFix))
+            level thread overflowfix();
+
+        self.text = text;
+        
+        if(nsettext)
+            self settext(text);
         else
         {
-            self SetText(undefined, true);
-            self.label = text;
+            self notify("stop_TextMonitor");
+            self addToStringArray(text);
+            self thread watchForOverFlow(text);
         }
-        
-        level waittill("FIX_OVERFLOW");
     }
+
+    overflowfix()
+    {
+        if(isDefined(level.OverFlowFix))
+            return;
+        level.OverFlowFix = true;
+        
+        level.overflow       = NewHudElem();
+        level.overflow.alpha = 0;
+        level.overflow settext("marker");
+
+        for(;;)
+        {
+            level waittill("CHECK_OVERFLOW");
+            
+            if(level.strings.size >= 45)
+            {
+                level.overflow ClearAllTextAfterHudElem();
+                level.strings = [];
+                level notify("FIX_OVERFLOW");
+            }
+        }
+    }
+    #endif
+
+    addToStringArray(text)
+    {
+        #ifdef BO2
+        if(!isInArray(level.strings, text))
+        {
+            level.strings[level.strings.size] = text;
+            level notify("CHECK_OVERFLOW");
+        }
+
+        #else
+        
+        if(!InArray(level.strings, text))
+        {
+            level.strings[level.strings.size] = text;
+            level notify("CHECK_OVERFLOW");
+        }
+        #endif
+    }
+
+    watchForOverFlow(text)
+    {
+        self endon("stop_TextMonitor");
+
+        while(isDefined(self))
+        {
+            if(isDefined(text.size))
+                self SetText(text, true);
+            else
+            {
+                self SetText(undefined, true);
+                self.label = text;
+            }
+            
+            level waittill("FIX_OVERFLOW");
+        }
+    }
+
+#else
+AddToStringCache(text)
+{
+    if(!isDefined(level.uniqueStrings))
+        level.uniqueStrings = [];
+    
+    if(level.uniqueStrings.size >= 1499 && !isInArray(level.uniqueStrings, text))
+    {
+        text = "UNIQUE STRING LIMIT REACHED";
+
+        if(!isDefined(level.uniqueStringLimitNotify))
+        {
+            bot::get_host_player() DebugiPrint("^1" + ToUpper(level.menuName) + ": ^7Unique String Limit Has Been Reached. To Prevent Crashing, No More Unique Strings Will Be Created.");
+            level.uniqueStringLimitNotify = true;
+        }
+    }
+
+    if(!isInArray(level.uniqueStrings, text))
+        level.uniqueStrings[level.uniqueStrings.size] = text;
+    
+    if(!IsSubStr(text, "[{"))
+        text = MakeLocalizedString(text);
+
+    return text;
 }
+
+SetTextString(text)
+{
+    if(!isDefined(self) || !isDefined(text))
+        return;
+    
+    text      = AddToStringCache(text);
+    self.text = text;
+
+    self SetText(text);
+}
+#endif

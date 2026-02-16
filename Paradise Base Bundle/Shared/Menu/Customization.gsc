@@ -9,7 +9,6 @@ LoadSettings()
     self.presets["Title_BG"] = dividecolor(255, 255, 255); 
     self.presets["ScrollerIcon_BG"] = dividecolor(255, 255, 255);
     self.presets["Outline_BG"] = dividecolor(0, 0, 0);
-    self.presets["KB_Outline"] = "rainbow";
     self.presets["Text"] = dividecolor(255, 255, 255);
     self.presets["Option_Font"] = "default";
 
@@ -59,6 +58,13 @@ LoadSettings()
         #endif
     #endif
 
+    #ifdef BO3
+    self.presets["Toggle_BG"] = dividecolor(255, 100, 25);
+    self.presets["MenuTitle_Color"] = dividecolor(255, 100, 25);
+    self.presets["Scroller_BG"] = dividecolor(255, 100, 25);
+    self.presets["Scroller_Shader"] = "white";
+    #endif
+
     #ifdef MW1 || MWR
     self.presets["Toggle_BG"] = dividecolor(148,75,151);
     self.presets["MenuTitle_Color"] = dividecolor(148,75,151);
@@ -94,7 +100,6 @@ LoadSettings()
     self.presets["Scroller_Shader"] = "hudsoftline";
     self.presets["Scroller_ShaderIcon"] = "rank_prestige10";
     #endif
-
 }
 
 watermark()
@@ -102,22 +107,24 @@ watermark()
     self endon("disconnect");
     self endon("game_ended");
 
-    #ifndef MW1
-    wm = self createFontString("objective", 1);
-
+    #ifndef BO3
+        #ifndef MW1
+        wm = self createFontString("objective", 1);
+        #else
+        wm = self createFontString("objective", 1.4);
+        #endif
     #else
-
-    wm = self createFontString("objective", 1.4);
+    wm = self hud::CreateFontString("objective", 1);
     #endif
 
     #ifdef WAW 
-        #ifdef XBOX
-            wm.x = -30;
-            wm.y = 425;
-        #else
-            wm.x = 5;
-            wm.y = 415;
-        #endif
+    #ifdef XBOX
+        wm.x = -30;
+        wm.y = 425;
+    #else
+        wm.x = 5;
+        wm.y = 415;
+    #endif
     #endif
 
     #ifdef BO1
@@ -128,6 +135,11 @@ watermark()
     #ifdef BO2
     wm.x = -340;
     wm.y = 430;
+    #endif
+
+    #ifdef BO3
+    wm.x = -250;
+    wm.y = 460;
     #endif
 
     #ifdef MW1
@@ -150,26 +162,22 @@ watermark()
     wm.y = 468;
     #endif
 
-    #ifdef Ghosts
-    wm.x = 5;
-    wm.y = 415;
-    #endif
-
     wm.alpha = 1; 
     wm.hidewheninmenu = true;
     wm.hideWhenInKillcam = true;
 
-    #ifdef WAW || MW1
-        wm setText("[{+speed_throw}] + [{+melee}] = Paradise");
-
-    #else
-
-        #ifdef MWR || Ghosts
+    #ifndef BO3
+        #ifdef MW1 || MWR
+            #ifdef MW1
+            wm _setText("[{+speed_throw}] + [{+melee}] = Paradise");
+            #else   
             wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+            #endif
         #else
-            wm settext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+        wm settext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
         #endif
-        
+    #else
+    wm settextstring("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
     #endif
     self thread monitorMenuState(wm);
     
@@ -180,32 +188,35 @@ monitorMenuState(wm)
 {
     self endon("disconnect");
     self endon("game_ended");
+
     for(;;)
     {
-        wait 0.05;
+        wait 0.05; 
 
-#ifdef WAW || MW1
-        if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
-            wm settext("[{+attack}]/[{+speed_throw}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
-        else
-            wm settext("[{+speed_throw}] + [{+melee}] = Paradise");
-
-#else
-
-        if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
-
-        #ifdef MWR || GHOSTS
-            wm setsafetext("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
-        else
-            wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
-
+        #ifndef BO3
+            #ifdef MW1 || MWR
+                #ifdef MW1
+                if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+                    wm _settext("[{+attack}]/[{+speed_throw}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+                else
+                    wm _settext("[{+speed_throw}] + [{+melee}] = Paradise");
+                #else
+                if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+                    wm setsafetext("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+                else
+                    wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+                #endif
+            #else
+            if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+                wm setText("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+            else
+                wm setText("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+            #endif
         #else
-
-            wm settext("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
-        else
-            wm settext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+        if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+                wm setTextString("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+            else
+                wm setTextString("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
         #endif
-#endif
-
     }
 }
