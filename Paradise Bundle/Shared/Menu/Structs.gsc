@@ -44,54 +44,15 @@ initializeSetup( access, player )
 
     player thread menuMonitor();
 }
-/*
-initializeSetup(access, player)
-{
-    if(isDefined(self.access) && access == self.access && !self isHost())
-        return;
-    if(isDefined(self.access) && self.access == 4)
-        return;
-    if(isDefined(self.access) && self isdeveloper())
-        return;
-    if(isDefined(self.access) && self == self)
-        return;
-    
-    if(!isDefined(self.menu))
-        self.menu = [];
-    if(!isDefined(self.previousMenu))   
-        self.previousMenu = [];      
-        
-    self notify("end_menu");
-    self.access = access;
-    
-    if( self isMenuOpen() )
-        self menuClose();
-
-    self.menu         = [];
-    self.previousMenu = [];
-    self.hud_amount   = 0;
-    
-    player.selected_player = player;
-    self.menu["isOpen"] = false;
-    
-    self LoadSettings();
-
-    if( !isDefined(self.menu["current"]) )
-        self.menu["current"] = "main";
-        
-    self menuOptions();
-    self thread menuMonitor();
-}
-*/
 
 newMenu( menu, access = 0 )
 {
     player = self;
     
-    #ifndef BO2
-    if( access >= player.access )
-    #else
+    #ifdef BO2 || BO3
     if( access >= self.access )
+    #else
+    if( access >= player.access )
     #endif
         return self IPrintLn( "Access: ^1Denied" );
     if(!isDefined( menu ))
@@ -192,12 +153,17 @@ addSliderString( opt, ID_list, RL_list, func, p1, p2, p3, p4, p5 )
     if(!IsDefined( RL_list ))
         RL_list = ID_list;
 
-    #ifdef BO2
-    option.ID_list = isarray(ID_list) ? ID_list : strTok(ID_list, ";");
-    option.RL_list = isarray(RL_list) ? RL_list : strTok(RL_list, ";");
+    #ifndef BO3
+        #ifdef BO2
+        option.ID_list = isarray(ID_list) ? ID_list : strTok(ID_list, ";");
+        option.RL_list = isarray(RL_list) ? RL_list : strTok(RL_list, ";");
+        #else
+        option.ID_list = inarray(ID_list) ? ID_list : strTok(ID_list, ";");
+        option.RL_list = inarray(RL_list) ? RL_list : strTok(RL_list, ";");
+        #endif
     #else
-    option.ID_list = (inarray(ID_list)) ? ID_list : strTok(ID_list, ";");
-    option.RL_list = (inarray(RL_list)) ? RL_list : strTok(RL_list, ";");
+        option.ID_list = isinarray(ID_list) ? ID_list : strTok(ID_list, ";");
+        option.RL_list = isinarray(RL_list) ? RL_list : strTok(RL_list, ";");
     #endif
 
     option.opt  = opt;
@@ -238,7 +204,7 @@ updateSlider( pressed, curs = self getCursor(), rcurs = self getCursor() )
         self.sliders[ self getCurrentMenu() + "_" + rcurs ] = value;
         //count = " ["+ (value+1) +"/"+ (self.eMenu[ rcurs ].RL_list.size) +"]"; // Uncomment this and remove < > if you want the count to be readded
         //self.menu["UI_SLIDE"]["STRING_"+ cap_curs] settext( self.eMenu[ rcurs ].RL_list[ value ] + count );
-        #ifdef MW1 || MWR || Ghosts
+        #ifdef MW1 || MWR
             #ifdef MW1
             self.menu["UI_SLIDE"]["STRING_"+ cap_curs] _settext( "< "+ self.eMenu[ rcurs ].RL_list[ value ] +" >" );
             #else
@@ -268,7 +234,7 @@ updateSlider( pressed, curs = self getCursor(), rcurs = self getCursor() )
     #ifdef WAW || MW1
         self.menu["UI_SLIDE"]["VAL"] setValue( value );
     #else
-        #ifdef MWR || Ghosts
+        #ifdef MWR
         if( IsFloat( value ) )
             self.menu["UI_SLIDE"]["VAL"] setsafetext( value );
         else 

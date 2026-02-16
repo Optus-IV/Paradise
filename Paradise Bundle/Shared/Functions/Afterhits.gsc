@@ -7,15 +7,11 @@ AfterHit(gunIn)
         gun = "h1_"+gunIn+"_mp_a#none_f#base";
     #endif
 
-    #ifdef Ghosts
-        gun = "iw6_" + gunIn;
-    #endif
-
-    #ifdef MW1 || MW2 || MW3 || BO1 || BO2 || WAW
+    #ifdef MW1 || MW2 || MW3 || BO1 || BO2 || WAW || BO3
         gun = gunIn;
     #endif
 
-    if(self.AfterHit == 0)
+    if(!self.AfterHit)
     {
         self iprintln("Afterhit Weapon set: [^2" + gun + "^7]");
         self thread doAfterHit(gun);

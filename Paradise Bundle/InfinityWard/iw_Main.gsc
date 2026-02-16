@@ -46,7 +46,7 @@ iw_pub_OnPlayerSpawned()
 
         #ifndef MW1
         if (self getPlayerCustomDvar("loadoutSaved") == "1") 
-                self loadLoadout(true); 
+                self loadLoadout(); 
         #endif
 
         #ifdef MW3
@@ -83,17 +83,13 @@ iw_pub_OnPlayerSpawned()
                 wait .01;
 
                 #ifdef MW1
-                self setClientDvar("g_compassShowEnemies", "1");
+                self setClientDvar("g_compassShowEnemies", 1);
                 #endif
 
                 #ifdef MW2 || MW3
                 self setClientDvar("g_compassShowEnemies", 1);
                 self setClientDvar("scr_game_forceuav", 1);
                 self setClientDvar("compassEnemyFootstepEnabled", 1); 
-                #endif
-
-                #ifdef Ghosts
-                //???
                 #endif
 
                 if(!self.hasCalledFastLast)
@@ -150,17 +146,13 @@ iw_pub_OnPlayerSpawned()
                     self thread initializesetup(1, self);
 
                 #ifdef MW1
-                self setClientDvar("g_compassShowEnemies", "1");
+                self setClientDvar("g_compassShowEnemies", 1);
                 #endif
 
                 #ifdef MW2 || MW3
                 self setClientDvar("g_compassShowEnemies", 1);
                 self setClientDvar("scr_game_forceuav", 1);
                 self setClientDvar("compassEnemyFootstepEnabled", 1); 
-                #endif
-
-                #ifdef Ghosts
-                //???
                 #endif
 
                 self setClientDvar("player_sprintUnlimited" , 1 );
@@ -207,10 +199,6 @@ iw_pm_init()
     //level.airDropCrateCollision = GetEnt(level.airDropCrates[0].target,"targetname");
     precachemodel("com_plasticcase_enemy");
     level.BotNameIndex = 0;
-    #endif
-
-    #ifdef Ghosts
-    precachemodel("carepackage_friendly_iw6");
     #endif
 
     #ifdef MWR

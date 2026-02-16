@@ -76,7 +76,7 @@ normalbounce()
         self.spawnedTrampoline = undefined;
     }
 
-    if(getDvar("mapname") == "mp_seelow")
+    if(level.currentMapName == "mp_seelow")
         model = "dest_seelow_crate_long";
     else
         model = "static_peleliu_crate01";
@@ -149,7 +149,7 @@ slide()
         self.spawnedSlide = undefined;
     }
 
-    if(getDvar("mapname") == "mp_seelow")
+    if(level.currentMapName == "mp_seelow")
         model = "dest_seelow_crate_long";
     else
         model = "static_peleliu_crate01";
@@ -238,7 +238,7 @@ crate()
         self.spawnedCrateThread = undefined;
     }
 
-    if(getDvar("mapname") == "mp_seelow")
+    if(level.currentMapName == "mp_seelow")
         model = "dest_seelow_crate_long";
     else
         model = "static_peleliu_crate01";
@@ -278,7 +278,7 @@ platform()
     startpos = self.origin + (0, 0, -35);
     barrierpos = self.origin + (0, 0, -60);
 
-    if(getDvar("mapname") == "mp_seelow")
+    if(level.currentMapName == "mp_seelow")
         model = "dest_seelow_crate_long";
     else
         model = "static_peleliu_crate01";

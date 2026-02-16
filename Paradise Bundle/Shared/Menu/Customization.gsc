@@ -7,21 +7,13 @@ LoadSettings()
 
     self.presets["Option_BG"] = dividecolor(0, 0, 0);
     self.presets["Title_BG"] = dividecolor(255, 255, 255); 
-    self.presets["ScrollerIcon_BG"] = dividecolor(255, 255, 255);
     self.presets["Outline_BG"] = dividecolor(0, 0, 0);
-    self.presets["KB_Outline"] = "rainbow";
     self.presets["Text"] = dividecolor(255, 255, 255);
     self.presets["Option_Font"] = "default";
 
     #ifdef MW1
     self.presets["Font_Scale"] = 1.4;
-    #endif
-
-    #ifdef Ghosts
-    self.presets["Font_Scale"] = 0.8;
-    #endif
-
-    #ifdef WAW || MW2 || MW3 || BO1 || BO2 || MWR
+    #else
     self.presets["Font_Scale"] = 1;
     #endif
 
@@ -30,7 +22,6 @@ LoadSettings()
     self.presets["MenuTitle_Color"] = dividecolor(230, 150, 80); 
     self.presets["Scroller_BG"] = dividecolor(230, 150, 80); 
     self.presets["Scroller_Shader"] = "hudsoftline";
-    //self.presets["Scroller_ShaderIcon"] = "rank_prestige9";
     #endif
     
     #ifdef BO1
@@ -38,7 +29,6 @@ LoadSettings()
     self.presets["MenuTitle_Color"] = dividecolor(45, 114, 178);
     self.presets["Scroller_BG"] = dividecolor(45, 114, 178); 
     self.presets["Scroller_Shader"] = "hudsoftline";
-    //self.presets["Scroller_ShaderIcon"] = "rank_prestige15";
     #endif
 
     #ifdef BO2
@@ -47,22 +37,26 @@ LoadSettings()
         self.presets["MenuTitle_Color"] = dividecolor(26, 148, 49);
         self.presets["Scroller_BG"] = dividecolor(26, 148, 49);
         self.presets["Scroller_Shader"] = "line_horizontal";
-        self.presets["Scroller_ShaderIcon"] = "rank_prestige09";
     #endif
     #ifdef ZM
         self.presets["Toggle_BG"] = dividecolor(26, 148, 49);
         self.presets["MenuTitle_Color"] = dividecolor(26, 148, 49);
         self.presets["Scroller_BG"] = dividecolor(26, 148, 49);
         self.presets["Scroller_Shader"] = "line_horizontal";
-        //self.presets["Scroller_ShaderIcon"] = "specialty_fastreload_zombies";
     #endif
+    #endif
+
+    #ifdef BO3
+    self.presets["Toggle_BG"] = dividecolor(255, 100, 25);
+    self.presets["MenuTitle_Color"] = dividecolor(255, 100, 25);
+    self.presets["Scroller_BG"] = dividecolor(255, 100, 25);
+    self.presets["Scroller_Shader"] = "white";
     #endif
 
     #ifdef MW1 || MWR
     self.presets["Toggle_BG"] = dividecolor(148,75,151);
     self.presets["MenuTitle_Color"] = dividecolor(148,75,151);
     self.presets["Scroller_BG"] = dividecolor(148,75,151);
-    //self.presets["Scroller_ShaderIcon"] = "rank_prestige4";
     #ifdef MW1
     self.presets["Scroller_Shader"] = "hudsoftline";
     #else
@@ -75,7 +69,6 @@ LoadSettings()
     self.presets["MenuTitle_Color"] = dividecolor(255, 20, 147);
     self.presets["Scroller_BG"] = dividecolor(255, 20, 147);
     self.presets["Scroller_Shader"] = "hudsoftline";
-	//self.presets["Scroller_ShaderIcon"] = "rank_prestige8";
     #endif
 
     #ifdef MW3
@@ -83,15 +76,6 @@ LoadSettings()
     self.presets["MenuTitle_Color"] = dividecolor(255, 0, 0);
     self.presets["Scroller_BG"] = dividecolor(255, 0, 0);
     self.presets["Scroller_Shader"] = "hudsoftline";
-    //self.presets["Scroller_ShaderIcon"] = "cardicon_prestige_classic9";
-    #endif
-
-    #ifdef Ghosts
-    self.presets["Toggle_BG"] = dividecolor(255, 238, 140);
-    self.presets["MenuTitle_Color"] = dividecolor(255, 238, 140);
-    self.presets["Scroller_BG"] = dividecolor(255, 238, 140);
-    self.presets["Scroller_Shader"] = "hudsoftline";
-    //self.presets["Scroller_ShaderIcon"] = "rank_prestige10";
     #endif
 }
 
@@ -99,53 +83,66 @@ displayVer()
 {
     self endon( "disconnect");
 
-    #ifdef MW2 || MW3 || MWR
-        Instructions = createFontString("objective", 1 );
-        Instructions setPoint( "TOPRIGHT", "TOPRIGHT", -10, 10);
-    #endif
-
-    #ifdef Ghosts
-        Instructions = createFontString("objective", 1 );
-        Instructions setPoint( "TOPRIGHT", "TOPRIGHT", -170, 6);
+    #ifdef MW2 || MW3 || MWR || BO3
+    fontScale = 1;
+    x = -10;
+    y = 10;
     #endif
 
     #ifdef MW1
-    Instructions = createFontString("objective", 1.4);
-    Instructions setPoint( "TOPRIGHT", "TOPRIGHT", 15, -25);
+    fontScale = 1.4;
+    x = 15;
+    y = -25;
     #endif
 
     #ifdef BO1 || BO2
-    Instructions = createFontString("objective", 1.20 );
-    Instructions setPoint( "TOPRIGHT", "TOPRIGHT", 15, -25);
+    fontScale = 1.2;
+    x = 15;
+    y = -25;
     #endif
 
     #ifdef WAW
+    fontScale = 1.2;
+
     #ifdef XBOX
-        Instructions = createFontString("objective", 1.20 );
-        Instructions setPoint( "TOPRIGHT", "TOPRIGHT", 15, -25);
+    x = 15;
+    y = -25;
     #else
-        Instructions = createFontString("objective", 1.20 );
-        Instructions setPoint( "TOPRIGHT", "TOPRIGHT", -10, 10);
-    #endif 
+    x = -10;
+    y = 10;
+    #endif
+    #endif  
+
+    #ifndef BO3
+    Instructions = createFontString("objective", fontScale);
+    Instructions setPoint("TOPRIGHT", "TOPRIGHT", x, y);
+    #else
+    Instructions = self hud::CreateFontString("objective", fontScale);
+    Instructions hud::SetPoint("TOPRIGHT", "TOPRIGHT", x, y);
     #endif
 
     Instructions.alpha = 0.5;
-    Instructions.hidewheninmenu = 1;
+    Instructions.hidewheninmenu = true;
     Instructions.hideWhenInKillcam = true;
 
-    for( ;; )
-    {
-        #ifdef MW1 || MWR || Ghosts
-            #ifdef MWR || Ghosts
-            Instructions setsafetext("Paradise");
+    #ifndef BO3
+        for( ;; )
+        {
+            #ifdef MW1 || MWR
+                #ifdef MWR
+                Instructions setsafetext("Paradise");
+                #else
+                Instructions _settext("Paradise");
+                #endif
             #else
-            Instructions _settext("Paradise");
+            Instructions settext("Paradise");
             #endif
-        #else
-        Instructions settext("Paradise");
-        #endif
-        wait(2.0);
-    }
+
+            wait 2;
+        }
+    #else
+    Instructions settextstring("Paradise");
+    #endif
 }
 
 initstrings()
@@ -186,10 +183,14 @@ watermark()
     self endon("disconnect");
     self endon("game_ended");
 
-    #ifndef MW1
-    wm = self createFontString("objective", 1);
+    #ifndef BO3
+        #ifndef MW1
+        wm = self createFontString("objective", 1);
+        #else
+        wm = self createFontString("objective", 1.4);
+        #endif
     #else
-    wm = self createFontString("objective", 1.4);
+    wm = self hud::CreateFontString("objective", 1);
     #endif
 
     #ifdef WAW 
@@ -208,8 +209,13 @@ watermark()
     #endif
 
     #ifdef BO2
-        wm.x = -340;
-        wm.y = 430;
+    wm.x = -340;
+    wm.y = 430;
+    #endif
+
+    #ifdef BO3
+    wm.x = -250;
+    wm.y = 460;
     #endif
 
     #ifdef MW1
@@ -232,25 +238,23 @@ watermark()
     wm.y = 468;
     #endif
 
-    #ifdef Ghosts
-    wm.x = 5;
-    wm.y = 415;
-    #endif
-
     wm.alpha = 1; 
     wm.hidewheninmenu = true;
     wm.hideWhenInKillcam = true;
 
-    #ifdef MW1 || MWR || Ghosts
-        #ifdef MW1
-        wm _setText("[{+speed_throw}] + [{+melee}] = Paradise");
-        #else   
-        wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+    #ifndef BO3
+        #ifdef MW1 || MWR
+            #ifdef MW1
+            wm _setText("[{+speed_throw}] + [{+melee}] = Paradise");
+            #else   
+            wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+            #endif
+        #else
+        wm settext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
         #endif
     #else
-    wm settext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+    wm settextstring("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
     #endif
-
     self thread monitorMenuState(wm);
     
     return wm;
@@ -260,27 +264,35 @@ monitorMenuState(wm)
 {
     self endon("disconnect");
     self endon("game_ended");
+
     for(;;)
     {
         wait 0.05; 
 
-        #ifdef MW1 || MWR || Ghosts
-            #ifdef MW1
-            if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
-                wm _settext("[{+attack}]/[{+speed_throw}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
-            else
-                wm _settext("[{+speed_throw}] + [{+melee}] = Paradise");
+        #ifndef BO3
+            #ifdef MW1 || MWR
+                #ifdef MW1
+                if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+                    wm _settext("[{+attack}]/[{+speed_throw}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+                else
+                    wm _settext("[{+speed_throw}] + [{+melee}] = Paradise");
+                #else
+                if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
+                    wm setsafetext("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+                else
+                    wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+                #endif
             #else
             if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
-                wm setsafetext("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+                wm setText("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
             else
-                wm setsafetext("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+                wm setText("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
             #endif
         #else
         if(isDefined(self.menu["isOpen"]) && self.menu["isOpen"])
-            wm setText("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
-        else
-            wm setText("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+                wm setTextString("[{+actionslot 1}]/[{+actionslot 2}] = Scroll [{+usereload}] = Select  [{+melee}] = Back/Close");
+            else
+                wm setTextString("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
         #endif
     }
 }

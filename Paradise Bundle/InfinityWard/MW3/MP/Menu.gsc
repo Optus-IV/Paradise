@@ -166,7 +166,7 @@ pubmenuOptions()
     tpNames = [];
     tpCoords = [];
 
-    if(getDvar("mapname") == "mp_seatown")
+    if(level.currentMapName == "mp_seatown")
     {
         tpNames  = "Spawn Palm Tree;Castle Wall;B Building;Numbs Barrier;Owls Nest";
         tpCoords = [
@@ -177,7 +177,7 @@ pubmenuOptions()
             (-214.042, 3500.72, 736.126)
         ];
     }
-    else if(getDvar("mapname") == "mp_dome")
+    else if(level.currentMapName == "mp_dome")
     {
         tpNames  = "Top Antennae;Yellow Roof;Water Tower 1;Water Tower 2;Edge of Map";
         tpCoords = [
@@ -188,7 +188,7 @@ pubmenuOptions()
             (-4417.23, -14196.8, 1002.05)
         ];
     }
-    else if(getDvar("mapname") == "mp_plaza2")
+    else if(level.currentMapName == "mp_plaza2")
     {
         tpNames  = "A Building;Bomb Spawn Building;Parking Garage;Across the River 1;Across the River 2";
         tpCoords = [
@@ -199,7 +199,7 @@ pubmenuOptions()
             (1607.44, 5783.35, 1408.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_mogadishu")
+    else if(level.currentMapName == "mp_mogadishu")
     {
         tpNames  = "Ship Crane;Ship Spot 1;Ship Spot 2";
         tpCoords = [
@@ -208,7 +208,7 @@ pubmenuOptions()
             (1514.71, -1932.56, 648.426)
         ];
     }
-    else if(getDvar("mapname") == "mp_paris")
+    else if(level.currentMapName == "mp_paris")
     {
         tpNames  = "Main Roof;A Bomb Roof;A Bomb Roof 2;B Bomb Roof";
         tpCoords = [
@@ -218,7 +218,7 @@ pubmenuOptions()
             (-133.233, -1895.12, 794.639)
         ];
     }
-    else if(getDvar("mapname") == "mp_exchange")
+    else if(level.currentMapName == "mp_exchange")
     {
         tpNames  = "Bomb Spawn Building 1;Bomb Spawn Building 2;Numbs Spot;Lew Undermap;Alley Building";
         tpCoords = [
@@ -229,7 +229,7 @@ pubmenuOptions()
             (-2320.08, -1135.49, 1116.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_bootleg")
+    else if(level.currentMapName == "mp_bootleg")
     {
         tpNames  = "Blue Building 1;Blue Building 2;Brick Office Roof";
         tpCoords = [
@@ -238,7 +238,7 @@ pubmenuOptions()
             (2090.33, 1109.19, 1036.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_carbon")
+    else if(level.currentMapName == "mp_carbon")
     {
         tpNames  = "AC Unit;Undermap Sui;Green Building Sui;Red Building Sui";
         tpCoords = [
@@ -248,7 +248,7 @@ pubmenuOptions()
             (-1351.91, -7515.63, 4801.99)
         ];
     }
-    else if(getDvar("mapname") == "mp_hardhat")
+    else if(level.currentMapName == "mp_hardhat")
     {
         tpNames  = "Rooftop 1;Rooftop 2;Rooftop 3;Skyscraper Roof 1;Pelo Skyscraper Roof";
         tpCoords = [
@@ -259,7 +259,7 @@ pubmenuOptions()
             (-11538.3, -5194.07, 8896.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_village")
+    else if(level.currentMapName == "mp_village")
     {
         tpNames  = "B Tower;Cliff;Church Barrier";
         tpCoords = [
@@ -268,7 +268,7 @@ pubmenuOptions()
             (1090.95, 417.557, 1385.73)
         ];
     }
-    else if(getDvar("mapname") == "mp_lambeth")
+    else if(level.currentMapName == "mp_lambeth")
     {
         tpNames  = "Trxgic Barrier Spot;Bomb Spawn Sui;OOM Roof";
         tpCoords = [
@@ -277,7 +277,7 @@ pubmenuOptions()
             (3314.56, -3888.27, 52.2078)
         ];
     }
-    else if(getDvar("mapname") == "mp_interchange")
+    else if(level.currentMapName == "mp_interchange")
     {
         tpNames  = "Way Out Building;Apartment Complex Roof 1;Apartment Complex Roof 2;Blue Warehouse";
         tpCoords = [
@@ -287,7 +287,7 @@ pubmenuOptions()
             (-9065.15, 3564.91, 1415.50)
         ];
     }
-    else if(getDvar("mapname") == "mp_radar")
+    else if(level.currentMapName == "mp_radar")
     {
         tpNames  = "Inside Cliff;Top Cliff;Way OOM;Tower Spot";
         tpCoords = [
@@ -297,7 +297,7 @@ pubmenuOptions()
             (-11290.5, 2712.13, 2953.53)
         ];
     }
-    else if(getDvar("mapname") == "mp_underground")
+    else if(level.currentMapName == "mp_underground")
     {
         tpNames  = "Carnie Roof;Office Roof;Parking Garage Roof;Skyscraper Roof";
         tpCoords = [
@@ -307,7 +307,7 @@ pubmenuOptions()
             (-11553.3, -4204.02, 5124.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_courtyard_ss")
+    else if(level.currentMapName == "mp_courtyard_ss")
     {
         tpNames  = "Top of Well;Top of Pillars;Top Orange Wall";
         tpCoords = [
@@ -316,7 +316,7 @@ pubmenuOptions()
             (334.478, 1660.46, 807.390)
         ];
     }
-    else if(getDvar("mapname") == "mp_aground_ss")
+    else if(level.currentMapName == "mp_aground_ss")
     {
         tpNames  = "A Side Cliff;B Side Cliff;Top of Crane;Way Out Cliff;Top of Boat";
         tpCoords = [
@@ -327,7 +327,7 @@ pubmenuOptions()
             (972.888, 1880.84, 1128.19)
         ];
     }
-    else if(getDvar("mapname") == "mp_terminal_cls")
+    else if(level.currentMapName == "mp_terminal_cls")
     {
         tpNames  = "OOM Plane;Spawn Roof";
         tpCoords = [
@@ -335,7 +335,7 @@ pubmenuOptions()
             (2998.43, 6732.3, 464.126)
         ];
     }
-    else if(getDvar("mapname") == "mp_italy")
+    else if(level.currentMapName == "mp_italy")
     {
         tpNames = "Cliff Sui;Way Out Building;White Building Roof";
         tpCoords = [
@@ -344,7 +344,7 @@ pubmenuOptions()
             (-5228.65, 1867.19, 1857.13)
         ];
     }
-    else if(getDvar("mapname") == "mp_park")
+    else if(level.currentMapName == "mp_park")
     {
         tpNames = "Building Ledge 1;Building Ledge 2;Roof;Skyscraper Ledge";
         tpCoords = [
@@ -354,7 +354,7 @@ pubmenuOptions()
             (-14433.8, -1409.4, 8663.63)
         ];
     }
-    else if(getDvar("mapname") == "mp_overwatch")
+    else if(level.currentMapName == "mp_overwatch")
     {
         tpNames = "Skyscraper Ledge;Crane Sui 1;Crane Sui 2; Mid Sui";
         tpCoords = [
@@ -364,14 +364,14 @@ pubmenuOptions()
             (-46.1258, -0.350276, 13507.1)
         ];
     }
-    else if(getDvar("mapname") == "mp_morningwood")
+    else if(level.currentMapName == "mp_morningwood")
     {
         tpNames = "Top of Plane";
         tpCoords = [
             (2077.9, -2410.5, 1332.62)
         ];
     }
-    else if(getDvar("mapname") == "mp_cement")
+    else if(level.currentMapName == "mp_cement")
     {
         tpNames = "Silla Cement Building;Blue Roof";
         tpCoords = [
@@ -379,7 +379,7 @@ pubmenuOptions()
             (-146.733, 2776.96, 799.865)
         ];
     }
-    else if(getDvar("mapname") == "mp_qadeem")
+    else if(level.currentMapName == "mp_qadeem")
     {
         tpNames = "Rooftop;Glass Building Roof;Inside Building Barrier";
         tpCoords = [
@@ -388,7 +388,7 @@ pubmenuOptions()
             (128.76, 5243.63, 1209.12)
         ];
     }
-    else if(getDvar("mapname") == "mp_hillside_ss")
+    else if(level.currentMapName == "mp_hillside_ss")
     {
         tpNames = "Hillside House;Glass House";
         tpCoords = [
@@ -396,7 +396,7 @@ pubmenuOptions()
             (-3871.97, 596, 3578.63)
         ];
     }
-    else if(getDvar("mapname") == "mp_six_ss")
+    else if(level.currentMapName == "mp_six_ss")
     {
         tpNames = "Barn Roof 1;Barn Roof 2;Way Out Silo";
         tpCoords = [
@@ -405,7 +405,7 @@ pubmenuOptions()
             (9851.93, -322.705, 1220.62)
         ];
     }
-    else if(getDvar("mapname") == "mp_crosswalk_ss")
+    else if(level.currentMapName == "mp_crosswalk_ss")
     {
         tpNames = "Bridge Spot;Roof Spot 1;Roof Spot 2";
         tpCoords = [
@@ -414,7 +414,7 @@ pubmenuOptions()
             (-4210.05, 156.849, 1757.13)
         ];
     }
-    else if(getDvar("mapname") == "mp_moab")
+    else if(level.currentMapName == "mp_moab")
     {
         tpNames = "Rock Wall 1;Rock Wall 2;Way OOM Ledge";
         tpCoords = [
@@ -423,7 +423,7 @@ pubmenuOptions()
             (-10704.3, -138.587, 1403.79)
         ];
     }
-    else if(getDvar("mapname") == "mp_nola")
+    else if(level.currentMapName == "mp_nola")
     {
         tpNames = "Long Building Roof 1;Long Building Roof 2;Brick Apartments Roof;Building Ledge";
         tpCoords = [
@@ -608,6 +608,16 @@ pubmenuOptions()
     }
 }
 
+pmapname()
+{
+    ilog(level.currentMapName);
+}
+
+porigin()
+{
+    ilog(self.origin);
+}
+
 menuOptions()
 {
         player = self.selected_player;        
@@ -623,6 +633,8 @@ menuOptions()
         if(player.access > 0)
         {
             self addMenu("main", "Main Menu");
+            self addOpt("print mapname", ::pmapname);
+            self addOpt("log origin", ::porigin);
             self addOpt("Trickshot Menu", ::newMenu, "ts");
             self addOpt("Binds Menu", ::newMenu, "sK");
             self addOpt("Teleport Menu", ::newMenu, "tp");
@@ -756,7 +768,7 @@ menuOptions()
     tpNames = [];
     tpCoords = [];
 
-    if(getDvar("mapname") == "mp_seatown")
+    if(level.currentMapName == "mp_seatown")
     {
         tpNames  = "Spawn Palm Tree;Castle Wall;B Building;Numbs Barrier;Owls Nest";
         tpCoords = [
@@ -767,7 +779,7 @@ menuOptions()
             (-214.042, 3500.72, 736.126)
         ];
     }
-    else if(getDvar("mapname") == "mp_dome")
+    else if(level.currentMapName == "mp_dome")
     {
         tpNames  = "Top Antennae;Yellow Roof;Water Tower 1;Water Tower 2;Edge of Map";
         tpCoords = [
@@ -778,7 +790,7 @@ menuOptions()
             (-4417.23, -14196.8, 1002.05)
         ];
     }
-    else if(getDvar("mapname") == "mp_plaza2")
+    else if(level.currentMapName == "mp_plaza2")
     {
         tpNames  = "A Building;Bomb Spawn Building;Parking Garage;Across the River 1;Across the River 2";
         tpCoords = [
@@ -789,7 +801,7 @@ menuOptions()
             (1607.44, 5783.35, 1408.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_mogadishu")
+    else if(level.currentMapName == "mp_mogadishu")
     {
         tpNames  = "Ship Crane;Ship Spot 1;Ship Spot 2";
         tpCoords = [
@@ -798,7 +810,7 @@ menuOptions()
             (1514.71, -1932.56, 648.426)
         ];
     }
-    else if(getDvar("mapname") == "mp_paris")
+    else if(level.currentMapName == "mp_paris")
     {
         tpNames  = "Main Roof;A Bomb Roof;A Bomb Roof 2;B Bomb Roof";
         tpCoords = [
@@ -808,7 +820,7 @@ menuOptions()
             (-133.233, -1895.12, 794.639)
         ];
     }
-    else if(getDvar("mapname") == "mp_exchange")
+    else if(level.currentMapName == "mp_exchange")
     {
         tpNames  = "Bomb Spawn Building 1;Bomb Spawn Building 2;Numbs Spot;Lew Undermap;Alley Building";
         tpCoords = [
@@ -819,7 +831,7 @@ menuOptions()
             (-2320.08, -1135.49, 1116.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_bootleg")
+    else if(level.currentMapName == "mp_bootleg")
     {
         tpNames  = "Blue Building 1;Blue Building 2;Brick Office Roof";
         tpCoords = [
@@ -828,7 +840,7 @@ menuOptions()
             (2090.33, 1109.19, 1036.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_carbon")
+    else if(level.currentMapName == "mp_carbon")
     {
         tpNames  = "AC Unit;Undermap Sui;Green Building Sui;Red Building Sui";
         tpCoords = [
@@ -838,7 +850,7 @@ menuOptions()
             (-1351.91, -7515.63, 4801.99)
         ];
     }
-    else if(getDvar("mapname") == "mp_hardhat")
+    else if(level.currentMapName == "mp_hardhat")
     {
         tpNames  = "Rooftop 1;Rooftop 2;Rooftop 3;Skyscraper Roof 1;Pelo Skyscraper Roof";
         tpCoords = [
@@ -849,7 +861,7 @@ menuOptions()
             (-11538.3, -5194.07, 8896.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_village")
+    else if(level.currentMapName == "mp_village")
     {
         tpNames  = "B Tower;Cliff;Church Barrier";
         tpCoords = [
@@ -858,7 +870,7 @@ menuOptions()
             (1090.95, 417.557, 1385.73)
         ];
     }
-    else if(getDvar("mapname") == "mp_lambeth")
+    else if(level.currentMapName == "mp_lambeth")
     {
         tpNames  = "Trxgic Barrier Spot;Bomb Spawn Sui;OOM Roof";
         tpCoords = [
@@ -867,7 +879,7 @@ menuOptions()
             (3314.56, -3888.27, 52.2078)
         ];
     }
-    else if(getDvar("mapname") == "mp_interchange")
+    else if(level.currentMapName == "mp_interchange")
     {
         tpNames  = "Way Out Building;Apartment Complex Roof 1;Apartment Complex Roof 2;Blue Warehouse";
         tpCoords = [
@@ -877,7 +889,7 @@ menuOptions()
             (-9065.15, 3564.91, 1415.50)
         ];
     }
-    else if(getDvar("mapname") == "mp_radar")
+    else if(level.currentMapName == "mp_radar")
     {
         tpNames  = "Inside Cliff;Top Cliff;Way OOM;Tower Spot";
         tpCoords = [
@@ -887,7 +899,7 @@ menuOptions()
             (-11290.5, 2712.13, 2953.53)
         ];
     }
-    else if(getDvar("mapname") == "mp_underground")
+    else if(level.currentMapName == "mp_underground")
     {
         tpNames  = "Carnie Roof;Office Roof;Parking Garage Roof;Skyscraper Roof";
         tpCoords = [
@@ -897,7 +909,7 @@ menuOptions()
             (-11553.3, -4204.02, 5124.14)
         ];
     }
-    else if(getDvar("mapname") == "mp_courtyard_ss")
+    else if(level.currentMapName == "mp_courtyard_ss")
     {
         tpNames  = "Top of Well;Top of Pillars;Top Orange Wall";
         tpCoords = [
@@ -906,7 +918,7 @@ menuOptions()
             (334.478, 1660.46, 807.390)
         ];
     }
-    else if(getDvar("mapname") == "mp_aground_ss")
+    else if(level.currentMapName == "mp_aground_ss")
     {
         tpNames  = "A Side Cliff;B Side Cliff;Top of Crane;Way Out Cliff;Top of Boat";
         tpCoords = [
@@ -917,7 +929,7 @@ menuOptions()
             (972.888, 1880.84, 1128.19)
         ];
     }
-    else if(getDvar("mapname") == "mp_terminal_cls")
+    else if(level.currentMapName == "mp_terminal_cls")
     {
         tpNames  = "OOM Plane;Spawn Roof";
         tpCoords = [
@@ -925,7 +937,7 @@ menuOptions()
             (2998.43, 6732.3, 464.126)
         ];
     }
-    else if(getDvar("mapname") == "mp_italy")
+    else if(level.currentMapName == "mp_italy")
     {
         tpNames = "Cliff Sui;Way Out Building;White Building Roof";
         tpCoords = [
@@ -934,7 +946,7 @@ menuOptions()
             (-5228.65, 1867.19, 1857.13)
         ];
     }
-    else if(getDvar("mapname") == "mp_park")
+    else if(level.currentMapName == "mp_park")
     {
         tpNames = "Building Ledge 1;Building Ledge 2;Roof;Skyscraper Ledge";
         tpCoords = [
@@ -944,7 +956,7 @@ menuOptions()
             (-14433.8, -1409.4, 8663.63)
         ];
     }
-    else if(getDvar("mapname") == "mp_overwatch")
+    else if(level.currentMapName == "mp_overwatch")
     {
         tpNames = "Skyscraper Ledge;Crane Sui 1;Crane Sui 2; Mid Sui";
         tpCoords = [
@@ -954,14 +966,14 @@ menuOptions()
             (-46.1258, -0.350276, 13507.1)
         ];
     }
-    else if(getDvar("mapname") == "mp_morningwood")
+    else if(level.currentMapName == "mp_morningwood")
     {
         tpNames = "Top of Plane";
         tpCoords = [
             (2077.9, -2410.5, 1332.62)
         ];
     }
-    else if(getDvar("mapname") == "mp_cement")
+    else if(level.currentMapName == "mp_cement")
     {
         tpNames = "Silla Cement Building;Blue Roof";
         tpCoords = [
@@ -969,7 +981,7 @@ menuOptions()
             (-146.733, 2776.96, 799.865)
         ];
     }
-    else if(getDvar("mapname") == "mp_qadeem")
+    else if(level.currentMapName == "mp_qadeem")
     {
         tpNames = "Rooftop;Glass Building Roof;Inside Building Barrier";
         tpCoords = [
@@ -978,7 +990,7 @@ menuOptions()
             (128.76, 5243.63, 1209.12)
         ];
     }
-    else if(getDvar("mapname") == "mp_hillside_ss")
+    else if(level.currentMapName == "mp_hillside_ss")
     {
         tpNames = "Hillside House;Glass House";
         tpCoords = [
@@ -986,7 +998,7 @@ menuOptions()
             (-3871.97, 596, 3578.63)
         ];
     }
-    else if(getDvar("mapname") == "mp_six_ss")
+    else if(level.currentMapName == "mp_six_ss")
     {
         tpNames = "Barn Roof 1;Barn Roof 2;Way Out Silo";
         tpCoords = [
@@ -995,7 +1007,7 @@ menuOptions()
             (9851.93, -322.705, 1220.62)
         ];
     }
-    else if(getDvar("mapname") == "mp_crosswalk_ss")
+    else if(level.currentMapName == "mp_crosswalk_ss")
     {
         tpNames = "Bridge Spot;Roof Spot 1;Roof Spot 2";
         tpCoords = [
@@ -1004,7 +1016,7 @@ menuOptions()
             (-4210.05, 156.849, 1757.13)
         ];
     }
-    else if(getDvar("mapname") == "mp_moab")
+    else if(level.currentMapName == "mp_moab")
     {
         tpNames = "Rock Wall 1;Rock Wall 2;Way OOM Ledge";
         tpCoords = [
@@ -1013,7 +1025,7 @@ menuOptions()
             (-10704.3, -138.587, 1403.79)
         ];
     }
-    else if(getDvar("mapname") == "mp_nola")
+    else if(level.currentMapName == "mp_nola")
     {
         tpNames = "Long Building Roof 1;Long Building Roof 2;Brick Apartments Roof;Building Ledge";
         tpCoords = [
@@ -1021,6 +1033,26 @@ menuOptions()
             (2652.88, -3703.37, 585.067),
             (3730.12, 602.36, 777.125),
             (-4019.16, 272.979, 529.083)
+        ];
+    }
+    else if(level.currentMapName == "mp_shipbreaker")
+    {
+        tpNames = "Lighthouse;Renko III Deck;Cliffside";
+        tpCoords = [
+            (-1672.26, -1495.47, 2288.13),
+            (2970.45, -3312.69, 1468.62),
+            (16528.6, -8081.71, 980.168)
+        ];
+    }
+    else if(level.currentMapName == "mp_roughneck")
+    {
+        tpNames = "";
+        tpCoords = [
+            (-1078.55, 2991.25, 882.125),
+            (-2290.83, 2183.5, 662.263),
+            (2131.96, 1256.85, 1275.82),
+            (243.202, -1202.44, 2477.63),
+            (199.004, -2526.37, 1001.08)
         ];
     }
     else 
@@ -1201,10 +1233,7 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
-            
-            timeActions = ["Add 1 Minute","Remove 1 Minute"];
-            timeIDs = ["add","sub"];
-            self addSliderString("Game Timer", timeIDs, timeActions, ::editTime);
+            self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
 
             self addOpt("Fast Restart", ::FastRestart);
             self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
@@ -1234,6 +1263,5 @@ menuOptions()
         self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
         self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
         self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
-        //self.menu["UI"]["SCROLLERICON"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 45, self.presets["Y"] - 108, 10, 10, self.presets["ScrollerIcon_BG"], self.presets["Scroller_ShaderIcon"], 3, 1);
         resizeMenu();
     }

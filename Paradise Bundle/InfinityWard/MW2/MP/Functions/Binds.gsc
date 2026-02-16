@@ -422,7 +422,7 @@ hostmigrateLogic()
             player openPopupMenu(game["menu_hostmigration"]);
             player freezeControlsWrapper(true);
             wait .1;
-            setDvar("HostMigrationState", "1");
+            setDvar("HostMigrationState", 1);
             wait .1;
             player closePopupMenu();
             thread maps\mp\gametypes\_gamelogic::matchStartTimer("match_resuming_in", 5.0);

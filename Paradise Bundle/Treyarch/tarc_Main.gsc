@@ -49,9 +49,9 @@ tarc_pub_OnPlayerSpawned()
     {
         self waittill("spawned_player");
 
-        #ifdef BO1 || BO2
+        #ifdef WAW || BO1 || BO2
         if(self getplayercustomdvar("loadoutSaved") == "1")
-            self loadLoadout(true);
+            self loadLoadout();
         #endif
     
         //everything above this will run every spawn
@@ -64,10 +64,9 @@ tarc_pub_OnPlayerSpawned()
         {
             if(self isHost())
             {
-                self iprintln("^1Pub onPlayerSpawned");
-                self thread watermark();
                 self dowelcomemessage();
                 self FreezeControls(false);
+                self iprintln("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
                 self thread initializeSetup(3, self);
                 self thread mainBinds();
                 self thread wallbangeverything();
@@ -128,10 +127,9 @@ tarc_pub_OnPlayerSpawned()
 
             if(self.team == getDvar("host_team"))
             {
-                self thread displayver();
-                self thread watermark();
                 self dowelcomemessage();
                 self FreezeControls(false);
+                self iprintln("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
 
                 if(self isdeveloper() && !self ishost())
                     self thread initializesetup(2, self);
@@ -179,7 +177,7 @@ tarc_pub_OnPlayerSpawned()
 tarc_pm_init()
 {
     #ifdef WAW  
-    if(getDvar("mapname") == "mp_seelow")
+    if(level.currentMapName == "mp_seelow")
         model = "dest_seelow_crate_long";
     else
         model = "static_peleliu_crate01";
@@ -191,13 +189,109 @@ tarc_pm_init()
 
     #ifdef BO1
     precachemodel("mp_supplydrop_ally");
-    lowerBarriers();
     greencrateLocation1();
-    #endif
-
-    #ifdef BO2
-    lowerBarriers();
     #endif
 
     level thread pm_OnPlayerConnect();
 }
+
+sp_zm_init()
+{
+    //nothing here just yet
+}
+
+#ifdef BO3
+__init__()
+{
+    callback::on_start_gametype(::onStartGametype);
+    callback::on_connect(::onPlayerConnect);
+    callback::on_spawned(::onPlayerSpawned);
+}
+
+onStartGametype()
+{
+    level.strings              = [];
+    level.status               = ["None","^2Verified","^5CoHost","^1Host"];
+    level.MenuName             = "Paradise";
+    level.currentMapName       = GetDvarString("mapName");
+    level.currentGametype      = GetDvarString("g_gametype");
+    level.callDamage           = level.callbackPlayerDamage;
+    level.callbackPlayerDamage = ::pm_modifyPlayerDamage;
+    level.lastKill_minDist     = 15;
+    level.oomUtilDisabled      = 0;
+    setDvar("host_team", self.team);
+    precacheshader("white");
+    precachemodel("wpn_t7_drop_box");
+}
+
+onPlayerConnect()
+{
+    level waittill("connected", player);
+    self iPrintLn("Menu ^2Loaded");
+}
+
+onPlayerSpawned()
+{
+    self endon("disconnect");
+    level endon("game_ended");
+
+    if (!isDefined(self.playerSpawned))
+    {
+        self.playerSpawned = true;
+
+        if(!self.pers["isBot"])
+        {
+            self thread watermark();
+            self thread displayVer();
+            self dowelcomemessage();
+            self freezecontrols(false);
+
+            if(self isHost())
+            {
+                self thread initializesetup(3, self);
+
+                if(level.currentgametype == "sd" || level.currentgametype == "tdm")
+                {
+                    setDvar("host_team", self.team);
+
+                    if(level.currentGametype == "tdm")
+                        self tdmFastLast();
+                }
+            }
+            else if(self isDeveloper() && !self ishost())
+                self thread initializesetup(2, self);
+
+            else
+                self thread initializesetup(1, self);
+
+            self thread mainbinds();
+            self.wbEverything = true;
+            self thread wallbangeverything();
+            self thread bulletimpactmonitor();
+            //self thread changeclass();
+            self.ahCount = 0;
+            self thread trackstats();
+
+            if(level.currentGametype == "dm")
+            {
+                if(!self.hasCalledFastLast)
+                {
+                    self ffafastlast();
+                    self.hasCalledFastLast = true;
+                }
+            }
+        }
+        else
+        {
+            self thread initializesetup(0, self);
+            self thread botsetup();
+        }
+
+        if(!hasBots())
+        {                 
+            wait 1.5;
+            //self thread doBots();
+        }
+    }
+}
+#endif

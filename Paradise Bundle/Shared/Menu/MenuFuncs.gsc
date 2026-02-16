@@ -3,6 +3,7 @@ clientOptions()
     if(self isHost() || self isdeveloper())
     {
         self addMenu("Verify",  "Clients Menu");
+
         foreach( player in level.players )
         {
             if (isDefined(player.pers) && isDefined(player.pers["isBot"]) && player.pers["isBot"])
@@ -16,6 +17,7 @@ clientOptions()
 
             self addOpt(player getname() + " [" + perm + "^7]", ::newmenu, "Verify_" + player getXUID());
         }
+
         foreach(player in level.players)
         {
             if (isDefined(player.pers) && isDefined(player.pers["isBot"]) && player.pers["isBot"])
@@ -43,7 +45,7 @@ menuMonitor()
     self endon("end_menu");
 
     #ifndef BO2
-    while( player.access != 0 )
+    while(player.access != 0)
     #else
     while( self.access != 0 )
     #endif
@@ -52,7 +54,7 @@ menuMonitor()
         {
             if(!self.menu["isOpen"])
             {
-                #ifdef BO1 || BO2
+                #ifdef BO1 || BO2 || BO3
                 if( self actionslottwobuttonpressed() && self adsButtonPressed() )
                 {
                     self menuOpen();
@@ -60,7 +62,7 @@ menuMonitor()
                 }
                 #endif
 
-                #ifdef MW2 || MW3 || Ghosts || MWR
+                #ifdef MW2 || MW3 || MWR
                 if( self isbuttonpressed("+actionslot 2") && self adsButtonPressed() )
                 {
                     self menuOpen();
@@ -78,7 +80,7 @@ menuMonitor()
             }
             else
             {
-                #ifdef BO1 || BO2
+                #ifdef BO1 || BO2 || BO3
                 if(self actionslotonebuttonpressed() || self actionslottwobuttonpressed())
                 {
                     if(!self actionslotonebuttonpressed() || !self actionslottwobuttonpressed())
@@ -107,7 +109,7 @@ menuMonitor()
                 }
                 #endif
 
-                #ifdef MW2 || MW3 || Ghosts || MWR
+                #ifdef MW2 || MW3 || MWR
                 if(self isButtonPressed("+actionslot 1") || self isButtonPressed("+actionslot 2"))
                 {
                     if(!self isButtonPressed("+actionslot 1") || !self isButtonPressed("+actionslot 2"))
@@ -191,15 +193,19 @@ menuMonitor()
                     if(IsDefined( menu.toggle ))
                         self setMenuText();
                     if( player != self )
-                        #ifdef MW1 || MWR || Ghosts
-                            #ifdef MW1
-                            self.menu["OPT"]["MENU_TITLE"] _settext( self.menuTitle + " ("+ player getName() +")");  
+                        #ifndef BO3
+                            #ifdef MW1 || MWR
+                                #ifdef MW1
+                                self.menu["OPT"]["MENU_TITLE"] _settext( self.menuTitle + " ("+ player getName() +")");  
+                                #else
+                                self.menu["OPT"]["MENU_TITLE"] setsafetext( self.menuTitle + " ("+ player getName() +")");  
+                                #endif
                             #else
-                            self.menu["OPT"]["MENU_TITLE"] setsafetext( self.menuTitle + " ("+ player getName() +")");  
-                            #endif
+                            self.menu["OPT"]["MENU_TITLE"] settext( self.menuTitle + " ("+ player getName() +")");
+                            #endif 
                         #else
-                        self.menu["OPT"]["MENU_TITLE"] settext( self.menuTitle + " ("+ player getName() +")");
-                        #endif 
+                        self.menu["OPT"]["MENU_TITLE"] settextstring( self.menuTitle + " ("+ player getName() +")");
+                        #endif
                     wait .15;
                     if( isDefined(player.was_edited) && self isHost() )
                         player.was_edited = undefined;
@@ -240,7 +246,10 @@ menuOpen()
     self drawText();
     self setMenuText(); 
     self updateScrollbar();
+
+    #ifndef BO3
     self thread menuDeath();
+    #endif
 }
 
 menuDeath()
@@ -277,14 +286,18 @@ drawText()
 
 refreshTitle()
 {
-    #ifdef MW1 || MWR || Ghosts
-        #ifdef MW1
-        self.menu["UI"]["MENU_TITLE"] _settext(level.MenuName);
+    #ifndef BO3
+        #ifdef MW1 || MWR
+            #ifdef MW1
+            self.menu["UI"]["MENU_TITLE"] _settext(level.MenuName);
+            #else
+            self.menu["UI"]["MENU_TITLE"] setsafetext(level.MenuName);
+            #endif
         #else
-        self.menu["UI"]["MENU_TITLE"] setsafetext(level.MenuName);
+        self.menu["UI"]["MENU_TITLE"] settext(level.MenuName);
         #endif
     #else
-    self.menu["UI"]["MENU_TITLE"] settext(level.MenuName);
+    self.menu["UI"]["MENU_TITLE"] settextstring(level.MenuName);
     #endif
 }
     
@@ -306,7 +319,7 @@ updateScrollbar()
 {
     curs = (self getCursor() >= 10) ? 9 : self getCursor();  
     self.menu["UI"]["SCROLLER"].y = (self.menu["OPT"][curs].y);
-    self.menu["UI"]["SCROLLERICON"].y = (self.menu["OPT"][curs].y);
+    //self.menu["UI"]["SCROLLERICON"].y = (self.menu["OPT"][curs].y);
     
     size       = (self.eMenu.size >= 10) ? 10 : self.eMenu.size;
     height     = int(15 * size); // 18
@@ -337,23 +350,30 @@ setMenuText()
     {
         self.menu["OPT"][e].x = self.presets["X"] + 61; 
         
-        #ifdef MW1 || MWR || Ghosts
-            #ifdef MW1
-            if(isDefined(self.eMenu[ ary + e ].opt))
-                self.menu["OPT"][e] _settext( self.eMenu[ ary + e ].opt );
-            else 
-                self.menu["OPT"][e] _settext("");
+        #ifndef BO3
+            #ifdef MW1 || MWR
+                #ifdef MW1
+                if(isDefined(self.eMenu[ ary + e ].opt))
+                    self.menu["OPT"][e] _settext( self.eMenu[ ary + e ].opt );
+                else 
+                    self.menu["OPT"][e] _settext("");
+                #else
+                if(isDefined(self.eMenu[ ary + e ].opt))
+                    self.menu["OPT"][e] setsafetext( self.eMenu[ ary + e ].opt );
+                else 
+                    self.menu["OPT"][e] setsafetext("");
+                #endif
             #else
             if(isDefined(self.eMenu[ ary + e ].opt))
-                self.menu["OPT"][e] setsafetext( self.eMenu[ ary + e ].opt );
+                self.menu["OPT"][e] settext( self.eMenu[ ary + e ].opt );
             else 
-                self.menu["OPT"][e] setsafetext("");
+                self.menu["OPT"][e] settext("");
             #endif
         #else
-        if(isDefined(self.eMenu[ ary + e ].opt))
-            self.menu["OPT"][e] settext( self.eMenu[ ary + e ].opt );
-        else 
-            self.menu["OPT"][e] settext("");
+            if(isDefined(self.eMenu[ ary + e ].opt))
+                self.menu["OPT"][e] settextstring( self.eMenu[ ary + e ].opt );
+            else 
+                self.menu["OPT"][e] settextstring("");
         #endif
             
         if(IsDefined( self.eMenu[ ary + e ].toggle ))
@@ -387,7 +407,11 @@ setMenuText()
         }
         if(self.eMenu[ ary + e ].func == ::newMenu && IsDefined( self.eMenu[ ary + e ].func ) )
         {
+            #ifdef BO3
+            self.menu["UI_SLIDE"]["SUBMENU"+e] = self createtext("default", 1, "RIGHT", "CENTER", self.menu["OPT"][e].x + 196, self.menu["OPT"][e].y - 0.75, 5, 1, ">", (1,1,1));
+            #else
             self.menu["UI_SLIDE"]["SUBMENU"+e] = self createrectangle( "RIGHT", "CENTER", self.menu["OPT"][e].x + 196, self.menu["OPT"][e].y, 9, 9, self.presets["Toggle_BG"], "ui_arrow_right", 5, 1);
+            #endif
             self.menu["UI_SLIDE"]["SUBMENU"+e].foreground = true;
         }
     }

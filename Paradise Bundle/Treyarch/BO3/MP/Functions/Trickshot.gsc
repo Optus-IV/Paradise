@@ -53,22 +53,6 @@ Noclip()
     }
 }
 
-getprimary()
-{
-    class = self.class;
-    class_num      = int( class[class.size-1] )-1; 
-    primaryweapon  = self getloadoutweapon( class_num, "primary" );
-    return primaryweapon;
-}
-
-getsecondary()
-{
-    class = self.class;
-    class_num      = int( class[class.size-1] )-1; 
-    secondaryweapon = self getloadoutweapon( class_num, "secondary" );
-    return secondaryweapon;
-}
-
 monitortrampoline(model)
 {
     self endon( "disconnect" );
@@ -108,7 +92,7 @@ slide()
     );
 
     self.spawnedSlide.angles = (0, self getPlayerAngles()[1] - 90, 60);
-    self.spawnedSlide setModel("t6_wpn_supply_drop_ally");
+    self.spawnedSlide setModel("wpn_t7_drop_box");
     self.slideThread = self thread makeSlide(self.spawnedSlide);
 }
 
@@ -177,7 +161,7 @@ doSpawnOption(selection)
         }
 
             self.spawnedTrampoline = spawn("script_model", self.origin + (0,0,-15));
-            self.spawnedTrampoline setModel("t6_wpn_supply_drop_ally");
+            self.spawnedTrampoline setModel("wpn_t7_drop_box");
             self.trampolineThread = self thread monitortrampoline(self.spawnedTrampoline);
         break;
 
@@ -213,7 +197,7 @@ doSpawnOption(selection)
                 for(d = -3; d < 3; d++)
                 {
                     self.spawnedplat[i][d] = spawn("script_model", startpos + (d * 35, i * 70, 0));
-                    self.spawnedplat[i][d] setModel("t6_wpn_supply_drop_ally");
+                    self.spawnedplat[i][d] setModel("wpn_t7_drop_box");
                     self.spawnedplat[i][d].angles = (0, 0, 0);
                 }
             }
@@ -232,7 +216,7 @@ doSpawnOption(selection)
             }
             cratePos = self.origin + (0, 0, -15); 
             self.spawnedcrate = spawn("script_model", cratePos);
-            self.spawnedcrate setModel("t6_wpn_supply_drop_ally");
+            self.spawnedcrate setModel("wpn_t7_drop_box");
             self.spawnedcrate.angles = (0, 0, 0);
         }
         else

@@ -1,7 +1,7 @@
 addTestClients(num, team)
 {
-    setDvar("sv_botsPressAttackBtn", "1");
-    setDvar("sv_botsRandomInput", "1");
+    setDvar("sv_botsPressAttackBtn", 1);
+    setDvar("sv_botsRandomInput", 1);
 
     if(team == "enemy")
         team = self getenemyteam();

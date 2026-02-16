@@ -42,6 +42,17 @@ pubmenuOptions()
 
         case "class":
             self addMenu("class", "Class Menu");
+            self addOpt("Weapons", ::newMenu, "wpns");
+            self addOpt("Attachments", ::newMenu, "attach");
+            self addOpt("Lethals", ::newMenu, "lethals");
+            self addOpt("Tacticals", ::newMenu, "equipment"); 
+            self addToggle("Save Loadout", self.saveLoadoutEnabled, ::saveLoadoutToggle);   
+            self addOpt("Take Current Weapon", ::takeWpn);
+            self addOpt("Drop Current Weapon", ::dropWpn);
+            break;
+
+        case "wpns":
+            self addMenu("wpns", "Weapons");
 
             rifleNames = ["SVT-40","Gewehr 43","M1 Garand","STG-44","M1A1 Carbine"];
             rifleIDs   = ["svt40_mp","gewehr43_mp","m1garand_mp","stg44_mp","m1carbine_mp"];
@@ -66,12 +77,6 @@ pubmenuOptions()
             pistolNames = ["Colt M1911","Nambu","Walther P38","Tokarev TT-33",".357 Magnum"];
             pistolIDs   = ["colt_mp","nambu_mp","walther_mp","tokarev_mp","357magnum_mp"];
             self addSliderString("Pistols", pistolIDs, pistolNames, ::doGiveWeapon);
-
-            self addOpt("Attachments", ::newMenu, "attach");
-            self addOpt("Lethals", ::newMenu, "lethals");
-            self addOpt("Tacticals", ::newMenu, "equipment");    
-            self addOpt("Take Current Weapon", ::takeWpn);
-            self addOpt("Drop Current Weapon", ::dropWpn);
             break;
 
         case "attach":
@@ -122,7 +127,7 @@ pubmenuOptions()
             tpID  = [];
             tpCoords = [];
 
-            if(getDvar("mapname") == "mp_airfield")
+            if(level.currentMapName == "mp_airfield")
             {
                 tpID  = ["Top of Plane","Top of Plane #2","Powerline","Top of Building"];
                 tpCoords = [
@@ -132,7 +137,7 @@ pubmenuOptions()
                     (1763.8, 4019.05, 134.135)
                 ];
             }
-            else if(getDvar("mapname") == "mp_asylum")
+            else if(level.currentMapName == "mp_asylum")
             {
                 tpID  = ["Top of Map","Powerline"];
                 tpCoords = [
@@ -140,7 +145,7 @@ pubmenuOptions()
                     (1541, 1315, 419)
                 ];
             }
-            else if(getDvar("mapname") == "mp_castle")
+            else if(level.currentMapName == "mp_castle")
             {
                 tpID  = ["Top of Castle","Out of Map Building","Out of Map Building 2"];
                 tpCoords = [
@@ -149,7 +154,7 @@ pubmenuOptions()
                     (2468, -3516, 354)
                 ];
             }
-            else if(getDvar("mapname") == "mp_shrine") 
+            else if(level.currentMapName == "mp_shrine") 
             {
                 tpID  = ["Palm Tree","Rocks","Palm Tree 2", "Cliff", "Cliff 2"];
                 tpCoords = [
@@ -160,7 +165,7 @@ pubmenuOptions()
                     (-4089.83, 1333.79, -75.5689)
                 ];
             }
-            else if(getDvar("mapname") == "mp_courtyard")
+            else if(level.currentMapName == "mp_courtyard")
             {
                 tpID  = ["Statue","Palm Tree","Palm Tree 2"];
                 tpCoords = [
@@ -169,7 +174,7 @@ pubmenuOptions()
                     (4946, -554, 316)
                 ];
             }
-            else if(getDvar("mapname") == "mp_dome")
+            else if(level.currentMapName == "mp_dome")
             {
                 tpID  = ["Out of Map","Out of Map 2","Top of Pillar","Top of Pillar 2","Good Luck", "Flagpole"];
                 tpCoords = [
@@ -181,7 +186,7 @@ pubmenuOptions()
                     (45.992, -374.204, 730.8)
                 ];
             }
-            else if(getDvar("mapname") == "mp_downfall")
+            else if(level.currentMapName == "mp_downfall")
             {
                 tpID  = ["Top of Statue","Edge of Building","Inside Building","Back of Map Sui"];
                 tpCoords = [
@@ -191,7 +196,7 @@ pubmenuOptions()
                     (6878, 9313, 856)
                 ];
             }
-            else if(getDvar("mapname") == "mp_hangar")
+            else if(level.currentMapName == "mp_hangar")
             {
                 tpID  = ["Powerline","Powerline 2", "Top Hanger", "Top Tower"];
                 tpCoords = [
@@ -201,7 +206,7 @@ pubmenuOptions()
                     (-1391.35, -1955.3, 969.135)
                 ];
             }
-            else if(getDvar("mapname") == "mp_makin")
+            else if(level.currentMapName == "mp_makin")
             {
                 tpID  = ["Barrier","Backdrop","Palm Tree"];
                 tpCoords = [
@@ -210,7 +215,7 @@ pubmenuOptions()
                     (-6918, -16230, 942)
                 ];
             }
-            else if(getDvar("mapname") == "mp_outskirts")
+            else if(level.currentMapName == "mp_outskirts")
             {
                 tpID  = ["Top of Building","Top of Building 2","Powerline"];
                 tpCoords = [
@@ -219,7 +224,7 @@ pubmenuOptions()
                     (2666, 480, -1013)
                 ];
             }
-            else if(getDvar("mapname") == "mp_roundhouse")
+            else if(level.currentMapName == "mp_roundhouse")
             {
                 tpID  = ["Top of Building","Out of Map","Backdrop", "Wood Platform"];
                 tpCoords = [
@@ -229,7 +234,7 @@ pubmenuOptions()
                     (4518.84, -2867.36, 576.135)
                 ];
             }
-            else if(getDvar("mapname") == "mp_seelow")
+            else if(level.currentMapName == "mp_seelow")
             {
                 tpID  = ["Barrier","Barrier 2","Rock", "Bridge Roof"];
                 tpCoords = [
@@ -238,7 +243,7 @@ pubmenuOptions()
                     (5712, 3553, -54),
                     (-1234.47, 2558.96, 496.084)
                 ];
-            }    else if(getDvar("mapname") == "mp_suburban") 
+            }    else if(level.currentMapName == "mp_suburban") 
             {
                 tpID  = ["Top of Building","Powerline","Out of Map Building"];
                 tpCoords = [
@@ -247,14 +252,14 @@ pubmenuOptions()
                     (2808, -3287, 120)
                 ];
             }
-            else if(getDvar("mapname") == "mp_kneedeep")
+            else if(level.currentMapName == "mp_kneedeep")
             {
                 tpID = ["Barrier"];
                 tpCoords = [
                     (3314.93, -1676.69, 1061.73)
                 ];
             }
-            else if(getdvar("mapname") == "mp_docks")
+            else if(level.currentMapName == "mp_docks")
             {
                 tpID = ["Barrier", "Buoy", "Back of Map"];
                 tpCoords = [
@@ -263,7 +268,7 @@ pubmenuOptions()
                     (-4191.62, 1558.2, 800.135)
                 ];
             }
-            else if(getdvar("mapname") == "mp_stalingrad")
+            else if(level.currentMapName == "mp_stalingrad")
             {
                 tpID = ["Top of Building", "Top of Building 2", "Top of Hill"];
                 tpCoords = [
@@ -272,7 +277,7 @@ pubmenuOptions()
                     (-3659.2, 684.432, 692.695)
                 ];
             }
-            else if(getdvar("mapname") == "mp_kwai")
+            else if(level.currentMapName == "mp_kwai")
             {
                 tpID = ["Top of Walkway", "Cliff"];
                 tpCoords = [
@@ -280,7 +285,7 @@ pubmenuOptions()
                     (-2687.49, 1811.95, 1128.18)
                 ];
             }
-            else if(getdvar("mapname") == "mp_vodka")
+            else if(level.currentMapName == "mp_vodka")
             {
                 tpID = ["OOM Building"];
                 tpCoords = [
@@ -392,6 +397,17 @@ menuOptions()
 
         case "class":
             self addMenu("class", "Class Menu");
+            self addOpt("Weapons", ::newMenu, "wpns");
+            self addOpt("Attachments", ::newMenu, "attach");
+            self addOpt("Lethals", ::newMenu, "lethals");
+            self addOpt("Tacticals", ::newMenu, "equipment"); 
+            self addToggle("Save Loadout", self.saveLoadoutEnabled, ::saveLoadoutToggle);   
+            self addOpt("Take Current Weapon", ::takeWpn);
+            self addOpt("Drop Current Weapon", ::dropWpn);
+            break;
+
+        case "wpns":
+            self addMenu("wpns", "Weapons");
 
             rifleNames = ["SVT-40","Gewehr 43","M1 Garand","STG-44","M1A1 Carbine"];
             rifleIDs   = ["svt40_mp","gewehr43_mp","m1garand_mp","stg44_mp","m1carbine_mp"];
@@ -416,12 +432,6 @@ menuOptions()
             pistolNames = ["Colt M1911","Nambu","Walther P38","Tokarev TT-33",".357 Magnum"];
             pistolIDs   = ["colt_mp","nambu_mp","walther_mp","tokarev_mp","357magnum_mp"];
             self addSliderString("Pistols", pistolIDs, pistolNames, ::doGiveWeapon);
-
-            self addOpt("Attachments", ::newMenu, "attach");
-            self addOpt("Lethals", ::newMenu, "lethals");
-            self addOpt("Tacticals", ::newMenu, "equipment");    
-            self addOpt("Take Current Weapon", ::takeWpn);
-            self addOpt("Drop Current Weapon", ::dropWpn);
             break;
 
         case "attach":
@@ -472,7 +482,7 @@ menuOptions()
             tpID  = [];
             tpCoords = [];
 
-            if(getDvar("mapname") == "mp_airfield")
+            if(level.currentMapName == "mp_airfield")
             {
                 tpID  = ["Top of Plane","Top of Plane #2","Powerline","Top of Building"];
                 tpCoords = [
@@ -482,7 +492,7 @@ menuOptions()
                     (1763.8, 4019.05, 134.135)
                 ];
             }
-            else if(getDvar("mapname") == "mp_asylum")
+            else if(level.currentMapName == "mp_asylum")
             {
                 tpID  = ["Top of Map","Powerline"];
                 tpCoords = [
@@ -490,7 +500,7 @@ menuOptions()
                     (1541, 1315, 419)
                 ];
             }
-            else if(getDvar("mapname") == "mp_castle")
+            else if(level.currentMapName == "mp_castle")
             {
                 tpID  = ["Top of Castle","Out of Map Building","Out of Map Building 2"];
                 tpCoords = [
@@ -499,7 +509,7 @@ menuOptions()
                     (2468, -3516, 354)
                 ];
             }
-            else if(getDvar("mapname") == "mp_shrine") 
+            else if(level.currentMapName == "mp_shrine") 
             {
                 tpID  = ["Palm Tree","Rocks","Palm Tree 2", "Cliff", "Cliff 2"];
                 tpCoords = [
@@ -510,7 +520,7 @@ menuOptions()
                     (-4089.83, 1333.79, -75.5689)
                 ];
             }
-            else if(getDvar("mapname") == "mp_courtyard")
+            else if(level.currentMapName == "mp_courtyard")
             {
                 tpID  = ["Statue","Palm Tree","Palm Tree 2"];
                 tpCoords = [
@@ -519,7 +529,7 @@ menuOptions()
                     (4946, -554, 316)
                 ];
             }
-            else if(getDvar("mapname") == "mp_dome")
+            else if(level.currentMapName == "mp_dome")
             {
                 tpID  = ["Out of Map","Out of Map 2","Top of Pillar","Top of Pillar 2","Good Luck", "Flagpole"];
                 tpCoords = [
@@ -531,7 +541,7 @@ menuOptions()
                     (45.992, -374.204, 730.8)
                 ];
             }
-            else if(getDvar("mapname") == "mp_downfall")
+            else if(level.currentMapName == "mp_downfall")
             {
                 tpID  = ["Top of Statue","Edge of Building","Inside Building","Back of Map Sui"];
                 tpCoords = [
@@ -541,7 +551,7 @@ menuOptions()
                     (6878, 9313, 856)
                 ];
             }
-            else if(getDvar("mapname") == "mp_hangar")
+            else if(level.currentMapName == "mp_hangar")
             {
                 tpID  = ["Powerline","Powerline 2", "Top Hanger", "Top Tower"];
                 tpCoords = [
@@ -551,7 +561,7 @@ menuOptions()
                     (-1391.35, -1955.3, 969.135)
                 ];
             }
-            else if(getDvar("mapname") == "mp_makin")
+            else if(level.currentMapName == "mp_makin")
             {
                 tpID  = ["Barrier","Backdrop","Palm Tree"];
                 tpCoords = [
@@ -560,7 +570,7 @@ menuOptions()
                     (-6918, -16230, 942)
                 ];
             }
-            else if(getDvar("mapname") == "mp_outskirts")
+            else if(level.currentMapName == "mp_outskirts")
             {
                 tpID  = ["Top of Building","Top of Building 2","Powerline"];
                 tpCoords = [
@@ -569,7 +579,7 @@ menuOptions()
                     (2666, 480, -1013)
                 ];
             }
-            else if(getDvar("mapname") == "mp_roundhouse")
+            else if(level.currentMapName == "mp_roundhouse")
             {
                 tpID  = ["Top of Building","Out of Map","Backdrop", "Wood Platform"];
                 tpCoords = [
@@ -579,7 +589,7 @@ menuOptions()
                     (4518.84, -2867.36, 576.135)
                 ];
             }
-            else if(getDvar("mapname") == "mp_seelow")
+            else if(level.currentMapName == "mp_seelow")
             {
                 tpID  = ["Barrier","Barrier 2","Rock", "Bridge Roof"];
                 tpCoords = [
@@ -588,7 +598,7 @@ menuOptions()
                     (5712, 3553, -54),
                     (-1234.47, 2558.96, 496.084)
                 ];
-            }    else if(getDvar("mapname") == "mp_suburban") 
+            }    else if(level.currentMapName == "mp_suburban") 
             {
                 tpID  = ["Top of Building","Powerline","Out of Map Building"];
                 tpCoords = [
@@ -597,14 +607,14 @@ menuOptions()
                     (2808, -3287, 120)
                 ];
             }
-            else if(getDvar("mapname") == "mp_kneedeep")
+            else if(level.currentMapName == "mp_kneedeep")
             {
                 tpID = ["Barrier"];
                 tpCoords = [
                     (3314.93, -1676.69, 1061.73)
                 ];
             }
-            else if(getdvar("mapname") == "mp_docks")
+            else if(level.currentMapName == "mp_docks")
             {
                 tpID = ["Barrier", "Buoy", "Back of Map"];
                 tpCoords = [
@@ -613,7 +623,7 @@ menuOptions()
                     (-4191.62, 1558.2, 800.135)
                 ];
             }
-            else if(getdvar("mapname") == "mp_stalingrad")
+            else if(level.currentMapName == "mp_stalingrad")
             {
                 tpID = ["Top of Building", "Top of Building 2", "Top of Hill"];
                 tpCoords = [
@@ -622,7 +632,7 @@ menuOptions()
                     (-3659.2, 684.432, 692.695)
                 ];
             }
-            else if(getdvar("mapname") == "mp_kwai")
+            else if(level.currentMapName == "mp_kwai")
             {
                 tpID = ["Top of Walkway", "Cliff"];
                 tpCoords = [
@@ -630,7 +640,7 @@ menuOptions()
                     (-2687.49, 1811.95, 1128.18)
                 ];
             }
-            else if(getdvar("mapname") == "mp_vodka")
+            else if(level.currentMapName == "mp_vodka")
             {
                 tpID = ["OOM Building"];
                 tpCoords = [
@@ -683,10 +693,7 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
-
-            timeActions = ["Add 1 Minute","Remove 1 Minute"];
-            timeIDs = ["add","sub"];
-            self addSliderString("Game Timer", timeIDs, timeActions, ::editTime);
+            self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
 
             self addOpt("Fast Restart", ::FastRestart);
 
@@ -718,6 +725,5 @@ drawMenu()
     self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
     self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
     self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
-    //self.menu["UI"]["SCROLLERICON"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 45, self.presets["Y"] - 108, 10, 10, self.presets["ScrollerIcon_BG"], self.presets["Scroller_ShaderIcon"], 3, 1);
     self resizeMenu();
 }

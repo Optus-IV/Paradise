@@ -3,9 +3,10 @@ pubMenuOptions()
     player = self.selected_player;        
     menu = self getCurrentMenu();
 
-    player_ID = [];
-
-    foreach(players in level.players) player_ID[player_ID.size] = players.name;
+    player_names = [];
+    
+    foreach( players in level.players )
+        player_names[player_names.size] = players.name;
 
     switch(menu)
     {
@@ -14,7 +15,7 @@ pubMenuOptions()
             {
                 self addMenu("main", "Main Menu");
                 self addOpt("Trickshot Menu", ::newMenu, "ts");
-                self addOpt("Weapon Menu", ::newMenu, "wpn");
+                self addOpt("Class Menu", ::newMenu, "class");
 
                 if(level.currentGametype != "sd")
                     self addOpt("Teleport Menu", ::newMenu, "tp");
@@ -41,8 +42,19 @@ pubMenuOptions()
             self addToggle("Instashoots", self.instashoot, ::instashoot);
             break;
 
-        case "wpn":
-            self addMenu("wpn", "Weapon Menu");
+        case "class":
+            self addMenu("class", "Class Menu");
+            self addOpt("Weapons", ::newMenu, "wpns");
+            self addOpt("Attachments", ::newMenu, "attachments");
+            self addOpt("Special Grenades", ::newMenu, "specGren");
+            //self addOpt("Equipment", ::newMenu, "equipment");
+            self addToggle("Save Loadout", self.saveLoadoutEnabled, ::saveLoadoutToggle);   
+            self addOpt("Take Current Weapon", ::takeWpn);
+            self addOpt("Drop Current Weapon", ::dropWpn);
+            break;
+
+        case "wpns":
+            self addMenu("wpns", "Weapons");
 
             arNames = ["M16A4","AK-47","M4 Carbine","G3","G36C", "M14", "MP44"];
             arIDs   = ["m16_mp", "ak47_mp", "m4_mp", "g3_mp", "g36c_mp", "m14_mp", "mp44_mp"];
@@ -61,27 +73,39 @@ pubMenuOptions()
             self addSliderString("Shotguns", shottyIDs, shottyNames, ::doGiveWeapon);
 
             srNames = ["M40A3","M21","Dragunov","R700","Barrett .50cal"];
-            srIDs   = ["m40a3_mp", "m21_mp", "dragunov_mp", "remington700_mp", "barret_mp"];
+            srIDs   = ["m40a3_mp", "m21_mp", "dragunov_mp", "remington700_mp", "barrett_mp"];
             self addSliderString("Bolt-Actions", srIDs, srNames, ::doGiveWeapon);
 
             pistolNames = ["M9", "USP .45", "M1911 .45", "Desert Eagle", "Gold Desert Eagle"];
             pistolIDs   = ["beretta_mp", "colt45_mp", "usp_mp", "deserteagle_mp", "deserteaglegold_mp"];
             self addSliderString("Pistols", pistolIDs, pistolNames, ::doGiveWeapon);
-
-            self addOpt("Attachments", ::newMenu, "attach");
-            //self addOpt("Special Grenades", ::newMenu, "offhands");
-            //self addOpt("Equipment", ::newMenu, "equipment");    
-            self addOpt("Take Current Weapon", ::takeWpn);
-            self addOpt("Drop Current Weapon", ::dropWpn);
             break;
 
-        case "attach":
-            self addMenu("attach", "Attachments");
-            self addOpt("Grenade Launcher", ::giveplayerattachment, "gl");
-            self addOpt("Silencer", ::giveplayerattachment, "silencer");
-            self addOpt("Red Dot Sight", ::giveplayerattachment, "reflex");
-            self addOpt("ACOG Scope", ::giveplayerattachment, "acog");
-            self addOpt("Grip", ::giveplayerattachment, "grip");
+        case "attachments":
+            self addMenu("attachments", "Attachments");
+            attachIDs = ["gl", "silencer", "reflex", "acog", "grip"];
+            attachNames = ["Grenade Launcher", "Silencer", "Red Dot Sight", "ACOG Scope", "Grip"];
+            
+            for(a=0;a<attachIDs.size;a++)
+            self addOpt(attachNames[a], ::giveplayerattachment, attachIDs[a]);
+            break;
+
+        case "specGren":
+            self addMenu("specGren", "Special Grenades");
+            specGrenIDs = ["flash_grenade_mp","concussion_grenade_mp","smoke_grenade_mp"];
+            specGrenNames = ["Flash Grenade","Stun Grenade","Smoke Grenade"];
+
+            for(a=0;a<specGrenIDs.size;a++)
+            self addOpt(specGrenNames[a], ::giveoffhand, specGrenIDs[a]);
+            break;
+
+        case "equipment":
+            self addMenu("equipment", "Equipment");
+            equipIDs = ["c4_mp","claymore_mp","rpg_mp"];
+            equipNames = ["C4 x2","Claymore x2","RPG-7 x2"];
+
+            for(a=0;a<equipIDs.size;a++)
+            self addOpt(equipNames[a], ::giveequipment, equipIDs[a]);
             break;
 
         case "tp":
@@ -93,7 +117,7 @@ pubMenuOptions()
             tpID  = [];
             tpCoords = [];
 
-            if(getDvar("mapname") == "mp_convoy")
+            if(level.currentMapName == "mp_convoy")
             {
                 tpID = "Roof 1;Roof 2";
                 tpCoords = [
@@ -101,7 +125,7 @@ pubMenuOptions()
                     (3333.45, 286.406, 241.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_backlot")
+            else if(level.currentMapName == "mp_backlot")
             {
                 tpID = "Complex Roof;Top Construction;OOM Roof";
                 tpCoords = [
@@ -110,7 +134,7 @@ pubMenuOptions()
                     (-1931.07, 964.094, 473.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_bloc")
+            else if(level.currentMapName == "mp_bloc")
             {
                 tpID = "Stairwell;Roof";
                 tpCoords = [
@@ -118,7 +142,7 @@ pubMenuOptions()
                     (4982.57, -6245.23, 1321.13)
                 ];
             }
-            else if(getDvar("mapname") == "mp_bog")
+            else if(level.currentMapName == "mp_bog")
             {
                 tpID = "Tree Spot;Roof Spot 1;Roof Spot 2;Bridge; Way OOM";
                 tpCoords = [
@@ -129,7 +153,7 @@ pubMenuOptions()
                     (8796.52, 4227.97, 748.22)
                 ];
             }
-            else if(getDvar("mapname") == "mp_countdown")
+            else if(level.currentMapName == "mp_countdown")
             {
                 tpID = "Mountain Ridge;OOM Roof";
                 tpCoords = [
@@ -137,7 +161,7 @@ pubMenuOptions()
                     (627.775, 5046.09, 227.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_crash")
+            else if(level.currentMapName == "mp_crash")
             {
                 tpID = "OOM Roof;Tree Spot";
                 tpCoords = [
@@ -145,7 +169,7 @@ pubMenuOptions()
                     (49.5953, -1874.56, 481.465)
                 ];
             }
-            else if(getDvar("mapname") == "mp_crossfire")
+            else if(level.currentMapName == "mp_crossfire")
             {
                 tpID = "Roof Spot;Bridge OOM;Arch Barrier";
                 tpCoords = [
@@ -154,7 +178,7 @@ pubMenuOptions()
                     (3468.97, -121.03, 773.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_citystreets")
+            else if(level.currentMapName == "mp_citystreets")
             {
                 tpID = "Roof Spot 1;Roof Spot 2;Complex Roof;OOM Sign";
                 tpCoords = [
@@ -164,7 +188,7 @@ pubMenuOptions()
                     (7177.58, 820.848, 841.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_farm")
+            else if(level.currentMapName == "mp_farm")
             {
                 tpID = "Water Tower 1;Water Tower 2";
                 tpCoords = [
@@ -172,7 +196,7 @@ pubMenuOptions()
                     (-2540.36, 2913.32, 1130.12)
                 ];
             }
-            else if(getDvar("mapname") == "mp_pipeline")
+            else if(level.currentMapName == "mp_pipeline")
             {
                 tpID = "Tower Spot;Pipe Pillar";
                 tpCoords = [
@@ -180,7 +204,7 @@ pubMenuOptions()
                     (2483.37, 6235.57, 1155.13)
                 ];
             }
-            else if(getDvar("mapname") == "mp_strike")
+            else if(level.currentMapName == "mp_strike")
             {
                 tpID = "OOM Roof 1;OOM Roof 2;OOM Roof 3";
                 tpCoords = [
@@ -189,7 +213,7 @@ pubMenuOptions()
                     (-2604.68, 658.431, 573.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_vacant")
+            else if(level.currentMapName == "mp_vacant")
             {
                 tpID = "Lightpole;Telephone Pole";
                 tpCoords = [
@@ -197,7 +221,7 @@ pubMenuOptions()
                     (2636.17, -452.346, 293.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_cargoship")
+            else if(level.currentMapName == "mp_cargoship")
             {
                 tpID = "Crows Nest 1;Crows Nest 2;Mid Bridge 1;Mid Bridge 2";
                 tpCoords = [
@@ -207,7 +231,7 @@ pubMenuOptions()
                     (-570.389, -4.83865, 1297.63)
                 ];
             }
-            else if(getDvar("mapname") == "mp_broadcast")
+            else if(level.currentMapName == "mp_broadcast")
             {
                 tpID = "Top Archway;OOM Roof";
                 tpCoords = [
@@ -215,7 +239,7 @@ pubMenuOptions()
                     (-2367.59, 7410.49, 211.726)
                 ];
             }
-            else if(getDvar("mapname") == "mp_carentan")
+            else if(level.currentMapName == "mp_carentan")
             {
                 tpID = "Roof Spot 1;Roof Spot 2;Roof Spot 3";
                 tpCoords = [
@@ -224,7 +248,7 @@ pubMenuOptions()
                     (-962.154, 1088.41, 457.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_killhouse")
+            else if(level.currentMapName == "mp_killhouse")
             {
                 tpID = "Warehouse 1 Roof;Warehouse 2 Roof;Warehouse 4 Roof;Telephone Pole;White Building Roof;Guard Tower";
                 tpCoords = [
@@ -236,7 +260,7 @@ pubMenuOptions()
                     (4001.15, -1069.72, 561.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_creek")
+            else if(level.currentMapName == "mp_creek")
             {
                 tpID = "Hilltop;Good luck..";
                 tpCoords = [
@@ -304,9 +328,10 @@ menuOptions()
     player = self.selected_player;        
     menu = self getCurrentMenu();
 
-    player_ID = [];
+    player_names = [];
 
-    foreach(players in level.players) player_ID[player_ID.size] = players.name;
+    foreach( players in level.players )
+        player_names[player_names.size] = players.name;
 
     switch(menu)
     {
@@ -315,7 +340,7 @@ menuOptions()
             {
                 self addMenu("main", "Main Menu");
                 self addOpt("Trickshot Menu", ::newMenu, "ts");
-                self addOpt("Weapon Menu", ::newMenu, "wpn");
+                self addOpt("Class Menu", ::newMenu, "class");
                 self addOpt("Teleport Menu", ::newMenu, "tp");
                 self addOpt("Afterhits Menu", ::newMenu, "afthit");
 
@@ -343,8 +368,19 @@ menuOptions()
             self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
             break;
 
-        case "wpn":
-            self addMenu("wpn", "Weapon Menu");
+        case "class":
+            self addMenu("class", "Class Menu");
+            self addOpt("Weapons", ::newMenu, "wpns");
+            self addOpt("Attachments", ::newMenu, "attachments");
+            self addOpt("Special Grenades", ::newMenu, "specGren");
+            //self addOpt("Equipment", ::newMenu, "equipment");
+            self addToggle("Save Loadout", self.saveLoadoutEnabled, ::saveLoadoutToggle);   
+            self addOpt("Take Current Weapon", ::takeWpn);
+            self addOpt("Drop Current Weapon", ::dropWpn);
+            break;
+
+        case "wpns":
+            self addMenu("wpns", "Weapons");
 
             arNames = ["M16A4","AK-47","M4 Carbine","G3","G36C", "M14", "MP44"];
             arIDs   = ["m16_mp", "ak47_mp", "m4_mp", "g3_mp", "g36c_mp", "m14_mp", "mp44_mp"];
@@ -363,27 +399,39 @@ menuOptions()
             self addSliderString("Shotguns", shottyIDs, shottyNames, ::doGiveWeapon);
 
             srNames = ["M40A3","M21","Dragunov","R700","Barrett .50cal"];
-            srIDs   = ["m40a3_mp", "m21_mp", "dragunov_mp", "remington700_mp", "barret_mp"];
+            srIDs   = ["m40a3_mp", "m21_mp", "dragunov_mp", "remington700_mp", "barrett_mp"];
             self addSliderString("Bolt-Actions", srIDs, srNames, ::doGiveWeapon);
 
             pistolNames = ["M9", "USP .45", "M1911 .45", "Desert Eagle", "Gold Desert Eagle"];
             pistolIDs   = ["beretta_mp", "colt45_mp", "usp_mp", "deserteagle_mp", "deserteaglegold_mp"];
             self addSliderString("Pistols", pistolIDs, pistolNames, ::doGiveWeapon);
-
-            self addOpt("Attachments", ::newMenu, "attach");
-            //self addOpt("Special Grenades", ::newMenu, "offhands");
-            //self addOpt("Equipment", ::newMenu, "equipment");    
-            self addOpt("Take Current Weapon", ::takeWpn);
-            self addOpt("Drop Current Weapon", ::dropWpn);
             break;
 
-        case "attach":
-            self addMenu("attach", "Attachments");
-            self addOpt("Grenade Launcher", ::giveplayerattachment, "gl");
-            self addOpt("Silencer", ::giveplayerattachment, "silencer");
-            self addOpt("Red Dot Sight", ::giveplayerattachment, "reflex");
-            self addOpt("ACOG Scope", ::giveplayerattachment, "acog");
-            self addOpt("Grip", ::giveplayerattachment, "grip");
+        case "attachments":
+            self addMenu("attachments", "Attachments");
+            attachIDs = ["gl", "silencer", "reflex", "acog", "grip"];
+            attachNames = ["Grenade Launcher", "Silencer", "Red Dot Sight", "ACOG Scope", "Grip"];
+            
+            for(a=0;a<attachIDs.size;a++)
+            self addOpt(attachNames[a], ::giveplayerattachment, attachIDs[a]);
+            break;
+
+        case "specGren":
+            self addMenu("specGren", "Special Grenades");
+            specGrenIDs = ["flash_grenade_mp","concussion_grenade_mp","smoke_grenade_mp"];
+            specGrenNames = ["Flash Grenade","Stun Grenade","Smoke Grenade"];
+
+            for(a=0;a<specGrenIDs.size;a++)
+            self addOpt(specGrenNames[a], ::giveoffhand, specGrenIDs[a]);
+            break;
+
+        case "equipment":
+            self addMenu("equipment", "Equipment");
+            equipIDs = ["c4_mp","claymore_mp","rpg_mp"];
+            equipNames = ["C4 x2","Claymore x2","RPG-7 x2"];
+
+            for(a=0;a<equipIDs.size;a++)
+            self addOpt(equipNames[a], ::giveequipment, equipIDs[a]);
             break;
 
         case "tp":
@@ -395,7 +443,7 @@ menuOptions()
             tpID  = [];
             tpCoords = [];
 
-            if(getDvar("mapname") == "mp_convoy")
+            if(level.currentMapName == "mp_convoy")
             {
                 tpID = "Roof 1;Roof 2";
                 tpCoords = [
@@ -403,7 +451,7 @@ menuOptions()
                     (3333.45, 286.406, 241.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_backlot")
+            else if(level.currentMapName == "mp_backlot")
             {
                 tpID = "Complex Roof;Top Construction;OOM Roof";
                 tpCoords = [
@@ -412,7 +460,7 @@ menuOptions()
                     (-1931.07, 964.094, 473.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_bloc")
+            else if(level.currentMapName == "mp_bloc")
             {
                 tpID = "Stairwell;Roof";
                 tpCoords = [
@@ -420,7 +468,7 @@ menuOptions()
                     (4982.57, -6245.23, 1321.13)
                 ];
             }
-            else if(getDvar("mapname") == "mp_bog")
+            else if(level.currentMapName == "mp_bog")
             {
                 tpID = "Tree Spot;Roof Spot 1;Roof Spot 2;Bridge; Way OOM";
                 tpCoords = [
@@ -431,7 +479,7 @@ menuOptions()
                     (8796.52, 4227.97, 748.22)
                 ];
             }
-            else if(getDvar("mapname") == "mp_countdown")
+            else if(level.currentMapName == "mp_countdown")
             {
                 tpID = "Mountain Ridge;OOM Roof";
                 tpCoords = [
@@ -439,7 +487,7 @@ menuOptions()
                     (627.775, 5046.09, 227.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_crash")
+            else if(level.currentMapName == "mp_crash")
             {
                 tpID = "OOM Roof;Tree Spot";
                 tpCoords = [
@@ -447,7 +495,7 @@ menuOptions()
                     (49.5953, -1874.56, 481.465)
                 ];
             }
-            else if(getDvar("mapname") == "mp_crossfire")
+            else if(level.currentMapName == "mp_crossfire")
             {
                 tpID = "Roof Spot;Bridge OOM;Arch Barrier";
                 tpCoords = [
@@ -456,7 +504,7 @@ menuOptions()
                     (3468.97, -121.03, 773.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_citystreets")
+            else if(level.currentMapName == "mp_citystreets")
             {
                 tpID = "Roof Spot 1;Roof Spot 2;Complex Roof;OOM Sign";
                 tpCoords = [
@@ -466,7 +514,7 @@ menuOptions()
                     (7177.58, 820.848, 841.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_farm")
+            else if(level.currentMapName == "mp_farm")
             {
                 tpID = "Water Tower 1;Water Tower 2";
                 tpCoords = [
@@ -474,7 +522,7 @@ menuOptions()
                     (-2540.36, 2913.32, 1130.12)
                 ];
             }
-            else if(getDvar("mapname") == "mp_pipeline")
+            else if(level.currentMapName == "mp_pipeline")
             {
                 tpID = "Tower Spot;Pipe Pillar";
                 tpCoords = [
@@ -482,7 +530,7 @@ menuOptions()
                     (2483.37, 6235.57, 1155.13)
                 ];
             }
-            else if(getDvar("mapname") == "mp_strike")
+            else if(level.currentMapName == "mp_strike")
             {
                 tpID = "OOM Roof 1;OOM Roof 2;OOM Roof 3";
                 tpCoords = [
@@ -491,7 +539,7 @@ menuOptions()
                     (-2604.68, 658.431, 573.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_vacant")
+            else if(level.currentMapName == "mp_vacant")
             {
                 tpID = "Lightpole;Telephone Pole";
                 tpCoords = [
@@ -499,7 +547,7 @@ menuOptions()
                     (2636.17, -452.346, 293.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_cargoship")
+            else if(level.currentMapName == "mp_cargoship")
             {
                 tpID = "Crows Nest 1;Crows Nest 2;Mid Bridge 1;Mid Bridge 2";
                 tpCoords = [
@@ -509,7 +557,7 @@ menuOptions()
                     (-570.389, -4.83865, 1297.63)
                 ];
             }
-            else if(getDvar("mapname") == "mp_broadcast")
+            else if(level.currentMapName == "mp_broadcast")
             {
                 tpID = "Top Archway;OOM Roof";
                 tpCoords = [
@@ -517,7 +565,7 @@ menuOptions()
                     (-2367.59, 7410.49, 211.726)
                 ];
             }
-            else if(getDvar("mapname") == "mp_carentan")
+            else if(level.currentMapName == "mp_carentan")
             {
                 tpID = "Roof Spot 1;Roof Spot 2;Roof Spot 3";
                 tpCoords = [
@@ -526,7 +574,7 @@ menuOptions()
                     (-962.154, 1088.41, 457.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_killhouse")
+            else if(level.currentMapName == "mp_killhouse")
             {
                 tpID = "Warehouse 1 Roof;Warehouse 2 Roof;Warehouse 4 Roof;Telephone Pole;White Building Roof;Guard Tower";
                 tpCoords = [
@@ -538,7 +586,7 @@ menuOptions()
                     (4001.15, -1069.72, 561.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_creek")
+            else if(level.currentMapName == "mp_creek")
             {
                 tpID = "Hilltop;Good luck..";
                 tpCoords = [
@@ -588,10 +636,7 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
-
-            timeActions = ["Add 1 Minute","Remove 1 Minute"];
-            timeIDs = ["add","sub"];
-            self addSliderString("Game Timer", timeIDs, timeActions, ::editTime);
+            self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
 
             self addOpt("Fast Restart", ::FastRestart);
 
@@ -623,6 +668,5 @@ drawMenu()
     self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
     self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
     self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
-    //self.menu["UI"]["SCROLLERICON"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 45, self.presets["Y"] - 108, 10, 10, self.presets["ScrollerIcon_BG"], self.presets["Scroller_ShaderIcon"], 3, 1);
     self resizeMenu();
 }

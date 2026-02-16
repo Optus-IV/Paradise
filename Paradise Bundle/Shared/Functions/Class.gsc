@@ -80,12 +80,12 @@ changeCamo(num)
     mystock = self getWeaponAmmoStock(weap);  
     self takeWeapon(weap);   
 
-    #ifdef BO1 || BO2
+    #ifdef BO1 || BO2 || BO3
     weaponOptions = self calcWeaponOptions(num,0,0,0,0);
-    self GiveWeapon(weap,0,weaponOptions);  
+    self GiveWeapon(weap,0,weaponOptions); 
     #endif
 
-    #ifdef MW2 || Ghosts
+    #ifdef MW2
     self GiveWeapon(weap, num);
     #endif
     
@@ -145,26 +145,22 @@ randomCamo()
     #endif
 }
 
-#ifndef MW1
-    #ifndef WAW
-        saveLoadoutToggle()
-        {
-            if(!self.saveLoadoutEnabled)
-            {
-                self saveloadout();
-                self.saveLoadoutEnabled = 1;
-            }
-            else if(self.saveLoadoutEnabled)
-            {
-                self deleteloadout();
-                self.saveLoadoutEnabled = 0;
-            }
-        }
+saveLoadoutToggle()
+{
+    if(!self.saveLoadoutEnabled)
+    {
+        self saveloadout();
+        self.saveLoadoutEnabled = 1;
+    }
+    else if(self.saveLoadoutEnabled)
+    {
+        self deleteloadout();
+        self.saveLoadoutEnabled = 0;
+    }
+}
 
-        deleteLoadout()
-        {        
-            self setPlayerCustomDvar("loadoutSaved", "0");
-            self iprintln("Loadout ^1Deleted");
-        }
-    #endif
-#endif
+deleteLoadout()
+{        
+    self setPlayerCustomDvar("loadoutSaved", "0");
+    self iprintln("Loadout ^1Deleted");
+}

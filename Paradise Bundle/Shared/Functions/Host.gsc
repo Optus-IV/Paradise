@@ -1,11 +1,14 @@
 FastRestart()
 {
-    for(i = 0; i < level.players.size; i++)
+    players = level.players;
+    
+    for ( i = 0; i < players.size; i++ )
     {
-        if (isDefined( level.players[i].pers["isBot"])) 
-            kick ( level.players[i] getEntityNumber() );
+        player = players[i];    
+        if(IsDefined(player.pers[ "isBot" ]) && player.pers["isBot"])
+            kick( player getEntityNumber());
     }
-    wait 1;
+    wait 2;
     map_restart( 0 );
 }
 
@@ -162,7 +165,7 @@ oomtoggle()
         level.oomUtilDisabled = 0;
 }
 
-#ifdef BO2 || Ghosts || MW2 || MW3 || MWR
+#ifdef BO2 || MW2 || MW3 || MWR
 togglelobbyfloat()
 {
     if(!self.floaters)
@@ -203,36 +206,17 @@ enableFloaters()
 }
 #endif
 
-editTime(input)
+editTime(value)
 {
-    #ifndef BO2
-    timeLeft       = GetDvar("scr_"+level.currentGametype+"_timelimit");
-    timeLeftProper = int(timeLeft);
-
-    if(input == "add")
-    {  
-        setTime = timeLeftProper + 1;
-        self iPrintln("^2Added 1 minute");
-    }
-    else if(input == "sub")
-    {
-        setTime = timeLeftProper - 1;
-        self iPrintln("^1Removed 1 minute"); 
-    }
-    SetDvar("scr_"+level.gametype+"_timelimit", setTime);
-    wait .05;
-
+    #ifdef BO2 || BO3
+        setGametypesetting("timelimit", getgametypesetting( "timelimit" ) + value);
     #else
-    
-    if(input == "add")
-    {
-        setgametypesetting( "timelimit", getgametypesetting( "timelimit" ) + 1);
-        self iPrintln("^2Added 1 Minute");
-    }
-    else if(input == "subtract")
-    {
-        setgametypesetting( "timelimit", getgametypesetting( "timelimit" ) - 1);
-        self iPrintln("^1Subtracted 1 Minute");
-    }
+        timeLeft       = GetDvar("scr_"+level.currentGametype+"_timelimit");
+        timeLeftProper = int(timeLeft);
+
+        setTime = timeLeftProper + value;
+        SetDvar("scr_"+level.gametype+"_timelimit", setTime);
+        wait .05;
     #endif
+
 }

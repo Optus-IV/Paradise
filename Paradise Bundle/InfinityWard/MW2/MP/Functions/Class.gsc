@@ -243,16 +243,19 @@ GiveSecondaryOffhand(offhand)
         self SetOffhandSecondaryClass("flash");
         self SetWeaponAmmoClip(offhand,2);
     }
+    
     else if(offhand == "concussion_grenade_mp")
     {
         self SetOffhandSecondaryClass("concussion");
         self SetWeaponAmmoClip(offhand,2);
     }
+
     else if(offhand == "smoke_grenade_mp")
     {
         self SetOffhandSecondaryClass("smoke");
         self SetWeaponAmmoClip(offhand,1);
     }
+
     self TakeWeapon(self GetCurrentOffhand());
     self GiveWeapon(offhand);
     self SetWeaponHudIconOverride( "secondaryoffhand", offhand );

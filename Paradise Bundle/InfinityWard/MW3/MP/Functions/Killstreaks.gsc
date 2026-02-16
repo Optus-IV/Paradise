@@ -26,7 +26,7 @@ FakeNuke()
         setSlowMotion( 0.25, 1, 2.0 );
         
         wait 1.5;
-        VisionSetNaked(GetDvar("mapname"), 0.5);
+        VisionSetNaked(level.currentMapName, 0.5);
         
         wait .1;
         break;

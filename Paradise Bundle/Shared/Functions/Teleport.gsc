@@ -81,7 +81,7 @@ dosaveandload()
         }
         #endif
 
-        #ifdef MW2 || MW3 || MWR || Ghosts
+        #ifdef MW2 || MW3 || MWR
         if( self.snl && self isbuttonpressed("+actionslot 2") && self GetStance() == "crouch")
         {
             self setplayerangles(self.a);
@@ -90,7 +90,7 @@ dosaveandload()
         }
         #endif
         
-        #ifdef BO1 || BO2
+        #ifdef BO1 || BO2 || BO3
         if( self.snl && self actionslottwobuttonpressed() && self GetStance() == "crouch")
         {
             self setplayerangles(self.a);

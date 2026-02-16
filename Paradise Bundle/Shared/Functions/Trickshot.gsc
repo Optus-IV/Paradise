@@ -21,7 +21,7 @@ SetCanswapMode(type)
 {
     if(type == "Current") 
     {
-        if(!self.currCan)
+        if(self.currCan)
         {
             self.currCan = 1;
             self.InfiniteCan = 0;
@@ -123,7 +123,7 @@ doTwoPiece()
     }
     #endif
 
-    #ifdef Ghosts
+    #ifdef BO3
     if(level.currentGametype == "dm")
     {
         self.kills   = 28;

@@ -128,7 +128,7 @@ menuOptions()
             self addOpt("Unset Spawn", ::unsetSpawn);
             self addToggle("Save & Load", self.snl, ::saveandload);
 
-            if(getDvar("mapname") == "mp_la")
+            if(level.currentMapName == "mp_la")
             {
                 tpNames = ["Garage Rooftop","Inside Garage","Plaza Building","Undermap Sui","Agora Ledge"];
                 tpCoords = [
@@ -139,7 +139,7 @@ menuOptions()
                     (-1778.4, 5631.22, 51.3185)
                 ];
             }
-            else if(getDvar("mapname") == "mp_dockside")
+            else if(level.currentMapName == "mp_dockside")
             {
                 tpNames = ["Out of Map Building","Out of Map Ledge"];
                 tpCoords = [
@@ -147,7 +147,7 @@ menuOptions()
                     (-10606.7, 2978.56, -54.2118)
                 ];
             }
-            else if(getDvar("mapname") == "mp_carrier")
+            else if(level.currentMapName == "mp_carrier")
             {
                 tpNames = ["Undermap Sui","Way Out Net","Helipad"];
                 tpCoords = [
@@ -156,7 +156,7 @@ menuOptions()
                     (-177.286, -1350.64, -267.875)
                 ];
             }
-            else if(getDvar("mapname") == "mp_drone")
+            else if(level.currentMapName == "mp_drone")
             {
                 tpNames = ["Hill Top Sui","End of Tunnel Sui","Inside Rock Sui"];
                 tpCoords = [
@@ -165,7 +165,7 @@ menuOptions()
                     (15425.4, -3109.07, 4333.52)
                 ];
             }
-            else if(getDvar("mapname") == "mp_express")
+            else if(level.currentMapName == "mp_express")
             {
                 tpNames = ["Bomb Spawn Roof","Defenders Spawn Roof","Powerlines","Powerlines 2","Powerlines 3","Top Roof 1","Top Roof 2","Drop Off Sui","End of Tunnel 1","End of Tunnel 2"];
                 tpCoords = [
@@ -181,7 +181,7 @@ menuOptions()
                     (5551.98, -3458.61, -777.233)
                 ];
             }
-            else if(getDvar("mapname") == "mp_hijacked")
+            else if(level.currentMapName == "mp_hijacked")
             {
                 tpNames = ["Top of Barrier","Top of Barrier 2"];
                 tpCoords = [
@@ -189,21 +189,21 @@ menuOptions()
                     (-6175.68, 808.258, 16131.3)
                 ];
             }
-            else if(getDvar("mapname") == "mp_overflow")
+            else if(level.currentMapName == "mp_overflow")
             {
                 tpNames = ["Impossible Shot"];
                 tpCoords = [
                     (28568, 7357.5, 1873.19)
                 ];
             }
-            else if(getDvar("mapname") == "mp_nightclub")
+            else if(level.currentMapName == "mp_nightclub")
             {
                 tpNames = ["Top of Barrier"];
                 tpCoords = [
                     (-19462.7,-2026.44, -1809.66)
                 ];
             }
-            else if(getDvar("mapname") == "mp_raid")
+            else if(level.currentMapName == "mp_raid")
             {
                 tpNames = ["Sui Roof","Basketball Court Roof","Sui Tree Spot","Other Tree Spot"];
                 tpCoords = [
@@ -213,7 +213,7 @@ menuOptions()
                     (2721.5, 4763.77, 137.625)
                 ];
             }
-            else if(getDvar("mapname") == "mp_slums")
+            else if(level.currentMapName == "mp_slums")
             {   
                 tpNames = ["Bomb Spawn Roof","B Roof","Soccer Field Roof","Out of Map Roof","Edge of Map Sui"];
                 tpCoords = [
@@ -224,7 +224,7 @@ menuOptions()
                     (-7128.08, -548.743, 1192.19)
                 ];
             }
-            else if(getDvar("mapname") == "mp_village")
+            else if(level.currentMapName == "mp_village")
             {
                 tpNames = ["Hill Top 1","Hill Top 2","Hill Top 3","Out of Map Roof","Top of Barrier","Barn Ledge"];
                 tpCoords = [
@@ -236,7 +236,7 @@ menuOptions()
                     (856.266, 1548.07, 222.173)
                 ];
             }
-            else if(getDvar("mapname") == "mp_turbine")
+            else if(level.currentMapName == "mp_turbine")
             {
                 tpNames = ["Inside Turbine","Stone Path","Top of Bridge","Out of Map Cliff"];
                 tpCoords = [
@@ -246,7 +246,7 @@ menuOptions()
                     (-207.78, -633.604, -562.192)
                 ];
             }
-            else if(getDvar("mapname") == "mp_socotra")
+            else if(level.currentMapName == "mp_socotra")
             {
                 tpNames = ["Defenders Spawn Roof","A Barrier","Staircase Spot","Out of Map Roof","Out of Map Sui"];
                 tpCoords = [
@@ -257,7 +257,7 @@ menuOptions()
                     (-2806.68, 4511.62, 124.697)
                 ];
             }
-            else if(getDvar("mapname") == "mp_nuketown_2020")
+            else if(level.currentMapName == "mp_nuketown_2020")
             {
                 tpNames = ["Defenders Spawn Roof","Purple House Sui","RC-XD Track Barrier","Under Map Sui","Greenhouse Sui"];
                 tpCoords = [
@@ -268,7 +268,7 @@ menuOptions()
                     (-1786.16, 1227.62, 91.9677)
                 ];
             }
-            else if(getDvar("mapname") == "mp_downhill")
+            else if(level.currentMapName == "mp_downhill")
             {
                 tpNames = ["Top Half Pipe","Top Half Pipe 2","Barrier","Barrier 2","Mountain Sui"];
                 tpCoords = [
@@ -279,14 +279,14 @@ menuOptions()
                     (-8987.19, 327.561, 2942.54)
                 ];
             }
-            else if(getDvar("mapname") == "mp_mirage")
+            else if(level.currentMapName == "mp_mirage")
             {
                 tpNames = ["Under Map Sui"];
                 tpCoords = [
                     (299.493, 3580.54, -288.084)
                 ];
             }
-            else if(getDvar("mapname") == "mp_hydro")
+            else if(level.currentMapName == "mp_hydro")
             {
                 tpNames = ["Bomb Spawn Sui","Bomb Spawn Bridge","Defenders Spawn Sui","Defenders Spawn Bridge"];
                 tpCoords = [
@@ -296,14 +296,14 @@ menuOptions()
                     (-11819.2, 22546.4, 8040.13)
                 ];
             }
-            else if(getDvar("mapname") == "mp_skate")
+            else if(level.currentMapName == "mp_skate")
             {
                 tpNames = ["Undermap Sui"];
                 tpCoords = [
                     (3317.06, -58.111, -19.875)
                 ];
             }
-            else if(getDvar("mapname") == "mp_concert")
+            else if(level.currentMapName == "mp_concert")
             {
                 tpNames = ["Center Stadium Barrier","A Stadium Barrier","Defenders Undermap"];
                 tpCoords = [
@@ -312,7 +312,7 @@ menuOptions()
                     (-1849.62, 527.147, -419.875)
                 ];
             }
-            else if(getDvar("mapname") == "mp_magma")
+            else if(level.currentMapName == "mp_magma")
             {
                 tpNames = ["Lava Barrier","Undermap Sui","OOM Barrier"];
                 tpCoords = [
@@ -321,7 +321,7 @@ menuOptions()
                     (-1248.7, -3339.31, 14.125)
                 ];
             }
-            else if(getDvar("mapname") == "mp_vertigo")
+            else if(level.currentMapName == "mp_vertigo")
             {
                 tpNames = ["Skyscraper Sui","Helipade Barrier","OOM Helipad 1","OOM Helipad 2","Building Ledge"];
                 tpCoords = [
@@ -332,7 +332,7 @@ menuOptions()
                     (-14.5213,-2853.14,-2440.15)
                 ];
             }
-            else if(getDvar("mapname") == "mp_studio")
+            else if(level.currentMapName == "mp_studio")
             {
                 tpNames = ["Defenders Spawn OOM","Mid Map Sui"];
                 tpCoords = [
@@ -340,7 +340,7 @@ menuOptions()
                     (558.137, 846.333, 145.502)
                 ];
             }
-            else if(getDvar("mapname") == "mp_detour")
+            else if(level.currentMapName == "mp_detour")
             {
                 tpNames = ["Bomb Spawn Bus Sui","OOM Sui"];
                 tpCoords = [
@@ -348,7 +348,7 @@ menuOptions()
                     (3951.57, 447.974, -13.8756)
                 ];
             }
-            else if(getDvar("mapname") == "mp_castaway")
+            else if(level.currentMapName == "mp_castaway")
             {
                 tpNames = ["Top of Barrier 1","Top of Barrier 2"];
                 tpCoords = [
@@ -356,7 +356,7 @@ menuOptions()
                     (2099.6, -4079.84, 1604.26)
                 ];
             }
-            else if(getDvar("mapname") == "mp_dig")
+            else if(level.currentMapName == "mp_dig")
             {
                 tpNames = ["Ledge","Undermap Sui","Top of Tower"];
                 tpCoords = [
@@ -365,7 +365,7 @@ menuOptions()
                     (383.11, 1591.54, 738.638)
                 ];
             }
-            else if(getDvar("mapname") == "mp_pod")
+            else if(level.currentMapName == "mp_pod")
             {
                 tpNames = ["Top of Pod","Top of Pod 2"];
                 tpCoords = [
@@ -594,10 +594,7 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
-
-            timerIDs = ["add", "subtract"];
-            timerNames = ["Add 1 Minute", "Remove 1 Minute"];
-            self addsliderstring("Game Timer", timerIDs, timerNames, ::editTime);
+            self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
             
             self addOpt("Fast Restart", ::FastRestart);
             self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
@@ -626,6 +623,5 @@ menuOptions()
         self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
         self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
         self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
-        self.menu["UI"]["SCROLLERICON"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 45, self.presets["Y"] - 108, 10, 10, self.presets["ScrollerIcon_BG"], self.presets["Scroller_ShaderIcon"], 3, 1);
         self resizeMenu();
     }

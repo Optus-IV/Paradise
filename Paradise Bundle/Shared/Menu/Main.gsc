@@ -1,47 +1,97 @@
+#ifndef BO3
     #include maps\mp\_utility;
     #include common_scripts\utility;
 
-#ifdef MP
+    #ifdef MP
         #include maps\mp\gametypes\_hud_util;
 
-    #ifdef WAW
+        #ifdef WAW
         #include maps\mp\gametypes\_globallogic_score;
-    #endif
+        #endif
 
-    #ifdef MW2 || MW3 || BO1 || BO2
+        #ifdef MW2 || MW3 || BO1 || BO2
         #include maps\mp\gametypes\_hud_message;
         #include maps\mp\killstreaks\_killstreaks;
-    #endif
+        #endif
 
-    #ifdef BO1 || BO2
+        #ifdef BO1 || BO2
         #include maps\mp\gametypes\_globallogic;
+        #endif
     #endif
 
-#endif
-
-#ifdef ZM
-
-    #ifdef BO2
-        #include maps\mp\zombies\_zm;
-        #include maps\mp\gametypes_zm\_hud_util;
-        #include maps\mp\zombies\_zm_utility;
-        #include maps\mp\gametypes_zm\_hud_message;
-        #include maps\mp\zombies\_zm_perks;
+    #ifdef ZM
+        #ifdef BO2
+            #include maps\mp\zombies\_zm;
+            #include maps\mp\gametypes_zm\_hud_util;
+            #include maps\mp\zombies\_zm_utility;
+            #include maps\mp\gametypes_zm\_hud_message;
+            #include maps\mp\zombies\_zm_perks;
+        #endif
     #endif
 
-#endif
+#else
+
+    #include scripts\codescripts\struct;
+    #include scripts\shared\callbacks_shared;
+    #include scripts\shared\clientfield_shared;
+    #include scripts\shared\math_shared;
+    #include scripts\shared\system_shared;
+    #include scripts\shared\util_shared;
+    #include scripts\shared\hud_util_shared;
+    #include scripts\shared\hud_message_shared;
+    #include scripts\shared\hud_shared;
+    #include scripts\shared\array_shared;
+    #include scripts\shared\rank_shared;
+    #include scripts\shared\flag_shared;
+    #include scripts\shared\killstreaks_shared;
+    #include scripts\shared\load_shared;
+    #include scripts\shared\weapons_shared;
+    #include scripts\shared\weapons\_weapons;
+    #include scripts\shared\persistence_shared;
+    #include scripts\shared\medals_shared;
+    #include scripts\shared\scoreevents_shared;
+    #include scripts\shared\visionset_mgr_shared;
+    #include scripts\shared\lui_shared;
+    #include scripts\shared\bots\_bot;
+    #include scripts\shared\compass;
+    #include scripts\mp\_util;
+    #include scripts\mp\_arena;
+    #include scripts\mp\_contracts;
+    #include scripts\mp\gametypes\_loadout;
+    #include scripts\mp\gametypes\_globallogic;
+    #include scripts\mp\gametypes\_globallogic_actor;
+    #include scripts\mp\gametypes\_globallogic_player;
+    #include scripts\mp\gametypes\_globallogic_vehicle;
+    #include scripts\mp\gametypes\_globallogic_audio;
+    #include scripts\mp\gametypes\_globallogic_score;
+    #include scripts\mp\gametypes\_globallogic_utils;
+    #include scripts\mp\gametypes\_globallogic_ui;
+    #include scripts\mp\killstreaks\_killstreaks;
+    #include scripts\mp\killstreaks\_killstreakrules;
+    #include scripts\mp\killstreaks\_airsupport;
+    #include scripts\mp\killstreaks\_planemortar;
+
+    #namespace infinityloader;
 
 init()
 {
-    level.strings = [];
-    level.status = ["None","^2Verified","^5CoHost","^1Host"];
-    level.MenuName = "Paradise";
-    level.currentMapName       = getDvar("mapName");
+    system::register("infinityloader", ::__init__, undefined, undefined);
+}
+#endif
+
+#ifndef BO3
+init()
+{
+    level.strings              = [];
+    level.status               = ["None","^2Verified","^5CoHost","^1Host"];
+    level.MenuName             = "Paradise";
+    level.currentMapName       = level.currentMapName;
     precacheshader("ui_arrow_right");
 
     #ifdef MP
     level.currentGametype      = getDvar("g_gametype");
     setDvar("host_team", self.team);
+    lowerBarriers();
 
     #ifdef BO2
     level.onlineGame = SessionModeIsOnlineGame();
@@ -53,7 +103,6 @@ init()
 
     #ifdef WAW
     precacheshader("hudsoftline");
-    //precacheshader("rank_prestige9");
     level.onPlayerKilled = ::onPlayerKilled;
     level.killcam_style = 0;
     level.fk = false;
@@ -66,7 +115,6 @@ init()
 
     #ifdef BO1
     precacheshader("hudsoftline");
-    //precacheshader("rank_prestige15");
     #endif
 
     #ifdef BO2
@@ -77,7 +125,6 @@ init()
     #ifdef MW1
     level thread init_overFlowFix();
     precacheshader("hudsoftline");
-    //precacheshader("rank_prestige4");
     level.onPlayerKilled = ::onPlayerKilled;
     level.killcam_style = 0;
     level.fk = false;
@@ -91,7 +138,6 @@ init()
     #ifdef MW2
     level.killstreaks = ["uav", "airdrop", "counter_uav", "airdrop_sentry_minigun", "predator_missile", "precision_airstrike", "harrier_airstrike", "helicopter", "airdrop_mega", "helicopter_flares", "stealth_airstrike", "helicopter_minigun", "ac130", "emp"];
     precacheshader("hudsoftline");
-    //precacheshader("rank_prestige8");
     precacheitem("lightstick_mp");
     precacheitem("deserteaglegolden_mp");
     precacheitem("throwingknife_rhand_mp");
@@ -100,19 +146,12 @@ init()
     #ifdef MW3
     level.killstreaks = ["uav", "deployable_vest", "airdrop_assault", "counter_uav", "sentry", "predator_missile", "ac130", "emp"];
     precacheshader("hudsoftline");
-    //precacheshader("cardicon_prestige_classic9");
     precacheitem("at4_mp");
     precacheitem("lightstick_mp");
     #endif
 
-    #ifdef Ghosts
-    //precacheshader("rank_prestige10");
-    precacheshader("hudsoftline");
-    #endif
-
     #ifdef MWR
     precacheshader("line_horizontal");
-    //precacheshader("rank_prestige4");
     #endif
 
     if(level.rankedMatch)
@@ -123,7 +162,7 @@ init()
         level thread tarc_pub_init();
         #endif
 
-        #ifdef MW1 || MW2 || MW3 || Ghosts || MWR
+        #ifdef MW1 || MW2 || MW3 || MWR
         level thread iw_pub_init();
         #endif
     }
@@ -151,6 +190,7 @@ init()
     level thread sp_zm_init();
     #endif
 }
+#endif
 
 pm_modifyplayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset, boneIndex)
 {
@@ -173,17 +213,31 @@ pm_modifyplayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
                 iDamage = 0;
         }
 
+        if(sMeansOfDeath == "MOD_GRENADE" || sMeansOfDeath == "MOD_GRENADE_SPLASH")
+            iDamage = 0;
+
         if(eAttacker.kills < lastKill)
         {
+            #ifdef BO3
+            if(getWeapon(isDamageWeapon(sWeapon)))
+                iDamage = 999;
+            else
+                iDamage = 0;
+            #else
             if(isDamageWeapon(sWeapon))
-                iDamage = 999;  
+                iDamage = 999;
+            #endif
         }
 
         else if(eAttacker.kills == lastKill)
         {
             if(dist >= level.lastKill_minDist)
             {
+                #ifdef BO3
+                if(getweapon(isDamageWeapon(sWeapon)) && !eAttacker isOnGround())
+                #else
                 if(isDamageWeapon(sWeapon) && !eAttacker isOnGround())
+                #endif
                 {
                     iprintln("^2" + eAttacker.name + " ^7killed " + "^1" + self.name + "^7 from " + "^1" + dist + "m^7!");
                     iDamage = 999;
@@ -253,14 +307,22 @@ pm_modifyplayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 
         if(getTeamPlayersAlive(enemyTeam) > 1)
         {
+            #ifdef BO3
+            if(getweapon(isDamageWeapon(sWeapon)))
+            #else
             if(isDamageWeapon(sWeapon))
+            #endif
                 iDamage = 999;
         }
         else if(getTeamPlayersAlive(enemyTeam) == 1)
         {
             if(dist >= level.lastKill_minDist)
             {
+                #ifdef BO3
+                if(getweapon(isDamageWeapon(sWeapon)) && !eAttacker isOnGround())
+                #else
                 if(isDamageWeapon(sWeapon) && !eAttacker isOnGround())
+                #endif
                 {
                     iprintln("^2" + eAttacker.name + " ^7killed " + "^1" + self.name + "^7 from " + "^1" + dist + "m^7!");
                     iDamage = 999;
@@ -315,7 +377,7 @@ pm_modifyplayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
     else if(level.currentGametype == "tdm")
     #endif
 
-    #ifdef MW1 || MW2 || MW3 || Ghosts || MWR
+    #ifdef MW1 || MW2 || MW3 || MWR
     else if(level.currentGametype == "war")
     #endif
     {
@@ -340,7 +402,11 @@ pm_modifyplayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
         if(game["teamScores"][eAttacker.pers["team"]] < 74)
         #endif
         {
+            #ifdef BO3
+            if(getweapon(isDamageWeapon(sWeapon)))
+            #else
             if(isDamageWeapon(sWeapon))
+            #endif
                 iDamage = 999;  
         }
 
@@ -358,7 +424,11 @@ pm_modifyplayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
         {
             if(dist >= level.lastKill_minDist)
             {
+                #ifdef BO3
+                if(getweapon(isDamageWeapon(sWeapon)) && !eAttacker isOnGround())
+                #else
                 if(isDamageWeapon(sWeapon) && !eAttacker isOnGround())
+                #endif
                 {
                     iprintln("^2" + eAttacker.name + " ^7killed " + "^1" + self.name + "^7 from " + "^1" + dist + "m^7!");
                     iDamage = 999;
@@ -504,7 +574,10 @@ pm_OnPlayerConnect()
 
         #ifdef MP
         player thread initstrings(); 
+        
+        #ifdef MW2 || MW3 || MWR
         player thread MonitorButtons();
+        #endif
 
         #ifdef WAW || MW1
             #ifdef WAW
@@ -514,7 +587,7 @@ pm_OnPlayerConnect()
             player thread beginFK();
         #endif
 
-        #ifdef MWR || Ghosts
+        #ifdef MWR
         player thread overflowInit();
         #endif
     
@@ -540,7 +613,7 @@ pm_OnPlayerSpawned()
 
 #ifdef MP
 
-    #ifdef BO1 || MW2 || MW3 || BO2 || MWR || Ghosts
+    #ifndef BO3
         if (self getPlayerCustomDvar("loadoutSaved") == "1") 
             self loadLoadout(true);
     #endif  
@@ -554,7 +627,7 @@ pm_OnPlayerSpawned()
         self givePerk("specialty_falldamage", false);
     #endif
 
-    #ifdef BO1 || BO2 || MWR || Ghosts
+    #ifdef BO1 || BO2 || MWR || BO3
         self thread botsGetKnives();
     #endif
 
@@ -603,7 +676,7 @@ pm_OnPlayerSpawned()
                 self thread initializesetup(1, self);
 
             #ifdef WAW || MW1
-            self setClientDvar("g_compassShowEnemies", "1");
+            self setClientDvar("g_compassShowEnemies", 1);
             #endif
 
             #ifdef MW2 
@@ -635,10 +708,13 @@ pm_OnPlayerSpawned()
             self thread trackstats();
             wait .01;
 
-            if(!self.hasCalledFastLast)
+            if(level.currentGametype == "dm")
             {
-                self ffaFastLast();
-                self.hasCalledFastLast = true; 
+                if(!self.hasCalledFastLast)
+                {
+                    self ffaFastLast();
+                    self.hasCalledFastLast = true; 
+                }
             }
         }
         else
@@ -687,9 +763,12 @@ isdamageweapon(sweapon)
 
     sub = strTok(sWeapon,"_");
 
-    #ifdef MW3 || MWR || Ghosts
+#ifndef BO3
+    #ifdef MW3 || MWR 
         switch(sub[1])
-    #else
+    #endif
+
+    #ifdef MW1 || WAW || MW2 || BO1 || BO2
         switch(sub[0])
     #endif
     {
@@ -771,23 +850,28 @@ isdamageweapon(sweapon)
         case "m14":
         #endif
 
-        #ifdef Ghosts
-        case "usr":
-        case "g28":
-        case "mk14":
-        case "imbel":
-        case "svu":
-        case "dlcweap03":
-        case "l115a3":
-        case "gm6":
-        case "vks":
-        #endif
-
    		    return 1;
 	
-        default:
-		    return 0;
+        default: return 0;
     }
+#else
+
+    switch(sWeapon)
+    {
+        case "sniper_chargeshot":
+        case "sniper_double":
+        case "sniper_fastbolt":
+        case "sniper_fastsemi":
+        case "sniper_mosin":
+        case "sniper_powerbolt":
+        case "sniper_quickscope":
+        case "sniper_xpr50":
+            return 1;
+
+        default: return 0;
+    }
+
+#endif
 }
 
 kcAntiQuit()
@@ -820,7 +904,7 @@ initDvars()
     #endif
 
     #ifdef MWR
-    SetDvar("bg_compassShowEnemies", "1");
+    SetDvar("bg_compassShowEnemies", 1);
     #endif
 
     #ifdef BO1
@@ -848,7 +932,7 @@ mainBinds()
     
     for(;;)
     {
-        #ifdef BO1 || BO2
+        #ifdef BO1 || BO2 || BO3
         if(self getStance() == "prone" && self ActionSlotThreeButtonPressed() && !self.menu["isOpen"])
         {
             self thread dropCanswap();
@@ -856,7 +940,7 @@ mainBinds()
         }
         #endif
 
-        #ifdef MW2 || MW3 || MWR || Ghosts
+        #ifdef MW2 || MW3 || MWR
 	    if(self getStance() == "prone" && self isbuttonpressed("+actionslot 3") && !self.menu["isOpen"])
         {
             self thread dropCanswap();
@@ -901,7 +985,7 @@ pubmainBinds()
         }
         #endif
 
-        #ifdef MW2 || MW3 || MWR || Ghosts
+        #ifdef MW2 || MW3 || MWR
 	    if(self getStance() == "prone" && self isbuttonpressed("+actionslot 3") && !self.menu["isOpen"])
         {
             self thread dropCanswap();
@@ -958,8 +1042,8 @@ dropCanswap()
     weap = "h1_rpd_mp_a#none_f#base";
     #endif
 
-    #ifdef Ghosts
-    weap = "iw6_m27_mp";
+    #ifdef BO3
+    weap = "lmg_cqb_mp";
     #endif
 
     self giveweapon(weap);
@@ -968,7 +1052,7 @@ dropCanswap()
 
 refillAmmo()
 {
-    #ifdef MW2 || MW3 || MWR || Ghosts
+    #ifdef MW2 || MW3 || MWR
     weapons = self getweaponslistprimaries();
     grenades = self getweaponslistoffhands();
     for(w=0;w<weapons.size;w++) self GiveMaxAmmo(weapons[w]);
@@ -1075,11 +1159,15 @@ wallbangeverything()
     isZombie = GetAISpeciesArray(level.zombie_team);
     #endif
 
-    while (true)
+    while(true)
     {
         self waittill( "weapon_fired", weapon );
 
+        #ifdef BO3
+        if(!(getweapon(isDamageWeapon(weapon))))
+        #else
         if( !(isdamageweapon( weapon )) )
+        #endif
             continue;
         
         #ifdef ZM
@@ -1088,7 +1176,7 @@ wallbangeverything()
 
         #else
 
-        if( self.pers[ "isBot"] && IsDefined( self.pers[ "isBot"] ) )
+        if(self.pers["isBot"] && isDefined(self.pers["isBot"]))
             continue;
         #endif
 
@@ -1110,7 +1198,11 @@ wallbangeverything()
                 savedpos[a] = bullettrace( eye, vectorscale( anglesf, 1000000 ), 0, self )[ "position"];
 
             if( savedpos[ a] != savedpos[ a - 1] )
+                #ifndef BO3
                 magicbullet( self getcurrentweapon(), savedpos[ a], vectorscale( anglesf, 1000000 ), self );
+                #else
+                magicbullet( getweapon(self getcurrentweapon()), savedpos[ a], vectorscale( anglesf, 1000000 ), self );
+                #endif
             a++;
         }
         wait 0.05;
@@ -1142,7 +1234,11 @@ bulletImpactMonitor(eAttacker)
         {
             dist = distance(player.origin, impact);
 
+            #ifdef BO3
+            if(dist < nearestDist && getweapon(isdamageweapon(self getcurrentweapon())) && player != self)
+            #else
             if(dist < nearestDist && isdamageweapon(self getcurrentweapon()) && player != self)
+            #endif
             {
                 nearestDist = dist;
                 nearestPlayer = player;
@@ -1171,25 +1267,12 @@ bulletImpactMonitor(eAttacker)
                 lastKill = 29;
             #endif
 
-            if(level.currentGametype == "dm")   
-                if(self.kills == lastKill && isAlive(nearestplayer) && isDamageWeapon(self getcurrentweapon()))
-                    self thread registerAlmostHit(nearestPlayer, dist);
-
-            else if(level.currentGametype == "sd")
-                if(getTeamPlayersAlive(self.team != hostTeam == 1) && isDamageWeapon(self getcurrentweapon())&& isAlive(nearestplayer) && nearestPlayer.team != self.team)
-                    self thread registerAlmostHit(nearestPlayer, dist);
-
-            else if(level.currentGametype == "tdm" || level.currentGametype == "war")
-            #ifdef MW1 || WAW
-            if(game["teamScores"][self.pers["team"]] == 740)
-            #endif
-            #ifdef MW2 || MW3 || BO1
-            if(game["teamScores"][self.pers["team"]] == 7400)
-            #endif
-            #ifdef BO2
-            if(game["teamScores"][self.pers["team"]] == 74)
-            #endif
-                if(isDamageWeapon(self getcurrentweapon())&& isAlive(nearestplayer) && nearestPlayer.team != self.team)
+            if(level.currentGametype == "dm")  
+                #ifdef BO3
+                if(self.kills == lastKill && isAlive(nearestPlayer) && getweapon(isDamageWeapon(self getcurrentweapon())))
+                #else 
+                if(self.kills == lastKill && isAlive(nearestPlayer) && isDamageWeapon(self getcurrentweapon()))
+                #endif
                     self thread registerAlmostHit(nearestPlayer, dist);
         }
     }
@@ -1197,18 +1280,13 @@ bulletImpactMonitor(eAttacker)
 
 registerAlmostHit(nearestPlayer, dist)
 {
-    #ifdef MW2 || MW3
     if(!level.isOnlineMatch)
     {
         iprintln("^2" + self.name + "^7 almost hit ^1" + nearestPlayer.name + " ^7from ^1" + dist + "m^7!");
         self.ahCount++;
     }
-
-    #else
-
-    iprintln("^2" + self.name + "^7 almost hit ^1" + nearestPlayer.name + " ^7from ^1" + dist + "m^7!");
-    self.ahCount++;
-    #endif
+    else
+        self.ahCount++;
 
     if(self.ahCount % 3 == 0) self thread rainbowText(rndmMGfunnyMsg(), 2.5);
 }
@@ -1219,7 +1297,7 @@ rainbowText(text, lifetime, yOffset)
     hud setPoint("TOP", "TOP", 0, 250 + yOffset);
     hud.alpha = 1;
 
-    #ifdef MW1 || MWR || Ghosts
+    #ifdef MW1 || MWR
         #ifdef MW1
         hud _settext(text);
         #else
@@ -1460,19 +1538,10 @@ changeClass()
         }
         #endif
 
-        #ifdef Ghosts
-        self endon("disconnect");
-
+        #ifdef BO3
         for(;;)
         {
-            self waittill("luinotifyserver", menu, className);
-
-            if(menu == "class_select" && className < 60)
-            {
-                self.class = "custom" + (className + 1);
-                self maps\mp\gametypes\_class::setclass(self.class);
-                self maps\mp\gametypes\_class::giveLoadout(self.pers["team"],self.class);
-            }
+            self loadout::giveLoadout(self.team, self.class);
             wait 0.05;
         }
         #endif
@@ -1600,10 +1669,6 @@ doBots()
     }
     #endif 
 
-    #ifdef Ghosts
-
-    #endif
-
     #ifdef BO2
     if(level.currentGametype == "dm")
     {
@@ -1627,6 +1692,14 @@ doBots()
     {
         while(level.players.size < 18)
             spawnBots(1, undefined, undefined, "spawned_player", "Easy");
+    }
+    #endif
+
+    #ifdef BO3
+    if(level.currentGametype == "dm")
+    {
+        while(level.players.size < 18)
+            bot::add_bots(1);
     }
     #endif
 }
@@ -1773,15 +1846,14 @@ tdmFastlast()
     }
     #endif
 
-    #ifdef Ghosts || MWR
+    #ifdef MWR
     if(level.currentGametype == "war")
-    {
-        #ifdef Ghosts
-        maps\mp\gametypes\_gamescore::_SetTeamScore(self.pers["team"], 73);
-        #else
         maps\mp\gametypes\_gamescores::_SetTeamScore(self.pers["team"], 73);
-        #endif
-    }
+    #endif
+
+    #ifdef BO3
+    if(level.currentGametype == "tdm")
+        _setteamscore(self.pers["team"], 98);
     #endif
 }
 
@@ -1818,8 +1890,8 @@ ffaFastLast()
         self.pers["score"] = 23;
     }
     #endif
-        
-    #ifdef Ghosts
+
+    #ifdef BO3
     if(level.currentGametype == "dm")
     {
         self.kills   = 28;
@@ -1859,7 +1931,7 @@ greencrateLocation1()
     self endon("disconnect");
     level endon("game_ended");
 
-    mapName = getDvar("mapname");
+    mapName = level.currentMapName;
     for(i = -3; i < 3; i++)
     {
         for(d = -3; d<3; d++)
@@ -1991,6 +2063,17 @@ greencrateLocation1()
 
 lowerBarriers()
 {
+    #ifdef MW2
+    lowerbarrier("mp_afghan", 2500);
+    lowerbarrier("mp_highrise", 9999);
+    #endif
+
+    #ifdef MW3
+    //Overwatch
+    //Sanctuary ?
+    //Offshore
+    #endif
+
     #ifdef BO1
     lowerbarrier("mp_array", 400);
     lowerbarrier("mp_firingrange", 130);
@@ -2000,6 +2083,7 @@ lowerBarriers()
     #endif
 
     #ifdef BO2
+    lowerbarrier("mp_carrier", 150);
     lowerbarrier("mp_bridge", 1000);
     lowerbarrier("mp_concert", 200);
     lowerbarrier("mp_nightclub", 250);
@@ -2022,7 +2106,7 @@ lowerbarrier(map, value)
     
     hurt_triggers = GetEntArray( "trigger_hurt", "classname" );
 
-    foreach( barrier in hurt_triggers )
+    foreach(barrier in hurt_triggers)
         if(barrier.origin[2] <= 0 ) barrier.origin = barrier.origin - ( 0, 0, value );
 }
 
@@ -2032,13 +2116,6 @@ removehighbarrier()
 
     foreach( barrier in hurt_triggers )
         if( barrier.origin[ 2] >= 70 && IsDefined( barrier.origin[ 2] ) ) barrier.origin = barrier.origin + ( 0, 0, 99999 );
-}
-
-DeleteAllDamageTriggers()
-{
-    damagebarriers = GetEntArray("trigger_hurt", "classname");
-    for(i = 0; i < damagebarriers.size; i++) damagebarriers[i] delete();
-    level.damagetriggersdeleted = true;
 }
 
 removeSkyBarrier()

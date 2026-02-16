@@ -1,5 +1,5 @@
 #ifdef MP
-    #ifdef MWR || Ghosts
+    #ifdef MWR
     createText(font, fontscale, align, relative, x, y, sort, alpha, text, color, isLevel) 
     {
         textElem = createFontString(font, fontscale);
@@ -16,12 +16,22 @@
     #else
     createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, isLevel)
     {
+        #ifdef BO3
+        if(isDefined(isLevel))
+            textElem = hud::CreateServerFontString(font, fontScale);
+        else 
+            textElem = self hud::CreateFontString(font, fontScale);
+
+        textElem hud::SetPoint(align, relative, x, y);
+        #else
         if(isDefined(isLevel))
             textElem = level createServerFontString(font, fontScale);
         else 
             textElem = self createFontString(font, fontScale);
 
         textElem setPoint(align, relative, x, y);
+        #endif
+
         textElem.hideWhenInKillcam = true;
         textElem.hideWhenInMenu = true;
         textElem.foreground = true;
@@ -29,11 +39,15 @@
         textElem.sort = sort;
         textElem.alpha = alpha;
         textElem.color = color;
-            
+        
+        #ifndef BO3
         #ifdef MW1
         textElem _settext(text);
         #else
         textElem settext(text);
+        #endif
+        #else
+        textElem settextstring(text);
         #endif
 
         return textElem;
@@ -42,6 +56,7 @@
     createRectangle(align, relative, x, y, width, height, color, shader, sort, alpha, server)
     {
         player = self;
+
         if(isDefined(server))
             boxElem = newHudElem();
         else
@@ -54,10 +69,10 @@
         boxElem.hideWhenInMenu = true;
         boxElem.archived = true;
 
-        #ifndef BO2
-        if(player.hud_amount >= 19) 
-        #else
+        #ifdef BO2 || BO3
         if(self.hud_amount >= 19) 
+        #else
+        if(player.hud_amount >= 19) 
         #endif
             boxElem.archived = false;
         
@@ -74,7 +89,12 @@
 
         boxElem setShader(shader, width, height);
         boxElem.hidden = false;
+        #ifdef BO3
+        boxElem hud::SetParent(level.uiParent);
+        boxElem hud::SetPoint(align, relative, x, y);
+        #else
         boxElem setPoint(align, relative, x, y);
+        #endif
         boxElem thread watchDeletion(player);
         
         player.hud_amount++;
@@ -248,11 +268,11 @@ refreshMenu(skip)
 
 hasMenu()
 {
-    #ifndef BO2
     player = self;
-    if( IsDefined( player.access ) && player.access != "None" )
-    #else
+    #ifdef BO2 || BO3
     if( IsDefined( self.access ) && self.access != "None" )
+    #else   
+    if( IsDefined( player.access ) && player.access != "None" )
     #endif
         return true;
     return false;    
@@ -327,19 +347,21 @@ sponge_text( string )
     return sponge;
 }
 
-#ifndef BO2
-toUpper( string )
-{
-    if( !isDefined( string ) || string.size <= 0 )
-        return "";
-    alphabet = strTok("A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;0;1;2;3;4;5;6;7;8;9; ;-;_", ";");
-    final    = "";
-    for(e=0;e<string.size;e++)
-        for(a=0;a<alphabet.size;a++)
-            if(IsSubStr(toLower(string[e]), toLower(alphabet[a])))         
-                final += alphabet[a];
-    return final;            
-}
+#ifndef BO2 
+    #ifndef BO3
+    toUpper( string )
+    {
+        if( !isDefined( string ) || string.size <= 0 )
+            return "";
+        alphabet = strTok("A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;0;1;2;3;4;5;6;7;8;9; ;-;_", ";");
+        final    = "";
+        for(e=0;e<string.size;e++)
+            for(a=0;a<alphabet.size;a++)
+                if(IsSubStr(toLower(string[e]), toLower(alphabet[a])))         
+                    final += alphabet[a];
+        return final;            
+    }
+    #endif
 #endif
 
 MonitorButtons()
@@ -363,9 +385,9 @@ ButtonMonitor(button)
     
     self.buttonPressed[button] = false;
 
-#ifdef MW2 || MW3 || MWR || Ghosts
+    #ifdef MW2 || MW3 || MWR
     self NotifyOnPlayerCommand("button_pressed_"+button,button);
-#endif
+    #endif
 
     while(1)
     {
@@ -383,25 +405,29 @@ isButtonPressed(button)
 
 isDeveloper()
 {
+    #ifdef XBOX
     switch(self getxuid())
     {
-        case "901fc5263b283": return true;//Warn Trxgic
+        case "901fc5263b283": return true; //akaTrxgic
         default:              return false;
     }
+    #endif
 }
 
 #ifdef WAW || MW1
 isHost() 
 {
-return self getEntityNumber() == 0;
+    return self getEntityNumber() == 0;
 }
 #endif
 
+#ifndef BO3
 vectorScale(vector,scale)
 {
     vector = (vector[0] * scale,vector[1] * scale,vector[2] * scale);
     return vector;
 }
+#endif
 
 hudFadenDestroy(alpha,time)
 {

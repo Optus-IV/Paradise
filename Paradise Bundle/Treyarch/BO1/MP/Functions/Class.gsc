@@ -4,8 +4,6 @@ giveUserWeapon(weapon)
     self giveStartAmmo(weapon);
     self switchToWeapon(weapon);
     self giveMaxAmmo(weapon);
-    
-    self iprintln("Given: ^2" + weapon);
 } 
 
 giveUserLethal(lethal)
@@ -13,21 +11,18 @@ giveUserLethal(lethal)
     self GiveWeapon( lethal );
     self SetWeaponAmmoClip( lethal, 1);
     self SwitchToOffhand( lethal );
-    self iprintln("Given: ^2" + lethal);
 }
 
 giveUserTactical(tactical)
 {
     self giveWeapon( tactical );
     self SetWeaponAmmoClip( tactical, 2 );
-    self iprintln("Given: ^2" + tactical);
 }
 
 giveUserEquipment(newEquipment)
 {
     self GiveWeapon(newEquipment);
     self SetActionSlot( 1, "weapon", newEquipment);
-    self iprintln("Given: ^2" + newEquipment);
 }  
 
 saveLoadout() 

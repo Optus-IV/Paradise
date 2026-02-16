@@ -33,7 +33,7 @@ finalkillcam( attacker, attackerNum, deathtime, victim)
     killcamlength = camtime + postdelay;
     killcamoffset = camtime + predelay;
     
-    visionSetNaked( getdvar("mapname") );
+    visionSetNaked( level.currentMapName );
     
     self notify ( "begin_killcam", getTime() );
     
@@ -631,13 +631,13 @@ slowMotion()
     
     wait (level.slowmostart - 0.1);
     
-    SetDvar("timescale", ".3");
+    SetDvar("timescale", .3);
     for(i=0;i<level.players.size;i++)
-        level.players[i] setclientdvar("timescale", ".3");
+        level.players[i] setclientdvar("timescale", .3);
     
     wait 1.7;
     
-    SetDvar("timescale", "1");
+    SetDvar("timescale", 1);
     for(i=0;i<level.players.size;i++)
-        level.players[i] setclientdvar("timescale", "1");
+        level.players[i] setclientdvar("timescale", 1);
 }

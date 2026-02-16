@@ -5,7 +5,6 @@ doGiveWeapon(weapon)
 
     self giveWeapon(weapon);
     self switchToWeapon(weapon);
-    self iPrintln("Given Weapon: ^2" + weapon);
 }
 
 getBaseName(weapon)
@@ -114,27 +113,130 @@ GetWeaponValidAttachments(weapon)
 
 giveLethal(grenadeTypePrimary)
 {
-    if ( grenadeTypePrimary != "" )
+    if(self hasWeapon("frag_grenade_mp"))
+        self takeweapon("frag_grenade_mp");
+
+    else if(self hasWeapon("sticky_grenade_mp"))
+        self takeweapon("sticky_grenade_mp");
+
+    else if(self hasWeapon("molotov_mp"))
+        self takeweapon("molotov_mp");
+
+    if(grenadeTypePrimary != "")
 	{
 		self GiveWeapon( grenadeTypePrimary );
 		self SetWeaponAmmoClip( grenadeTypePrimary, 1 );
 		self SwitchToOffhand( grenadeTypePrimary );
 	}
-    self iPrintln("Given: ^2" + grenadeTypePrimary);
 }
 
 giveTactical(grenadeTypeSecondary)
 {
-	if ( grenadeTypeSecondary != "" )
+    if(self hasWeapon("m8_white_smoke_mp"))
+        self takeweapon("m8_white_smoke_mp");
+
+    else if(self hasWeapon("tabun_gas_mp"))
+        self takeweapon("tabun_gas_mp");
+
+    else if(self hasWeapon("signal_flare_mp"))
+        self takeweapon("signal_flare_mp");
+    
+	if(grenadeTypeSecondary != "")
     {	
-		if ( grenadeTypeSecondary == level.weapons["flash"])
-			self setOffhandSecondaryClass("flash");
-		else
-			self setOffhandSecondaryClass("smoke");
-		
         self TakeWeapon();
-		self giveWeapon( grenadeTypeSecondary );
-		self SetWeaponAmmoClip( grenadeTypeSecondary, 1 );
+		self giveWeapon(grenadeTypeSecondary);
+		self SetWeaponAmmoClip(grenadeTypeSecondary, 1);
 	}
-    self iPrintln("Given: ^2" + grenadeTypeSecondary);
+}
+
+saveLoadout() 
+{
+    wait .01;
+        
+    self.primaryWeaponList = self getWeaponsListPrimaries();
+    self.offHandWeaponList = isExclude(self getWeaponsList(), self.primaryWeaponList);
+    self.offHandWeaponList = removeValueFromArray(self.offHandWeaponList, "knife_mp");
+
+    for (i = 0; i < self.primaryWeaponList.size; i++) 
+        self setPlayerCustomDvar("primary" + i, self.primaryWeaponList[i]);
+
+    for (i = 0; i < self.offHandWeaponList.size; i++)
+        self setPlayerCustomDvar("secondary" + i, self.offHandWeaponList[i]);
+
+    self setPlayerCustomDvar("primaryCount", self.primaryWeaponList.size);  
+    self setPlayerCustomDvar("secondaryCount", self.offHandWeaponList.size);
+    self setPlayerCustomDvar("loadoutSaved", "1");
+    self iprintln("Loadout ^2Saved");
+}
+
+takeOffhands()
+{
+    offhands = [];
+    offhands[0] = "frag_grenade_mp";
+    offhands[1] = "sticky_grenade_mp";
+    offhands[2] = "molotov_mp";
+
+    offhands[3] = "m8_white_smoke_mp";
+    offhands[4] = "tabun_gas_mp";
+    offhands[5] = "signal_flare_mp";
+    
+    if(self hasweapon(offhands))
+        self takeweapon(offhands);
+}
+
+loadLoadout() 
+{
+    self takeAllWeapons();
+    self takeoffhands();
+    
+    if (!isDefined(self.primaryWeaponList) && self getPlayerCustomDvar("loadoutSaved") == "1") 
+    {
+        for (i = 0; i < int(self getPlayerCustomDvar("primaryCount")); i++)
+            self.primaryWeaponList[i] = self getPlayerCustomDvar("primary" + i);
+
+        for (i = 0; i < int(self getPlayerCustomDvar("secondaryCount")); i++) 
+            self.offHandWeaponList[i] = self getPlayerCustomDvar("secondary" + i);
+    }
+
+    for (i = 0; i < self.primaryWeaponList.size; i++) 
+    {
+        if (!isDefined(self.camo) || self.camo == 0) 
+            self.camo = randomcamo();
+
+        weapon = self.primaryWeaponList[i];
+        self giveWeapon(weapon);
+        self giveMaxAmmo(weapon);
+    }
+
+    self switchToWeapon(self.primaryWeaponList[0]);
+    self setSpawnWeapon(self.primaryWeaponList[0]);
+    self giveWeapon("knife_mp");
+
+    for (i = 0; i < self.offHandWeaponList.size; i++) 
+    {
+        weapon = self.offHandWeaponList[i];
+
+        switch (weapon) 
+        {   
+            case "frag_grenade_mp":
+            case "sticky_grenade_mp":
+            case "molotov_mp":
+                self GiveWeapon( weapon );
+                self SetWeaponAmmoClip( weapon, 1 );
+                self SwitchToOffhand( weapon );
+                break;
+
+            case "m8_white_smoke_mp":
+            case "tabun_gas_mp":
+            case "signal_flare_mp":
+                self TakeWeapon();
+                self giveWeapon(weapon);
+                self SetWeaponAmmoClip(weapon, 1);
+                break;
+
+            default:
+                self giveWeapon(weapon);
+                break;
+        }
+    }
 }

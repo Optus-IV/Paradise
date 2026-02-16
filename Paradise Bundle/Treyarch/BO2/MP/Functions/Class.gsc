@@ -9,8 +9,6 @@ giveUserWeapon(weapon)
 
     if (weapon == "m32_mp" || weapon == "usrpg_mp" || weapon == "smaw_mp" || weapon == "fhj18_mp")
         self giveMaxAmmo(weapon);
-    
-    self iprintln("Given: ^2" + weapon);
 }
 
 GetPlayerEquipment(type)

@@ -124,7 +124,7 @@ menuOptions()
         tpNames = [];
         tpCoords = [];
 
-        if(getDvar("mapname") == "mp_convoy")
+        if(level.currentMapName == "mp_convoy")
         {
             tpID = "Roof 1;Roof 2;Roof 3; Water Tower; Roof 4";
             tpCoords = [
@@ -135,7 +135,7 @@ menuOptions()
                 (833.212, 3168.46, 301)
             ];
         }
-        else if(getDvar("mapname") == "mp_backlot")
+        else if(level.currentMapName == "mp_backlot")
         {
             tpID = "OOM Roof;Roof Barrier";
             tpCoords = [
@@ -143,7 +143,7 @@ menuOptions()
                 (2735.67, 145.16, 1030)
             ];
         }
-        else if(getDvar("mapname") == "mp_bloc")
+        else if(level.currentMapName == "mp_bloc")
         {
             tpID = "Roof 1;Roof 2";
             tpCoords = [
@@ -151,7 +151,7 @@ menuOptions()
                 (-98.0987, -10996.9, 650)
             ];
         }
-        else if(getDvar("mapname") == "mp_bog")
+        else if(level.currentMapName == "mp_bog")
         {
             tpID = "Roof 1;Roof 2;Highway Sign;Roof 3";
             tpCoords = [ 
@@ -161,7 +161,7 @@ menuOptions()
                 (5911.52, 6847.09, 694)
             ];
         }
-        else if(getDvar("mapname") == "mp_bog_summer")
+        else if(level.currentMapName == "mp_bog_summer")
         {
             tpID = "Roof 1;Roof 2;Highway Sign;Roof 3";
             tpCoords = [ 
@@ -171,7 +171,7 @@ menuOptions()
                 (8447.37, 2359.74, 809)
             ];
         }
-        else if(getDvar("mapname") == "mp_countdown")
+        else if(level.currentMapName == "mp_countdown")
         {
             tpID = "Roof 1;Roof 2";
             tpCoords = [
@@ -179,7 +179,7 @@ menuOptions()
                 (2901.54, -2246.11, 212)
             ];
         }
-        else if(getDvar("mapname") == "mp_crash" || getDvar("mapname") == "mp_crash_snow")
+        else if(level.currentMapName == "mp_crash" || level.currentMapName == "mp_crash_snow")
         {
             tpID = "Roof 1;Roof Ledge";
             tpCoords = [
@@ -187,7 +187,7 @@ menuOptions()
                 (-3681.95, -1688.14, 773)
             ];
         }
-        else if(getDvar("mapname") == "mp_crossfire")
+        else if(level.currentMapName == "mp_crossfire")
         {
             tpID = "Arch Barrier;Roof 1;Roof 2;Roof 3";
             tpCoords = [
@@ -197,7 +197,7 @@ menuOptions()
                 (7752.83, -1682.19, 705)
             ];
         }
-        else if(getDvar("mapname") == "mp_citystreets")
+        else if(level.currentMapName == "mp_citystreets")
         {
             tpID = "Roof 1;Roof 2";
             tpCoords = [
@@ -205,7 +205,7 @@ menuOptions()
                 (4007.13, 3370.43, 897)
             ];
         }
-        else if(getDvar("mapname") == "mp_farm")
+        else if(level.currentMapName == "mp_farm")
         {
             tpID = "Barn Roof 1;Barn Roof 2;Roof 1";
             tpCoords = [
@@ -214,7 +214,7 @@ menuOptions()
                 (2933.97, -1506.9, 548)
             ];
         }
-        else if(getDvar("mapname") == "mp_farm_spring")
+        else if(level.currentMapName == "mp_farm_spring")
         {
             tpID = "Barn Roof 1;Roof 1";
             tpCoords = [
@@ -222,7 +222,7 @@ menuOptions()
                 (2933.97, -1506.9, 548)
             ];
         }
-        else if(getDvar("mapname") == "mp_pipeline")
+        else if(level.currentMapName == "mp_pipeline")
         {
             tpID = "Pipe Pillar;Warehouse Rafters";
             tpCoords = [
@@ -230,7 +230,7 @@ menuOptions()
                 (841.095, 786.229, 399)
             ];
         }
-        else if(getDvar("mapname") == "mp_shipment")
+        else if(level.currentMapName == "mp_shipment")
         {
             tpID = "Roof 1; Roof 2;Roof 3";
             tpCoords = [
@@ -239,7 +239,7 @@ menuOptions()
                 (4269.6, -4634.83, 1516)
             ];
         }
-        else if(getDvar("mapname") == "mp_showdown")
+        else if(level.currentMapName == "mp_showdown")
         {
             tpID = "Roof Ledge 1;Roof Ledge 2;Roof Ledge 3";
             tpCoords = [
@@ -248,14 +248,14 @@ menuOptions()
                 (-3979.78, -57.2232, 1390)
             ];
         }
-        else if(getDvar("mapname") == "mp_strike")
+        else if(level.currentMapName == "mp_strike")
         {
             tpID = "Roof";
             tpCoords = [
                 (1164.22, 4871.36, 500)
             ];
         }
-        else if(getDvar("mapname") == "mp_vacant")
+        else if(level.currentMapName == "mp_vacant")
         {
             tpID = "Roof 1;Roof 2;Roof 3";
             tpCoords = [
@@ -405,10 +405,7 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
-
-            timeActions = ["Add 1 Minute","Remove 1 Minute"];
-            timeIDs = ["add","sub"];
-            self addSliderString("Game Timer", timeIDs, timeActions, ::editTime);
+            self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
 
             self addOpt("Fast Restart", ::FastRestart);
             self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
@@ -439,6 +436,5 @@ drawMenu()
     self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
     self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
     self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
-    //self.menu["UI"]["SCROLLERICON"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 45, self.presets["Y"] - 108, 10, 10, self.presets["ScrollerIcon_BG"], self.presets["Scroller_ShaderIcon"], 3, 1);
     resizeMenu();
 }

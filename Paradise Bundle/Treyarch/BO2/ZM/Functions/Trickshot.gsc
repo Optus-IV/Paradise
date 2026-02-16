@@ -24,9 +24,9 @@ Noclip()
 
     for(;;)
     {
-        if( self secondaryoffhandbuttonpressed() && self.specNadeActive == 0)
+        if( self secondaryoffhandbuttonpressed())
         {
-            if(self.NoClipOBJ == 0)
+            if(!self.NoClipOBJ)
             {
                 self.originObj = spawn( "script_origin", self.origin, 1 );
                 self.originObj.angles = self.angles;
