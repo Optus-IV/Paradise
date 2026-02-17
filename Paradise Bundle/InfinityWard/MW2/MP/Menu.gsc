@@ -1130,9 +1130,10 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
+            
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
-
             self addOpt("Fast Restart", ::FastRestart);
+            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
             self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
 
             botOptNames = ["Teleport Bots to Crosshairs","Spawn 18 Bots","Kick All Bots"];
@@ -1144,7 +1145,6 @@ menuOptions()
             self addSliderString("Map Rotations", mapRotIDs, mapRotNames, ::mapRot);
             */
             self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
-            self addToggle("Azza Lobby", level.AzzaLobby, ::azzalobby);
             break;
         }
         self clientOptions();

@@ -164,7 +164,7 @@ menuOptions()
             self addSliderString("Specialist Weapons", heroIDs, heroNames, ::giveuserweapon);
 
             miscIDs = ["baseweapon","ball","defaultweapon","ball_world","bowie_knife"];
-            miscNames = ["Baseweapon","Ball","Default Weapon","Ball Offhand","Bowie as Melee"];
+            miscNames = ["Baseweapon","Uplink Ball","Default Weapon","Ball Offhand","Bowie as Melee"];
             self addsliderstring("Miscellaneous", miscIDs, miscNames, ::giveuserweapon);
             break;
 
@@ -191,7 +191,7 @@ menuOptions()
             lthlNames = ["Frag","Semtex","Trip Mine", "Thermite","Combat Axe","C4"];
             
             for(a=0;a<lthlIDs.size;a++)
-            self addOpt(lthlNames[a], ::giveUserWeapon, lthlIDs[a]);
+            self addOpt(lthlNames[a], ::giveOffhand, lthlIDs[a]);
             break;
 
         case "tacticals":
@@ -201,7 +201,7 @@ menuOptions()
             tacNames = ["Concussion","Smoke Screen","EMP","Trophy System","Shock Charge","Flashbang","Black Hat"];
 
             for(a=0;a<tacIDs.size;a++)
-            self addOpt(tacNames[a], ::giveUserWeapon, tacIDs[a]);
+            self addOpt(tacNames[a], ::giveOffhand, tacIDs[a]);
             break;
 
         case "afthit":
@@ -248,7 +248,7 @@ menuOptions()
             self addSliderString("Specialist Weapons", heroIDs, heroNames, ::AfterHit);
 
             miscIDs = ["baseweapon","ball","defaultweapon"];
-            miscNames = ["Baseweapon","Ball","Default Weapon"];
+            miscNames = ["Baseweapon","Uplink Ball","Default Weapon"];
             self addsliderstring("Miscellaneous", miscIDs, miscNames, ::AfterHit);
             break;
 
@@ -263,11 +263,11 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
+
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
-            
             //self addOpt("Fast Restart", ::FastRestart);
+            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
             self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-            self addSliderValue("Spawn Bots", 1, 1, 18, 1);
 
             botOptNames = ["Teleport to Crosshairs","Kick All Bots"];
             botOptIDs = ["teleport","kick"];

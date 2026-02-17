@@ -594,12 +594,14 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
+
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
-            
             self addOpt("Fast Restart", ::FastRestart);
+            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
             self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-            botOptNames = "Teleport to Crosshairs;Spawn 18 Bots;Kick All Bots";
-            botOptIDs = "teleport;fill;kick";
+            
+            botOptNames = "Teleport to Crosshairs;Kick All Bots";
+            botOptIDs = "teleport;kick";
             self addSliderString("Bot Controls", botOptIDs, botOptNames, ::botControls);
 
             self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);

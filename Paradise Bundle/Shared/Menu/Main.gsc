@@ -41,41 +41,15 @@
     #include scripts\shared\hud_message_shared;
     #include scripts\shared\hud_shared;
     #include scripts\shared\array_shared;
-    #include scripts\shared\rank_shared;
     #include scripts\shared\flag_shared;
-    #include scripts\shared\killstreaks_shared;
-    #include scripts\shared\load_shared;
-    #include scripts\shared\weapons_shared;
-    #include scripts\shared\weapons\_weapons;
-    #include scripts\shared\persistence_shared;
-    #include scripts\shared\medals_shared;
-    #include scripts\shared\scoreevents_shared;
-    #include scripts\shared\visionset_mgr_shared;
-    #include scripts\shared\lui_shared;
     #include scripts\shared\bots\_bot;
-    #include scripts\shared\compass;
-    #include scripts\mp\_util;
-    #include scripts\mp\_arena;
-    #include scripts\mp\_contracts;
     #include scripts\mp\gametypes\_loadout;
-    #include scripts\mp\gametypes\_globallogic;
-    #include scripts\mp\gametypes\_globallogic_actor;
-    #include scripts\mp\gametypes\_globallogic_player;
-    #include scripts\mp\gametypes\_globallogic_vehicle;
-    #include scripts\mp\gametypes\_globallogic_audio;
-    #include scripts\mp\gametypes\_globallogic_score;
-    #include scripts\mp\gametypes\_globallogic_utils;
-    #include scripts\mp\gametypes\_globallogic_ui;
-    #include scripts\mp\killstreaks\_killstreaks;
-    #include scripts\mp\killstreaks\_killstreakrules;
-    #include scripts\mp\killstreaks\_airsupport;
-    #include scripts\mp\killstreaks\_planemortar;
 
-    #namespace infinityloader;
+    #namespace Paradise;
 
 init()
 {
-    system::register("infinityloader", ::__init__, undefined, undefined);
+    system::register("Paradise", ::__init__, undefined, undefined);
 }
 #endif
 
@@ -625,10 +599,6 @@ pm_OnPlayerSpawned()
             self givePerk( "specialty_fastoffhand", false );
         }
         self givePerk("specialty_falldamage", false);
-    #endif
-
-    #ifdef BO1 || BO2 || MWR || BO3
-        self thread botsGetKnives();
     #endif
 
     #ifdef BO1
@@ -1699,7 +1669,7 @@ doBots()
     if(level.currentGametype == "dm")
     {
         while(level.players.size < 18)
-            bot::add_bots(1);
+            spawnbots(1);
     }
     #endif
 }
@@ -1778,8 +1748,11 @@ botsCantWin()
 	{
 		wait 0.25;
 
-		#ifdef BO2
+		#ifdef BO2 || BO3
+        
+        #ifdef BO2
 		maps\mp\gametypes\_globallogic_score::_setplayermomentum(self, 0);
+        #endif
 
 		if(self.pers["pointstowin"] >= 20)
 		{
@@ -1849,11 +1822,6 @@ tdmFastlast()
     #ifdef MWR
     if(level.currentGametype == "war")
         maps\mp\gametypes\_gamescores::_SetTeamScore(self.pers["team"], 73);
-    #endif
-
-    #ifdef BO3
-    if(level.currentGametype == "tdm")
-        _setteamscore(self.pers["team"], 98);
     #endif
 }
 

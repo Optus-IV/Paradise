@@ -636,12 +636,11 @@ menuOptions()
 
             minDistVal = ["15","25","50","100","150","200","250"];
             self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
+
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
-
             self addOpt("Fast Restart", ::FastRestart);
-
-            self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
             self addOpt("Spawn a Bot", ::addtestclients, 1);
+            self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
             
             botOptNames = "TP Bots;Kick All Bots";
             botOptIDs = "teleport;kick";

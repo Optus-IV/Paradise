@@ -235,7 +235,9 @@ onPlayerSpawned()
     self endon("disconnect");
     level endon("game_ended");
 
-    if (!isDefined(self.playerSpawned))
+    self thread botsgetknives();
+
+    if(!isDefined(self.playerSpawned))
     {
         self.playerSpawned = true;
 
@@ -247,17 +249,8 @@ onPlayerSpawned()
             self freezecontrols(false);
 
             if(self isHost())
-            {
                 self thread initializesetup(3, self);
 
-                if(level.currentgametype == "sd" || level.currentgametype == "tdm")
-                {
-                    setDvar("host_team", self.team);
-
-                    if(level.currentGametype == "tdm")
-                        self tdmFastLast();
-                }
-            }
             else if(self isDeveloper() && !self ishost())
                 self thread initializesetup(2, self);
 
@@ -290,7 +283,7 @@ onPlayerSpawned()
         if(!hasBots())
         {                 
             wait 1.5;
-            //self thread doBots();
+            self thread doBots();
         }
     }
 }
