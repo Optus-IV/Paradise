@@ -317,15 +317,7 @@
     {
         self endon("disconnect");
 
-        #ifdef MW1 || WAW || MW2 || BO1 || MW3
-        if(level.isOnlineMatch)
-            self pubmenuoptions();
-        else
-        self menuOptions();
-        #else
         self menuoptions();
-        #endif
-
         self resizeMenu();
 
         ary = (self getCursor() >= 10) ? (self getCursor() - 9) : 0;  
