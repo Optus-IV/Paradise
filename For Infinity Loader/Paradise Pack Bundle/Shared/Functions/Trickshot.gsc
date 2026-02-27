@@ -140,7 +140,7 @@ tptoSpawn()
     self setOrigin( self.lastSpawnPoint.origin + ( 0, 0, 10 ) );
 }
 
-#ifdef WAW || BO1
+#ifdef MW1 || WAW || BO1
 getprimary()
 {
     class = self.class;

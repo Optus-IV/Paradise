@@ -233,7 +233,7 @@
         }
     }
 
-    pubmainBinds()
+    mainBinds()
     {
         self endon("disconnect");
         
@@ -709,10 +709,6 @@
             self waittill("changed_class");
             self thread maps\mp\gametypes\_class::giveLoadout( self.team, self.class );
             wait .1;
-
-            #ifdef BO1
-            self thread playersetup();
-            #endif
             #endif
 
             #ifdef MW2 || MW3

@@ -86,11 +86,7 @@
 
         CanzoomFunction()
         {
-            #ifndef BO3
             self.canswapWeap = self getCurrentWeapon();
-            #else
-            self.canswapWeap = getWeapon(self getcurrentweapon());
-            #endif
             self takeWeapon(self.canswapWeap);
             self giveweapon(self.canswapWeap);
             wait 0.05;
@@ -102,20 +98,12 @@
             if(num == 1)
             {
                 self.wep1 = self getCurrentWeapon();
-                #ifndef BO3
                 self iPrintln("Weapon 1 Selected: [^2" + self.wep1 + "^7]");
-                #else
-                self iPrintln("Weapon 1 Selected: [^2" + self.wep1.name + "^7]");
-                #endif
             }
             else if(num == 2)
             {
                 self.wep2 = self getCurrentWeapon();
-                #ifndef BO3
                 self iPrintln("Weapon 2 Selected: [^2" + self.wep2 + "^7]");
-                #else
-                self iPrintln("Weapon 2 Selected: [^2" + self.wep2.name + "^7]");
-                #endif
             }
         }
 
@@ -257,20 +245,12 @@
             if(num == 1)
             {
                 self.snacwep1 = self getCurrentWeapon();
-                #ifndef BO3
                 self iPrintln("Weapon 1 Selected: [^2" + self.snacwep1 + "^7]");
-                #else
-                self iPrintln("Weapon 1 Selected: [^2" + self.snacwep1.name + "^7]");
-                #endif
             }
             else if(num == 2)
             {
                 self.snacwep2 = self getCurrentWeapon();
-                #ifndef BO3
                 self iPrintln("Weapon 2 Selected: [^2" + self.snacwep2 + "^7]");
-                #else
-                self iPrintln("Weapon 2 Selected: [^2" + self.snacwep2.name + "^7]");
-                #endif
             }
         }
 

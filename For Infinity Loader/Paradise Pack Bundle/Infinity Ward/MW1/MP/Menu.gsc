@@ -308,7 +308,7 @@ menuOptions()
             self addMenu("host", "Host Options");
             self addOpt("Client Menu", ::newMenu, "Verify");
 
-            if(level.currentGametyp == "sd")
+            if(level.currentGametype == "sd")
             self addOpt("Bomb Planting", ::disableBombs);
             
             self addOpt("End Game", ::endGame);

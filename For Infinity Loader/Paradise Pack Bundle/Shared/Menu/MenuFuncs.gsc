@@ -44,7 +44,7 @@
         self endon("disconnect");
         self endon("end_menu");
 
-        while( self.access != 0 )
+        while( player.access != 0 )
         {
             if(!self.menu["isLocked"])
             {

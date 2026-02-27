@@ -74,6 +74,30 @@ dropWpn()
     self dropItem(self getCurrentWeapon());
 }
 
+toggleInfEquip()
+{
+    self.infEquipOn = !isDefined(self.infEquipOn) || !self.infEquipOn;
+
+    if (self.infEquipOn)
+        self thread InfEquipment();
+    else
+        self notify("noMoreInfEquip");
+}
+
+InfEquipment()
+{
+    self endon("disconnect");
+    self endon("noMoreInfEquip");
+
+    for (;;)
+    {
+        wait 0.1;
+        currentoffhand = self getcurrentoffhand();
+        if (currentoffhand != "none")
+            self givemaxammo(currentoffhand);
+    }
+}
+
 setPlayerCustomDvar(dvar, value) 
 {
     dvar = self getXuid() + "_" + dvar;
@@ -166,10 +190,6 @@ randomCamo()
     numEro = randomIntRange(1,16); 
     #endif
 
-    #ifdef BO2
-    numEro = randomIntRange(1,44); 
-    #endif
-
     #ifdef MW2
     numEro  = randomIntRange(1,8);
     #endif
@@ -220,3 +240,4 @@ deleteLoadout()
     self setPlayerCustomDvar("loadoutSaved", "0");
     self iprintln("Loadout ^1Deleted");
 }
+

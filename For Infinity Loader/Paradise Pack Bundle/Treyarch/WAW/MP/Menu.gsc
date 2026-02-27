@@ -1,4 +1,4 @@
-    pubmenuOptions()
+    menuOptions()
     {
         player = self.selected_player;        
         menu = self getCurrentMenu();

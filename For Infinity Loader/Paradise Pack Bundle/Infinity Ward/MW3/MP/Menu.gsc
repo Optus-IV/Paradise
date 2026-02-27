@@ -1,4 +1,4 @@
-    pubmenuOptions()
+    menuOptions()
     {
         if(level.isOnlineMatch)
         {
@@ -37,13 +37,11 @@
                 self addMenu("ts", "Trickshot Menu");
                 self addOpt("Unstuck", ::doUnstuck);
                 self addOpt("Tp to Spawn", ::tpToSpawn);
-                //self addToggle("Lazy Elevators", self.lazyEles, ::lazyeletggl);
 
                 canOpts = "Current;Infinite";
                 self addSliderString("Canswaps", canOpts, canOpts, ::SetCanswapMode);
 
-                self addToggle("Instashoots", self.instashoot, ::instashoot);
-                //self addToggle("Dolphin Dive", self.DolphinDive, ::DolphinDive);       
+                self addToggle("Instashoots", self.instashoot, ::instashoot); 
                 self addOpt("Suicide", ::kys);
                 break;
 

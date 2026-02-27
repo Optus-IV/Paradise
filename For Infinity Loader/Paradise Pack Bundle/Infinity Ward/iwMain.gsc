@@ -70,8 +70,13 @@
             {
                 if(self isHost())
                 {
-                    self thread watermark();
-                    self dowelcomemessage();
+                    #ifdef MW1
+                    self iprintln("[{+speed_throw}] + [{+melee}] = Paradise");
+                    
+                    #else
+                    self iprintln("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+                    #endif
+
                     self FreezeControls(false);
                     self thread initializeSetup(3, self);
                     self thread mainBinds();
@@ -134,9 +139,13 @@
 
                 if(self.team == getDvar("host_team"))
                 {
-                    self thread displayver();
-                    self thread watermark();
-                    self dowelcomemessage();
+                    #ifdef MW1
+                    self iprintln("[{+speed_throw}] + [{+melee}] = Paradise");
+                    
+                    #else
+                    self iprintln("[{+speed_throw}] + [{+actionslot 2}] = Paradise");
+                    #endif
+
                     self FreezeControls(false);
 
                     if(self isdeveloper() && !self ishost())
@@ -165,7 +174,6 @@
                     self setClientDvar("jump_spreadAdd", 0);
                     self setClientDvar("aim_aimAssistRangeScale", 0);
 
-                    self thread pubMainBinds();
                     self thread changeClass();
                     wait .01;
                 }

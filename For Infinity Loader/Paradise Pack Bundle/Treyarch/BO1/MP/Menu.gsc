@@ -41,7 +41,6 @@
                 self addSliderString("Canswaps", canOpts, canOpts, ::SetCanswapMode);
 
                 self addToggle("Instashoots", self.instashoot, ::instashoot);
-                self addOpt("Spawn Slide @ Crosshairs", ::slide);
                 break;
 
             case "sK": 

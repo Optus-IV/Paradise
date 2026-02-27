@@ -57,58 +57,6 @@ LoadSettings()
     #endif
 }
 
-displayVer()
-{
-    self endon( "disconnect");
-
-    #ifdef MW2 || MW3
-    fontScale = 1;
-    x = -10;
-    y = 10;
-    #endif
-
-    #ifdef MW1
-    fontScale = 1.4;
-    x = 15;
-    y = -25;
-    #endif
-
-    #ifdef BO1
-    fontScale = 1.2;
-    x = 15;
-    y = -25;
-    #endif
-
-    #ifdef WAW
-    fontScale = 1.2;
-
-    #ifdef XBOX
-    x = 15;
-    y = -25;
-    #else
-    x = -10;
-    y = 10;
-    #endif
-    #endif  
-
-    Instructions.alpha = 0.5;
-    Instructions.hidewheninmenu = true;
-    Instructions.hideWhenInKillcam = true;
-
-    for( ;; )
-    {
-        #ifdef MW1 
-        Instructions _settext("Paradise");
-
-        #else
-
-        Instructions settext("Paradise");
-        #endif
-
-        wait 2;
-    }
-}
-
 initstrings()
 {
    game["strings"]["pregameover"]       = "Paradise";
@@ -128,15 +76,6 @@ initstrings()
    game["strings"]["overtime"]            = "Paradise";
    game["strings"]["roundend"]            = "Paradise";
    game["strings"]["side_switch"]         = "Paradise";
-}
-
-doWelcomeMessage()
-{
-    if(level.currentGametype == "dm") self iprintlnbold("Welcome ^2" + self.name + " ^7to ^1Paradise FFA!");
-
-    else if(level.currentGametype == "sd") self iprintlnbold("Welcome ^2" + self.name + " ^7to ^1Paradise SND!");
-
-    else if(level.currentGametype == "war" || level.currentGametype == "tdm") self iprintlnbold("Welcome ^2" + self.name + " ^7to ^1Paradise TDM!");
 }
 
 watermark()

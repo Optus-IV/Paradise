@@ -349,10 +349,8 @@ classBind(classNum)
         while(isDefined(self.ChangeClass))
         {
             if(self actionslottwobuttonpressed() && !self.menu["isOpen"])
-            {
                 self thread maps\mp\gametypes\_class::giveloadout( self.team, "CLASS_CUSTOM" + classNum);
-                self thread playerSetup();
-            }
+                
             wait .001; 
         }
     }
