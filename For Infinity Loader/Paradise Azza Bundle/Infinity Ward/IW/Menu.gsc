@@ -161,6 +161,10 @@
 
             case "kstrks":
                 self addMenu("kstrks", "Killstreak Menu");
+                streakIDs = ["venom", "uav", "dronedrop", "counter_uav", "ball_drone_backup", "drone_hive", "precision_airstrike", "bombardment", "sentry_shock", "jackal", "directional_uav", "thor", "remote_c8", "minijackal", "nuke"];
+                streakNames = ["Scarab", "UAV", "Drone Package", "Counter UAV", "Vulture", "Trinity Rocket", "Scorchers", "Bombardment", "Shock Sentry", "Warden", "Advanced UAV", "T.H.O.R", "R-C8", "AP-3X", "De-Atomizer"];
+                for(a=0;a<streakNames.size;a++)
+                self addOpt(streakNames[a], ::give_killstreak, streakIDs[a]);
 
                 break;
 
