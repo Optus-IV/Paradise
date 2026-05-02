@@ -1,1 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Project><Title>Paradise Pack Bundle</Title><Author /><Game>WAW</Game><Mode>MP</Mode><Platform>Xbox</Platform><Symbols>DEBUG;EXAMPLE</Symbols></Project>
