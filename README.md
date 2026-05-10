@@ -14,8 +14,8 @@ Features:
 * Custom "ragebait" Messages
 * Automatic Bot Spawning 
 * Supports FFA/SND/TDM
-* Public Match & Private Match
-* + more!
+* Public Match (Pack) & Private Match (Azza)
+* and more!
 
 Credits:
 * Xesoftware: menu base, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets
