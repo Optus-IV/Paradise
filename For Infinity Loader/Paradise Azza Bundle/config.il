@@ -1,0 +1,1 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Project><Title>Paradise Azza Bundle</Title><Author>akaTrxgic</Author><Game>IW</Game><Mode>MP</Mode><Platform>Steam</Platform><Symbols>DEBUG;EXAMPLE</Symbols></Project>
