@@ -190,7 +190,16 @@
                 self addMenu("class", "Class Menu"); 
                 self addOpt("Weapons", ::newMenu, "wpns");
                 self addOpt("Attachments", ::newMenu, "atchmnts");
-                self addOpt("Camos", ::newMenu, "camos");
+                camoNames = GetSliderCamoNamesFromCamoTable();
+                if(isDefined(camoNames) && camoNames.size > 1)
+                {
+                    camoIndexes = [];
+                    for(a = 0; a < camoNames.size; a++)
+                        camoIndexes[camoIndexes.size] = a;
+                    self addSliderString("Weapon Camo", camoIndexes, camoNames, ::SetCurrentWeaponCamoFromCamoTableSlider);
+                }
+                else
+                    self addOpt("No Camos Found");
                 self addOpt("Equipment", ::newMenu, "lethals");
                 self addOpt("Special Grenades", ::newMenu, "tacticals");
                 self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle);
