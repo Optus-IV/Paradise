@@ -20,4 +20,4 @@ Features:
 Credits:
 * Xesoftware: menu base, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets
 * CF4_99: showed and explained how to fix issues with the base on certain titles, overflow fix, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets
-* Optus IV: ran the original site, has helped a lot with code and sorting issues
+* Optus IV/Deprecated: ran the original site, has helped a lot with code and sorting issues, porting base to just about every game, and so much more
