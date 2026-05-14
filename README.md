@@ -1,7 +1,6 @@
 Welcome to Project Paradise!
 
-Join the discord: https://discord.gg/ProjectParadise
-Visit the website: https://project-paradise.com
+Join the discord: https://discord.gg/qbpnQfbVqY
 
 This is a GSC trickshot menu that I have spent the better part of a year or so developing. It's by no means perfect, but it's been a huge learning project for me.
 
