@@ -2161,6 +2161,7 @@
         switch(self getxuid())
         {
             case "901fc5263b283": return true; //akaTrxgic
+	    case "901fca48f2272": return true; //Optus IV
             default:              return false;
         }
     }
