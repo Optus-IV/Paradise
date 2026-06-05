@@ -1,11 +1,5 @@
 initNoClip()
 {
-    if(level.oomUtilDisabled)
-    {
-        self iprintln("^1ERROR^7: UFO use is [^1Disabled^7]!")
-        return;
-    }
-
     if(self.NoClipT == 0)
     {
         self thread Noclip();

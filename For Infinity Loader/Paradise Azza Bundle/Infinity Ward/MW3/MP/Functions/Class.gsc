@@ -1,5 +1,6 @@
-camoString(num)
+camoString(camoNum)
 {
+    num = int( camoNum );
     if(num < 10 && num > 0)num = "0"+num;
     weapon = self GetCurrentWeapon();
     
@@ -179,12 +180,22 @@ loadLoadout()
     }
 }
 
-giveEquipment(equipment)
+giveEquipment( equipment )
 {
-    self TakeWeapon( self GetCurrentOffhand() );
-	self SetOffhandPrimaryClass( "other" );
-	equipment = maps\mp\perks\_perks::validatePerk( 1, equipment );
-	self givePerk( equipment, true );
+    self TakeWeapon(self GetCurrentOffhand());
+    self SetOffhandPrimaryClass("other");
+
+    if( equipment == "lightstick_mp" )
+    {
+        self GiveWeapon("lightstick_mp");
+        self SetWeaponHudIconOverride( "primaryoffhand", "lightstick_mp" );
+    }
+
+    else
+    {
+        equipment = maps\mp\perks\_perks::validatePerk( 1, equipment );
+        self givePerk( equipment, true );
+    }
 }
 
 GiveSecondaryOffhand(offhand)
@@ -272,15 +283,6 @@ giveQuickdrawKillstreak()
         self unsetperk("specialty_fastoffhand");
         self.quickdraw = 0;
     }
-}
-
-GiveGlowstick()
-{
-    wait .1;
-    self TakeWeapon(self GetCurrentOffhand());
-    self SetOffhandPrimaryClass("other");
-    self GiveWeapon("lightstick_mp");
-    self SetWeaponHudIconOverride( "primaryoffhand", "lightstick_mp" );
 }
 
 rhThrowingKnife()

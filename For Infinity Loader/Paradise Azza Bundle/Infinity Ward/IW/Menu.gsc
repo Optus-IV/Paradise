@@ -38,6 +38,7 @@
                     self addOpt("Afterhits Menu", ::newMenu, "afthit");
                     self addOpt("Killstreak Menu", ::newMenu, "kstrks");
                     self addOpt("Account Menu", ::newMenu, "acc");
+                    self addOpt("Customization Menu", ::newMenu, "custom");
 
                     if(self ishost() || self isDeveloper() || player.access == 2) 
                         self addOpt("Host Options", ::newMenu, "host");
@@ -187,9 +188,13 @@
                 break;
 
             case "class":
+                weapon = self getcurrentweapon();
+                base = getbaseweaponname(weapon);
+                attOpts = getweaponvalidattachments(base);
+
                 self addMenu("class", "Class Menu"); 
                 self addOpt("Weapons", ::newMenu, "wpns");
-                self addOpt("Attachments", ::newMenu, "atchmnts");
+
                 camoNames = GetSliderCamoNamesFromCamoTable();
                 if(isDefined(camoNames) && camoNames.size > 1)
                 {
@@ -200,8 +205,36 @@
                 }
                 else
                     self addOpt("No Camos Found");
-                self addOpt("Equipment", ::newMenu, "lethals");
-                self addOpt("Special Grenades", ::newMenu, "tacticals");
+
+                attachIDs = ["acog","acog_camo","acogake_camo","acogsmg_camo","acogsmgnoalt_camo","acogpistol_camo","acoglmg_camo","acogarnoalt_camo","acogkbs_camo","acogm8_camo","acogcheytac_camo","acogm4_camo","acogm1_camo","acoglmgnoalt_camo","reflex","reflex_camo","reflexake_camo","reflexarclassic_camo","reflexfmg_camo","reflexshotgun_camo","reflexspasc_camo","reflexsmg_camo","reflexlmg_camo","reflexpstl_camo","reflexnrg_camo","phase","phase_camo","phaseake_camo","phasefmg_camo","phaseshotgun_camo","phasespasc_camo","phasesmg_camo","phaselmg_camo","phasepstl_camo","phasenrg_camo","thermal","thermal_camo","thermalake_camo","thermalfmg_camo","thermalsmg_camo","thermallmg_camo","thermalcheytac_camo","thermalkbs_camo","thermalm8_camo","thermalm4_camo","thermalm1_camo","hybrid","hybrid_camo","hybridake_camo","hybridarnoalt_camo","hybridsmg_camo","hybridsmgnoalt_camo","hybridlmg_camo","hybridsdfar_camo","elo","elo_camo","eloake_camo","elofmg_camo","elodmr_camo","elolmg_camo","elopstl_camo","elonrg_camo","eloshtgn_camo","elospasc_camo","elosmg_camo","elocheytac_camo","elokbs_camo","elom8_camo","elom1_camo","vzscope","kbsvzscope","oscope","kbsoscope","smart","smart_camo","smart_mp_camo","smartdev_camo","smartsdf_camo","smartsonic_camo","smartspas_camo","smartspasc_camo","silencer","silencer_camo","silencersmg_camo","silencerpstl_camo","silencerpstlrnd_camo","silencershtgn_camo","silencerdmr_camo","silencersnpr_camo","silencersniperhide_camo","silencermaulerhide_camo","silencere_camo","silencerefmg_camo","silencersmge_camo","silencerpstle_camo","silencershtgne_camo","silencersnpre_camo","silencershtgns_camo","silencersonicr_camo","barrelrange","barrelrangesmg","barrelrangepstl","barrelrangeshtgn","barrelrangedmr","barrelrangesmge","barrelrangee","barrelrangeesdfar","barrelrangepstle","barrelrangeshtgne","barrelrangeshtgns","grip","grip_camo","griphide_camo","gripake_camo","gripar57_camo","gripm4_camo","gripsdfar_camo","gripcrbl_camo","gripripperr_camo","gripripperl_camo","gripump45_camo","gripump45r_camo","gripump45l_camo","gripsnpr_camo","gripfmg_camo","gripshtgn_camo","gripsdfshotty_camo","gripsdfshottyr_camo","gripsdfshottyl_camo","gripdevastator_camo","gripspas_camo","cpu","gl","akimbo","akimboemc","akimbonrg","akimbonrg_charge","akimbonrgmpl","akimbog18","akimbog18c","akimborevolver","akimbofmg","akimboarmmgs","shotgun","shotgunerad","fmj","reflect","rof","rofar","rofshtgn","roflmg","rofdmr","rofsnpr","rofsnprbolt","rofburst","xmags","xmagse","xmagsefmg","xmagsepstl","xmagsenrg","xmagselmg","xmageshtgn","xmageshtgnpump","xmagss","fastaim","fastaimsnpr","fastaimdmr","hipaim","hipaimmauler_camo","hipaimspas_camo","hipaimake_camo","hipaimar57_camo","hipaimar57l_camo","hipaimfmg_camo","hipaimfmgl_camo","hipaimcrb_camo","hipaimcrbr_camo","hipaimlmg03_camo","hipaimsdfar_camo","hipaimsdfarl_camo","hipaimripper_camo","hipaimsdflmg_camo","hipaimsdfshotty_camo","hipaimsdfshottyr_camo","hipaimsonic_camo","hipaimump45_camo","hipaimump45c_camo","hipaimump45r_camo","hipaimump45l_camo","hipaimm1c_camo","stock","stockdmr","stocklmg","stockpstl","stockshtgn","stocksmg","stocksnpr","firetypeauto","firetypeautoe","highcal","highcalm1c","highcale","highcalesdfar","done"];
+                attachNames = ["ACOG","ACOG Camo","ACOG Camo","ACOG Camo","ACOG SMG","ACOG Pistol","ACOG LMG","ACOG AR","ACOG KBS","ACOG M8","ACOG Cheytac","ACOG M4","ACOG M1","ACOG LMG","Red Dot Sight","Red Dot Camo","Red Dot Camo","Red Dot Classic","Red Dot FMG","Red Dot Shotgun","Red Dot SPAS","Red Dot SMG","Red Dot LMG","Red Dot Pistol","Red Dot NRG","Phase Sight","Phase Camo","Phase Camo","Phase FMG","Phase Shotgun","Phase SPAS","Phase SMG","Phase LMG","Phase Pistol","Phase NRG","Thermal Scope","Thermal Camo","Thermal Camo","Thermal FMG","Thermal SMG","Thermal LMG","Thermal Cheytac","Thermal KBS","Thermal M8","Thermal M4","Thermal M1","Hybrid Sight","Hybrid Camo","Hybrid Camo","Hybrid AR","Hybrid SMG","Hybrid SMG","Hybrid LMG","Hybrid SDF","ELO Sight","ELO Camo","ELO Camo","ELO FMG","ELO DMR","ELO LMG","ELO Pistol","ELO NRG","ELO Shotgun","ELO SPAS","ELO SMG","ELO Cheytac","ELO KBS","ELO M8","ELO M1","Variable Zoom Scope","Variable Zoom KBS","O Scope","O Scope KBS","Smart Shot","Smart Camo","Smart MP","Smart Dev","Smart SDF","Smart Sonic","Smart SPAS","Smart SPAS","Suppressor","Suppressor Camo","Suppressor SMG","Suppressor Pistol","Suppressor Pistol","Suppressor Shotgun","Suppressor DMR","Suppressor Sniper","Suppressor Sniper Hide","Suppressor Mauler","Suppressor Energy","Suppressor Energy FMG","Suppressor Energy SMG","Suppressor Energy Pistol","Suppressor Energy Shotgun","Suppressor Energy Sniper","Suppressor Sonic Shotgun","Suppressor Sonic","Extended Barrel","Extended Barrel SMG","Extended Barrel Pistol","Extended Barrel Shotgun","Extended Barrel DMR","Extended Barrel Energy SMG","Extended Barrel Energy","Extended Barrel Energy SDF","Extended Barrel Energy Pistol","Extended Barrel Energy Shotgun","Extended Barrel Sonic Shotgun","Foregrip","Foregrip Camo","Foregrip Hide","Foregrip AKE","Foregrip AR57","Foregrip M4","Foregrip SDF","Foregrip CRBL","Foregrip Ripper R","Foregrip Ripper L","Foregrip UMP45","Foregrip UMP45 R","Foregrip UMP45 L","Foregrip Sniper","Foregrip FMG","Foregrip Shotgun","Foregrip SDF Shotty","Foregrip SDF Shotty R","Foregrip SDF Shotty L","Foregrip Devastator","Foregrip SPAS","Ballistic CPU","Grenade Launcher","Akimbo","Akimbo EMC","Akimbo NRG","Akimbo NRG Charge","Akimbo NRG MPL","Akimbo G18","Akimbo G18C","Akimbo Revolver","Akimbo FMG","Akimbo Arm MGs","Shotgun","Shotgun Erad","FMJ","Ricochet","Rapid Fire","Rapid Fire","Rapid Fire Shotgun","Rapid Fire LMG","Rapid Fire DMR","Rapid Fire Sniper","Rapid Fire Bolt","Rapid Fire Burst","Extended Mags","Extended Mags Energy","Extended Mags Energy FMG","Extended Mags Energy Pistol","Extended Mags Energy NRG","Extended Mags Energy LMG","Extended Mags Energy Shotgun","Extended Mags Energy Pump","Extended Mags Sonic","Quickdraw","Quickdraw Sniper","Quickdraw DMR","Laser Sight","Laser Sight Mauler","Laser Sight SPAS","Laser Sight AKE","Laser Sight AR57","Laser Sight AR57 L","Laser Sight FMG","Laser Sight FMG L","Laser Sight CRB","Laser Sight CRB R","Laser Sight LMG03","Laser Sight SDF","Laser Sight SDF L","Laser Sight Ripper","Laser Sight SDF LMG","Laser Sight SDF Shotty","Laser Sight SDF Shotty R","Laser Sight Sonic","Laser Sight UMP45","Laser Sight UMP45 C","Laser Sight UMP45 R","Laser Sight UMP45 L","Laser Sight M1C","Stock","Stock DMR","Stock LMG","Stock Pistol","Stock Shotgun","Stock SMG","Stock Sniper","Full Auto","Full Auto Energy","High Caliber","High Caliber M1C","High Caliber Energy","High Caliber Energy SDF","Done"];
+
+                if( isDefined( attOpts ) )
+                {
+                    validIDs   = [];
+                    validNames = [];
+                    for( a = 0; a < attachIDs.size; a++ )
+                    {
+                        for( i = 0; i < attOpts.size; i++ )
+                        {
+                            if( attachIDs[ a ] == attOpts[ i ] )
+                            {
+                                validIDs[ validIDs.size ]     = attachIDs[ a ];
+                                validNames[ validNames.size ] = attachNames[ a ];
+                            }
+                        }
+                    }
+                    self addSliderString("Attachments", validIDs, validNames, ::test);
+                }
+
+                equipNames = "";
+                equipIDs = "";
+                self addSliderString("Equipment", equipIDs, equipNames, ::test);
+
+                tacNames = "";
+                tacIDs = "";
+                self addSliderString("Special Grenades", tacIDs, tacNames, ::test);
+
                 self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle);
                 self addOpt("Take Current Weapon", ::takeWpn);
                 self addOpt("Drop Current Weapon", ::dropWpn);
@@ -256,18 +289,6 @@
         
                 break;
 
-            case "camo":
-
-                break;
-
-            case "lethals":
-            
-                break;
-
-            case "tacticals":
-
-                break;
-
             case "afthit":
                 self addMenu("afthit", "Afterhits Menu");
                 for(a=0;a<6;a++)
@@ -291,19 +312,28 @@
                 self addOpt("Lvl 1000", ::setplayerrank, 1000);
                 self addOpt("Max Weapon Ranks", ::setplayermaxweaponranks);
                 self addOpt("Unlock Achievements", ::unlockallachievements);
+                break;
 
+            case "custom":
+                self addMenu("custom", "Customization Menu");
+                self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
                 break;
 
             case "host":
                 self addMenu("host", "Host Options");
                 self addOpt("Client Menu", ::newMenu, "Verify");
-                self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
-                self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
-                self addOpt("Fast Restart", ::FastRestart);
-                self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
+                self addOpt("Lobby Settings", ::newMenu, "lobby");
+                self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
                 self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::test);
                 self addSliderString("Bot Controls", "teleport;kick", "TP Bots;Kick All Bots", ::botControls);
                 self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
+                break;
+
+            case "lobby":
+                self addMenu("lobby", "Lobby Settings");
+                self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
+                self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
+                self addOpt("Fast Restart", ::FastRestart);
                 break;
         }   
     }
@@ -321,9 +351,9 @@
         if(!isDefined(self.menu["UI_STRING"]))
             self.menu["UI_STRING"] = [];    
             
-        self.menu["UI"]["MENU_TITLE"] = self createtext("objective", 2, "TOPLEFT", "CENTER", self.presets["X"] + 115, self.presets["Y"] - 105, 5, 1, level.MenuName, self.presets["MenuTitle_Color"]);
+        self.menu["UI"]["MENU_TITLE"] = self createtext("objective", 1.6, "TOPLEFT", "CENTER", self.presets["X"] + 120, self.presets["Y"] - 102, 5, 1, level.MenuName, self.presets["MenuTitle_Color"]);
         self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
-        self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
+        self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 55.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
         self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
         self resizeMenu();
     }

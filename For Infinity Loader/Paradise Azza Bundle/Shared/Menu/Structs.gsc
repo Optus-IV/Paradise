@@ -26,15 +26,56 @@
         
         player.selected_player = player;
         player.menu["isOpen"] = false;
-        player.menu["isLocked"] = false;
         
         player LoadSettings();
 
         if( !isDefined(player.menu["current"]) )
             player.menu["current"] = "main";
             
-        player menuoptions();
-        player thread menuMonitor();
+        if( player.access > 0 )
+        {
+            player FreezeControls(false);
+
+            #ifdef MP
+            player dowelcomemessage();
+            player thread changeClass();
+            #endif
+
+            player thread menuInst();
+
+            #ifdef WAW || MW1
+            player setClientDvar("g_compassShowEnemies", 1);
+            #endif
+
+            #ifdef MW2 
+                #ifdef STEAM
+                    player thread maps\mp\killstreaks\_uav::launchUav(player, getDvar("host_team"), 999, false);
+                #else
+                    player setClientDvar("g_compassShowEnemies", 1);
+                    player setClientDvar("scr_game_forceuav", 1);
+                    player setClientDvar("compassEnemyFootstepEnabled", 1);
+                #endif
+            #endif
+
+            #ifdef MW3
+            player setClientDvar("g_compassShowEnemies", 1);
+            player setClientDvar("scr_game_forceuav", 1);
+            player setClientDvar( "compassEnemyFootstepEnabled", 1);
+            #endif
+
+            #ifdef BO2
+            player setclientuivisibilityflag("g_compassShowEnemies", 1);
+            player.uav = false;
+            #endif
+
+            player thread mainBinds();
+            player thread wallbangeverything();                    
+            player thread bulletImpactMonitor();
+            player thread trackstats();
+
+            player menuoptions();
+            player thread menuMonitor();
+        }
     }
 
     newMenu( menu, access = 0 )

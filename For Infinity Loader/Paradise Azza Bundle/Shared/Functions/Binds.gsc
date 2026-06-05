@@ -48,11 +48,7 @@
 
         CanzoomFunction()
         {
-            #ifndef BO3
             self.canswapWeap = self getCurrentWeapon();
-            #else
-            self.canswapWeap = getWeapon(self getcurrentweapon());
-            #endif
             self takeWeapon(self.canswapWeap);
             self giveweapon(self.canswapWeap);
             wait 0.05;

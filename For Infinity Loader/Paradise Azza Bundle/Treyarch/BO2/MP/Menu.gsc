@@ -19,6 +19,7 @@ menuOptions()
                 self addOpt("Class Menu", ::newMenu, "class");
                 self addOpt("Afterhits Menu", ::newMenu, "afthit");
                 self addOpt("Killstreak Menu", ::newMenu, "kstrks");
+                self addOpt("Customization Menu", ::newMenu, "custom");
 
                 if(self ishost() || self isDeveloper()) 
                     self addOpt("Host Options", ::newMenu, "host");
@@ -28,17 +29,19 @@ menuOptions()
         case "ts":
             self addMenu("ts", "Trickshot Menu");
             self addToggle("Noclip [{+smoke}]", self.NoClipT, ::initNoClip);
-            self addOpt("Go for Two Piece", ::dotwopiece);
 
-            canOpts = ["Current", "Infinite"];
+            if( level.currentGametype == "dm" )
+                self addOpt("Go for Two Piece", ::dotwopiece);
+
+            canOpts = ["Current","Infinite"];
             self addSliderString("Canswaps", canOpts, canOpts, ::SetCanswapMode);
 
             self addToggle("Instashoots", self.instashoot, ::instashoot);
             self addOpt("Spawn Slide @ Crosshairs", ::slide);
 
-            spawnOptionsActions = ["Bounce","Platform","Crate"];
-            spawnOptionsIDs     = ["bounce","platform","crate"];
-            self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
+            spwnIDs = ["bounce","platform","crate"];
+            spwnNames = ["Bounce","Platform","Crate"];
+            self addSliderString("Spawn @ Feet", spwnIDs, spwnNames, ::doSpawnOption);
             break;
 
         case "sK": 
@@ -381,12 +384,46 @@ menuOptions()
             break;
 
    case "class":
+            weapon = self getcurrentweapon();
+            base = getbasename( weapon );
+            attOpts = GetWeaponValidAttachments( base );
+            
             self addMenu("class", "Class Menu"); 
             self addOpt("Weapons", ::newMenu, "wpns");
-            self addOpt("Attachments", ::newMenu, "attach");
-            self addOpt("Camos", ::newMenu, "camos");
-            self addOpt("Lethals", ::newMenu, "lethals");
-            self addOpt("Tacticals", ::newMenu, "tacticals");
+            
+            attachIDs = ["reflex", "fastads", "dualclip", "acog", "grip", "stalker", "rangefinder", "steadyaim", "sf", "holo", "silencer", "fmj", "dualoptic", "extclip", "gl", "mms", "extbarrel", "rf", "vzoom", "ir", "is", "tacknife", "dw", "stackfire"];
+            attachNames = ["Reflex", "Quickdraw", "Fast Mag", "ACOG", "Fore Grip", "Stock", "Target Finder", "Laser Sight", "Select Fire", "EO Tech", "Suppressor", "FMJ", "Hybrid Optic", "Extended Clip", "Launcher", "MMS", "Long Barrel", "Rapid Fire", "Variable Zoom", "Dual Band", "Iron Sight", "Knife", "Dual Wield", "Tri-Bolt"];
+            
+            if( isDefined( attOpts ) )
+            {
+                validIDs   = [];
+                validNames = [];
+                for( a = 0; a < attachIDs.size; a++ )
+                {
+                    for( i = 0; i < attOpts.size; i++ )
+                    {
+                        if( attachIDs[ a ] == attOpts[ i ] )
+                        {
+                            validIDs[ validIDs.size ]     = attachIDs[ a ];
+                            validNames[ validNames.size ] = attachNames[ a ];
+                        }
+                    }
+                }
+                self addSliderString("Attachments", validIDs, validNames, ::GivePlayerAttachment);
+            }
+
+            camoNames = ["None", "DEVGRU", "A-TACS AU", "ERDL", "Siberia", "Choco", "Blue Tiger", "Bloodshot", "Ghostex: Delta 6", "Kryptek: Typhon", "Carbon Fiber", "Cherry Blossom", "Art of War", "Ronin", "Skulls", "Gold", "Diamond", "Elite", "Digital", "Jungle Warfare", "UK Punk", "Benjamins", "Dia De Muertos", "Graffiti", "Kawaii", "Party Rock", "Zombies", "Viper", "Bacon", "Ghosts", "Paladin", "Cyborg", "Dragon", "Comics", "Aqua", "Breach", "Coyote", "Glam", "Rogue", "Pack-a-Punch", "Dead Mans Hand", "Beast", "Octane", "Weaponized 115", "Afterlife", "Advanced Warfare"];
+            camoNums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
+            self addSliderString("Camos", camoNums, camoNames, ::changeCamo);
+
+            lethalNames = ["Frag","Semtex","Combat Axe","Bouncing Betty","C4","Claymore"];
+            lethalIDs = ["frag_grenade","sticky_grenade","hatchet","bouncingbetty","satchel_charge","claymore"];
+            self addSliderString("Lethals", lethalIDs, lethalNames, ::GivePlayerEquipment);
+
+            tacticalNames = ["Concussion Grenade","Smoke Grenade","Sensor Grenade","EMP Grenade","Shock Charge","Black Hat","Flashbang","Trophy System","Tactical Insertion"];
+            tacticalIDs = ["concussion_grenade","willy_pete","sensor_grenade","emp_grenade","proximity_grenade","pda_hack","flash_grenade","trophy_system","tactical_insertion"];
+            self addSliderString("Tacticals", tacticalIDs, tacticalNames, ::GivePlayerEquipment);
+
             self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle);
             self addOpt("Take Current Weapon", ::takeWpn);
             self addOpt("Drop Current Weapon", ::dropWpn);
@@ -420,126 +457,17 @@ menuOptions()
             pstlsNames = ["Five Seven","Tac-45","B23R","Executioner","Kap-40"];
             self addSliderString("Pistols", pstlsIDs, pstlsNames, ::giveuserweapon);
 
-            self addOpt("Launchers", ::newMenu, "lnchrs");
-            self addOpt("Specials", ::newMenu, "specs");
-            self addOpt("Miscellaneous", ::newMenu, "misc");
-            self addOpt("Assault Shield", ::giveUserWeapon, "riotshield_mp");
-            break;
+            lnchrIDs = ["smaw_mp","fhj18_mp","usrpg_mp"];
+            lnchrNames = ["SMAW","FHJ-18 AA","RPG"];
+            self addSliderString("Launchers", lnchrIDs, lnchrNames, ::giveuserweapon);
 
-        case "attach":
-            weapon = self getcurrentweapon();
-            base = getbasename(weapon);
-            attOpts = GetWeaponValidAttachments(base);
+            specIDs = ["riotshield_mp","crossbow_mp","knife_ballistic_mp"];
+            specNames = ["Assault Shield","Crossbow","Ballistic Knife"];
+            self addSliderString("Specials", specIDs, specNames, ::giveuserweapon);
 
-            self addMenu("attach", "Attachments");
-
-            //smh -- CF4
-            attachIDs = ["reflex", "fastads", "dualclip", "acog", "grip", "stalker", "rangefinder", "steadyaim", "sf", "holo", "silencer", "fmj", "dualoptic", "extclip", "gl", "mms", "extbarrel", "rf", "vzoom", "ir", "is", "tacknife", "dw", "stackfire"];
-            attachNames = ["Reflex", "Quickdraw", "Fast Mag", "ACOG", "Fore Grip", "Stock", "Target Finder", "Laser Sight", "Select Fire", "EO Tech", "Suppressor", "FMJ", "Hybrid Optic", "Extended Clip", "Launcher", "MMS", "Long Barrel", "Rapid Fire", "Variable Zoom", "Dual Band", "Iron Sight", "Knife", "Dual Wield", "Tri-Bolt"];
-            
-            for(a=0;a<attachNames.size;a++)
-                self addOpt(attachNames[a], ::giveplayerattachment, attachIDs[a]);
-            break;
-                                   
-        case "lnchrs":
-            self addMenu("lnchrs", "Launchers");
-            self addOpt("SMAW", ::giveUserWeapon, "smaw_mp");
-            self addOpt("FHJ-18 AA", ::giveUserWeapon, "fhj18_mp");
-            self addOpt("RPG", ::giveUserWeapon, "usrpg_mp");
-            break;
-
-        case "specs":
-            self addMenu("specs", "Specials");
-
-            cbowIDs = ["crossbow_mp","crossbow_mp+stackfire","crossbow_mp+reflex"];
-            cbowNames = ["None","Tri-Bolt","Reflex"];
-            self addSliderString("Crossbow", cbowIDs, cbowNames, ::giveUserWeapon);
-
-            self addOpt("Ballistic Knife", ::giveUserWeapon, "knife_ballistic_mp");
-            break;
-
-            case "misc":
-            self addMenu("misc", "Miscellaneous");
-
-            self addOpt("Bomb Briefcase", ::giveUserWeapon, "briefcase_bomb_defuse_mp");
-            self addOpt("Shield Knife", ::giveUserWeapon, "knife_held_mp");
-            self addOpt("Default Weapon", ::giveUserWeapon, "defaultweapon_mp");
-            break;
-
-            case "camos":
-            self addMenu("camos", "Camos");
-            self addOpt("Remove Camo", ::changeCamo, 0);
-            self addOpt("Random Camo", ::randomCamo);
-            self addOpt("Base Camos", ::newMenu, "baseCamos");
-            self addOpt("DLC Camos", ::newMenu, "dlcCamos");
-            self addOpt("Secret Camos", ::newMenu, "secretCamos");     
-            break;
-
-        case "baseCamos":
-            self addMenu("baseCamos", "Base Camos");
-
-            baseCamoNames = ["", "DEVGRU", "A-TACS AU", "ERDL", "Siberia", "Choco", "Blue Tiger", "Bloodshot", "Ghostex: Delta 6", "Kryptek: Typhon", "Carbon Fiber", "Cherry Blossom", "Art of War", "Ronin", "Skulls", "Gold", "Diamond"];
-            for(a=1;a<baseCamoNames.size;a++)
-            self addOpt(baseCamoNames[a], ::changeCamo, a);
-            break;
-
-        case "dlcCamos":
-            self addMenu("dlcCamos", "DLC Camos");
-             self addOpt("Elite", ::changeCamo, 17);
-            self addOpt("Benjamins", ::changeCamo, 21);
-            self addOpt("Dia De Muertos", ::changeCamo, 22);
-            self addOpt("Graffiti", ::changeCamo, 23);
-            self addOpt("Kawaii", ::changeCamo, 24);
-            self addOpt("Party Rock", ::changeCamo, 25);
-            self addOpt("Zombies", ::changeCamo, 26);
-            self addOpt("Viper", ::changeCamo, 27);
-            self addOpt("Bacon", ::changeCamo, 28);
-            self addOpt("Dragon", ::changeCamo, 32);
-            self addOpt("Cyborg", ::changeCamo, 31);
-            self addOpt("Aqua", ::changeCamo, 34);
-            self addOpt("Breach", ::changeCamo, 35);
-            self addOpt("Coyote", ::changeCamo, 36);
-            self addOpt("Glam", ::changeCamo, 37);
-            self addOpt("Rogue", ::changeCamo, 38);
-            self addOpt("Pack-a-Punch", ::changeCamo, 39);
-            self addOpt("UK Punk", ::changeCamo, 20);
-            self addOpt("Paladin", ::changeCamo, 30);
-            self addOpt("Comics", ::changeCamo, 33);
-            self addOpt("Afterlife", ::changeCamo, 44);
-            self addOpt("Dead Mans Hand", ::changeCamo, 40);
-            self addOpt("Beast", ::changeCamo, 41);
-            self addOpt("Octane", ::changeCamo, 42);
-            self addOpt("Weaponized 115", ::changeCamo, 43);
-            break;
-
-        case "secretCamos":
-            self addMenu("secretCamos", "Secret Camos");
-            self addOpt("Digital", ::changeCamo, 18);
-            self addOpt("Ghosts", ::changeCamo, 29);
-            self addOpt("Advanced Warfare", ::changeCamo, 45);
-            break;
-
-        case "lethals":
-            self addMenu("lethals", "Lethals");
-            self addOpt("Frag", ::GivePlayerEquipment, "frag_grenade");
-            self addOpt("Semtex", ::GivePlayerEquipment, "sticky_grenade");
-            self addOpt("Combat Axe", ::GivePlayerEquipment, "hatchet");
-            self addOpt("Bouncing Betty", ::GivePlayerEquipment, "bouncingbetty");
-            self addOpt("C4", ::GivePlayerEquipment, "satchel_charge");
-            self addOpt("Claymore", ::GivePlayerEquipment, "claymore");
-            break;
-
-        case "tacticals":
-            self addMenu("tacticals", "Tacticals");
-            self addOpt("Concussion Grenade", ::GivePlayerEquipment, "concussion_grenade");
-            self addOpt("Smoke Grenade", ::GivePlayerEquipment, "willy_pete");
-            self addOpt("Sensor Grenade", ::GivePlayerEquipment, "sensor_grenade");
-            self addOpt("EMP Grenade", ::GivePlayerEquipment, "emp_grenade");
-            self addOpt("Shock Charge", ::GivePlayerEquipment, "proximity_grenade");
-            self addOpt("Black Hat", ::GivePlayerEquipment, "pda_hack");
-            self addOpt("Flashbang", ::GivePlayerEquipment, "flash_grenade");
-            self addOpt("Trophy System", ::GivePlayerEquipment, "trophy_system");
-            self addOpt("Tactical Insertion", ::GivePlayerEquipment, "tactical_insertion");
+            miscIDs = ["briefcase_bomb_defuse_mp","knife_held_mp","defaultweapon_mp"];
+            miscNames = ["Bomb Briefcase","Knife","Default Weapon"];
+            self addSliderString("Miscellaneous", miscIDs, miscNames, ::giveuserweapon);
             break;
 
         case "afthit":
@@ -573,8 +501,8 @@ menuOptions()
             lnchrsNames = ["War Machine","SMAW","FHJ-18","RPG"];
             self addSliderString("Launchers", lnchrsIDs, lnchrsNames, ::afterhit);
 
-            specIDs = ["knife_held_mp","defaultweapon_mp","minigun_mp","riotshield_mp","crossbow_mp","knife_ballistic_mp","briefcase_bomb_mp","claymore_mp","destructible_car_mp"];
-            specNames = ["CSGO Knife","Default Weapon","Death Machine","Riot Shield","Crossbow","Ballistic Knife","Bomb","Claymore","Car"];
+            specIDs = ["knife_held_mp","knife_mp","defaultweapon_mp","minigun_mp","riotshield_mp","crossbow_mp","knife_ballistic_mp","briefcase_bomb_mp","claymore_mp","destructible_car_mp"];
+            specNames = ["Knife","CSGO Knife","Default Weapon","Death Machine","Riot Shield","Crossbow","Ballistic Knife","Bomb","Claymore","Car"];
             self addSliderString("Special Weapons", specIDs, specNames, ::afterhit);
             break;
 
@@ -588,17 +516,34 @@ menuOptions()
             self addOpt(streakNames[a], ::dokillstreak, streakIDs[a]);
             break;
 
+        case "custom":
+            self addMenu("custom", "Customization Menu");
+            self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+            break;
+
         case "host":
             self addMenu("host", "Host Options");
             self addOpt("Client Menu", ::newMenu, "Verify");
+            self addOpt("Lobby Settings", ::newMenu, "lobby");
+            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
+            self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
+
+            botOptIDs = ["teleport","kick"];
+            botOptNames = ["Teleport to Crosshairs","Kick All Bots"];
+            self addSliderString("Bot Controls", botOptIDs, botOptNames, ::botControls);
+            
+            self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
+            break;
+
+        case "lobby":
+            self addMenu("lobby", "Lobby Settings");
             self addToggle("Toggle Floaters", self.floaters, ::togglelobbyfloat);
-            self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
+
+            minDist = ["15","25","50","100","150","200","250"];
+            self addsliderstring("Minimum Distance", minDist, undefined, ::setMinDistance);
+            
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
             self addOpt("Fast Restart", ::FastRestart);
-            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
-            self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-            self addSliderString("Bot Controls", "teleport;kick", "Teleport to Crosshairs;Kick All Bots", ::botControls);
-            self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
             break;
         }
         self clientOptions();

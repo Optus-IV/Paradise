@@ -217,8 +217,9 @@ removeValueFromArray(array, valueToRemove)
     return newArray;
 }
 
-changeCamo(num)
+changeCamo(camoNum)
 {
+    num = int( camoNum );
     weap    = self getCurrentWeapon();
     myclip  = self getWeaponAmmoClip(weap);
     mystock = self getWeaponAmmoStock(weap);  
@@ -303,3 +304,41 @@ saveLoadoutToggle()
         self saveLoadout();
     }
 }
+
+    #ifdef MW1 || WAW || MW3 || BO1
+    sohToggle()
+    {
+        if( self getPlayerCustomDvar( "SOH" ) == "1" )
+        {
+            #ifdef MW1 || WAW
+            self unsetPerk( "specialty_fastreload" );
+            self setPerk( "specialty_bulletdamage" );
+            #endif
+            #ifdef MW3   
+            self _unsetperk( "specialty_quickdraw" );
+            self _unsetperk( "specialty_fastoffhand" );
+            #endif
+            #ifdef BO1
+            self unsetPerk( "specialty_fastads" );
+            self unsetPerk( "specialty_fastreload" );   
+            #endif
+            self setPlayerCustomDvar( "SOH", "0" );
+        } 
+
+        else
+        {
+            #ifdef WAW || MW1
+            self setPerk( "specialty_fastreload" );
+            #endif
+            #ifdef MW3
+            self givePerk( "specialty_quickdraw", false );
+            self givePerk( "specialty_fastoffhand", false );
+            #endif
+            #ifdef BO1
+            self setPerk( "specialty_fastads" );
+            self setPerk( "specialty_fastreload" );   
+            #endif
+            self setPlayerCustomDvar( "SOH", "1" );
+        }
+    }
+    #endif

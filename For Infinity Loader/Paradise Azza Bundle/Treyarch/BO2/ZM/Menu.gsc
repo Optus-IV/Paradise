@@ -20,6 +20,7 @@
                 self addOpt("Class Menu", ::newMenu, "class");
                 self addOpt("Afterhits Menu", ::newMenu, "afthit");
                 self addOpt("Account Menu", ::newMenu, "acc");
+                self addOpt("Customization Menu", ::newMenu, "custom");
 
                 if(self ishost() || self isDeveloper()) 
                     self addOpt("Host Options", ::newMenu, "host");
@@ -366,9 +367,93 @@
             self addMenu("class", "Class Menu"); 
             self addOpt("Weapons", ::newMenu, "wpns");
             //self addOpt("Camos", ::newMenu, "camos");
-            self addOpt("Equipment", ::newMenu, "equipment");
-            self addOpt("Buildables", ::newMenu, "builds");
-            self addOpt("Perks", ::newMenu, "perks");
+
+            if(level.currentMapName == "zm_buried")
+            {
+                equipIDs = ["cymbal_monkey_zm","frag_grenade_zm","claymore_zm","time_bomb_zm"];
+                equipNames = ["Monkey Bomb","Frag Grenade","Claymore","Time Bomb"];
+            }
+            else if(level.currentMapName == "zm_highrise" || level.currentMapName == "zm_nuked")
+            {
+                equipIDs = ["cymbal_monkey_zm","frag_grenade_zm","claymore_zm","sticky_grenade_zm"];
+                equipNames = ["Monkey Bomb","Frag Grenade","Claymore","Semtex"];
+            }
+            else if(level.currentMapName == "zm_prison")
+            {
+                equipIDs = ["willy_pete_zm","sticky_grenade_zm","frag_grenade_zm","claymore_zm","bouncing_tomahawk_zm","upgraded_tomahawk_zm"];
+                equipNames = ["Smoke Grenade","Semtex","Frag Grenade","Claymore","Bouncing Tomahawk","Upgraded Tomahawk"];
+            }
+            else if(level.currentMapName == "zm_transit")
+            {
+                equipIDs = ["cymbal_monkey_zm","sticky_grenade_zm","frag_grenade_zm","claymore_zm","emp_grenade_zm"];
+                equipNames = ["Monkey Bomb","Semtex","Frag Grenade","Claymore","EMP Grenade"];
+            }
+            else if(level.currentMapName == "zm_tomb")
+            {
+                equipIDs = ["cymbal_monkey_zm","beacon_zm","sticky_grenade_zm","frag_grenade_zm","claymore_zm","emp_grenade_zm"];
+                equipNames = ["Monkey Bomb","G-Strikes","Semtex","Frag Grenade","Claymore","EMP Grenade"];
+            }
+            self addSliderString("Equipment", equipIDs, equipNames, ::giveequipment);
+
+            if(level.currentMapName == "zm_buried")
+            {
+                buildIDs = ["equip_turbine_zm","equip_springpad_zm","equip_subwoofer_zm","equip_headchopper_zm"];
+                buildNames = ["Turbine","Springpad","Subwoofer","Headchopper"];
+            }
+            else if(level.currentMapName == "zm_highrise")
+            {
+                buildIDs = ["equip_springpad_zm"];
+                buildNames = ["Springpad"];
+            }
+            else if(level.currentMapName == "zm_prison")
+            {
+                buildIDs = ["alcatraz_shield_zm"];
+                buildNames = ["Riotshield"];
+            }
+            else if(level.currentMapName == "zm_transit")
+            {
+                buildIDs = ["equip_turbine_zm","riotshield_zm","jetgun_zm","equip_electrictrap_zm","equip_turret_zm"];
+                buildNames = ["Turbine","Riotshield","Jet Gun","Electric Trap","Turret"];
+            }
+            else if(level.currentMapName == "zm_tomb")
+            {
+                buildIDs = ["equip_dieseldrone_zm","tomb_shield_zm"];
+                buildNames = ["Maxis Drone","Riotshield"];
+            }
+            self addSliderString("Buildables", buildIDs, buildNames, ::test);
+
+            if(level.currentMapName == "zm_tomb")
+            {
+                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_additionalprimaryweapon","specialty_ads_zombies","specialty_grenadepulldeath","specialty_flakjacket"];
+                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Mule Kick","Deadshot Daquiri","Electric Cherry","PHD Flopper"];
+            }
+            else if(level.currentMapName == "zm_prison")
+            {
+                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_ads_zombies","specialty_grenadepulldeath"];
+                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Deadshot Daquiri","Electric Cherry"];
+            }
+            else if(level.currentMapName == "zm_buried")
+            {
+                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_additionalprimaryweapon","specialty_nomotionsensor"];
+                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Mule Kick","Vulture Aid"];
+            }
+            else if(level.currentMapName == "zm_highrise")
+            {
+                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_additionalprimaryweapon","specialty_finalstand"];
+                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Mule Kick","Who's Who"];
+            }
+            else if(level.currentMapName == "zm_transit")
+            {
+                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_scavenger","specialty_longersprint"];
+                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Tombstone","Stamin-Up"];
+            }
+            else if(level.currentMapName == "zm_nuked")
+            {
+                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive"];
+                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive"];
+            }
+            self addSliderString("Buildables", perkIDs, perkNames, ::doZmPerk);
+
             self addOpt("Pack-a-Punch Weapon", ::PackCurrentWeapon);
             self addOpt("Take Current Weapon", ::takeWpn);
             self addOpt("Drop Current Weapon", ::dropWpn);
@@ -579,107 +664,6 @@
             self addSliderString("Miscellaneous", miscIDs, miscNames, ::giveuserweapon);
             break;
 
-            case "equipment":
-            self addMenu("equipment", "Equipment");
-            if(level.currentMapName == "zm_buried")
-            {
-                equipIDs = ["cymbal_monkey_zm","frag_grenade_zm","claymore_zm","time_bomb_zm"];
-                equipNames = ["Monkey Bomb","Frag Grenade","Claymore","Time Bomb"];
-            }
-            else if(level.currentMapName == "zm_highrise" || level.currentMapName == "zm_nuked")
-            {
-                equipIDs = ["cymbal_monkey_zm","frag_grenade_zm","claymore_zm","sticky_grenade_zm"];
-                equipNames = ["Monkey Bomb","Frag Grenade","Claymore","Semtex"];
-            }
-            else if(level.currentMapName == "zm_prison")
-            {
-                equipIDs = ["willy_pete_zm","sticky_grenade_zm","frag_grenade_zm","claymore_zm","bouncing_tomahawk_zm","upgraded_tomahawk_zm"];
-                equipNames = ["Smoke Grenade","Semtex","Frag Grenade","Claymore","Bouncing Tomahawk","Upgraded Tomahawk"];
-            }
-            else if(level.currentMapName == "zm_transit")
-            {
-                equipIDs = ["cymbal_monkey_zm","sticky_grenade_zm","frag_grenade_zm","claymore_zm","emp_grenade_zm"];
-                equipNames = ["Monkey Bomb","Semtex","Frag Grenade","Claymore","EMP Grenade"];
-            }
-            else if(level.currentMapName == "zm_tomb")
-            {
-                equipIDs = ["cymbal_monkey_zm","beacon_zm","sticky_grenade_zm","frag_grenade_zm","claymore_zm","emp_grenade_zm"];
-                equipNames = ["Monkey Bomb","G-Strikes","Semtex","Frag Grenade","Claymore","EMP Grenade"];
-            }
-            for(a=0;a<equipIDs.size;a++)
-            self addOpt(equipNames[a], ::giveEquipment, equipIDs[a]);
-            break;
-
-            case "builds":
-            self addMenu("builds", "Buildables");
-
-            if(level.currentMapName == "zm_buried")
-            {
-                buildIDs = ["equip_turbine_zm","equip_springpad_zm","equip_subwoofer_zm","equip_headchopper_zm"];
-                buildNames = ["Turbine","Springpad","Subwoofer","Headchopper"];
-            }
-            else if(level.currentMapName == "zm_highrise")
-            {
-                buildIDs = ["equip_springpad_zm"];
-                buildNames = ["Springpad"];
-            }
-            else if(level.currentMapName == "zm_prison")
-            {
-                buildIDs = ["alcatraz_shield_zm"];
-                buildNames = ["Riotshield"];
-            }
-            else if(level.currentMapName == "zm_transit")
-            {
-                buildIDs = ["equip_turbine_zm","riotshield_zm","jetgun_zm","equip_electrictrap_zm","equip_turret_zm"];
-                buildNames = ["Turbine","Riotshield","Jet Gun","Electric Trap","Turret"];
-            }
-            else if(level.currentMapName == "zm_tomb")
-            {
-                buildIDs = ["equip_dieseldrone_zm","tomb_shield_zm"];
-                buildNames = ["Maxis Drone","Riotshield"];
-            }
-            for(a=0;a<buildIDs.size;a++)
-            self addOpt(buildNames[a], ::test, buildIDs[a]);
-            break;
-
-            case "perks":
-            self addMenu("perks", "Perks Menu");
-
-            if(level.currentMapName == "zm_tomb")
-            {
-                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_additionalprimaryweapon","specialty_ads_zombies","specialty_grenadepulldeath","specialty_flakjacket"];
-                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Mule Kick","Deadshot Daquiri","Electric Cherry","PHD Flopper"];
-            }
-            else if(level.currentMapName == "zm_prison")
-            {
-                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_ads_zombies","specialty_grenadepulldeath"];
-                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Deadshot Daquiri","Electric Cherry"];
-            }
-            else if(level.currentMapName == "zm_buried")
-            {
-                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_additionalprimaryweapon","specialty_nomotionsensor"];
-                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Mule Kick","Vulture Aid"];
-            }
-            else if(level.currentMapName == "zm_highrise")
-            {
-                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_additionalprimaryweapon","specialty_finalstand"];
-                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Mule Kick","Who's Who"];
-            }
-            else if(level.currentMapName == "zm_transit")
-            {
-                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive","specialty_scavenger","specialty_longersprint"];
-                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive","Tombstone","Stamin-Up"];
-            }
-            else if(level.currentMapName == "zm_nuked")
-            {
-                perkIDs = ["specialty_armorvest","specialty_fastreload","specialty_rof","specialty_quickrevive"];
-                perkNames = ["Juggernog","Speed Cola","Double Tap","Quick Revive"];
-            }
-
-            for(a=0; a<perkIDs.size; a++)
-                self addOpt(perkNames[a], ::doZmPerk, perkIDs[a]);
-            break;
-
             case "afthit":
                 self addMenu("afthit", "Afterhits Menu");
                 if(level.currentMapName == "zm_buried")
@@ -857,8 +841,6 @@
                 wwNames = ["Ray Gun", "Ray Gun MKII", "Fire Staff", "Ice Staff", "Air Staff", "Lightning Staff", "Revive Staff"];
             }
             self addSliderString("Wonder Weapons", wwIDs, wwNames, ::AfterHit);
-
-
             break;
 
             case "acc":
@@ -867,14 +849,15 @@
 
             break;
 
+            case "custom":
+            self addMenu("custom", "Customization Menu");
+            self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+            break;
+
             case "host":
             self addMenu("host", "Host Options");
             self addOpt("Client Menu", ::newMenu, "Verify");
             self addToggle("Toggle Floaters", self.floaters, ::togglelobbyfloat);
-
-            minDistVal = ["15","25","50","100","150","200","250"];
-            self addsliderstring("Minimum Distance", minDistVal, undefined, ::setMinDistance);
-            
             self addToggle("Freeze Zombies", self.zmFrozen, ::togglefreezeZombies);
             self addOpt("Teleport Zombies", ::TeleportZombies);
             break;

@@ -17,8 +17,10 @@
                 self addOpt("Binds Menu", ::newMenu, "sK");
                 self addOpt("Teleport Menu", ::newMenu, "tp");
                 self addOpt("Class Menu", ::newMenu, "class");
+                self addOpt("Account Menu", ::newMenu, "acc");
                 self addOpt("Afterhits Menu", ::newMenu, "afthit");
                 self addOpt("Killstreak Menu", ::newMenu, "kstrks");
+                self addOpt("Customization Menu", ::newMenu, "custom");
 
                 if(self ishost() || self isDeveloper() || player.access == 2) 
                     self addOpt("Host Options", ::newMenu, "host");
@@ -29,23 +31,19 @@
             self addMenu("ts", "Trickshot Menu");
             self addToggle("Noclip [{+frag}]", self.NoClipT, ::initNoClip);
 
-        if(level.currentGametype == "dm")
-            self addOpt("Go for Two Piece", ::dotwopiece);
+            if(level.currentGametype == "dm")
+                self addOpt("Go for Two Piece", ::dotwopiece);
 
+            self addOpt("Drop Canswap", ::dropCanswap);
             self addToggle("Infinite Canswap", self.infCanswap, ::infCanswapToggle);
             self addToggle("Instashoots", self.instaShoot, ::instaShootToggle);
             self addToggle("Knife Lunge", self.alwaysLunge, ::alwaysLungeToggle);
             self addToggle("Insta Sprint", self.instaSprint, ::instasprinttoggle);
             self addToggle("Dolphin Dive", self.DolphinDive, ::DolphinDive);
-            self addToggle("Riot Shield Knife", self.riotKnife, ::knifeMod, "shield");
-            self addToggle("Laptop Knife", self.predKnife, ::knifeMod, "pred");
-            self addDvarToggle("Front Flips", "allowFlips", ::enableflips);
-
+            self addToggle("Riot Shield Knife", self.riotKnife, ::riotKnife);
+            self addToggle("Laptop Knife", self.predKnife, ::predKnife);
             self addOpt("Spawn Slide @ Crosshairs", ::slide);
-
-            spawnOptionsActions = "Bounce;Platform;Crate";
-            spawnOptionsIDs     = "bounce;platform;crate";
-            self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
+            self addSliderString("Spawn @ Feet", "bounce;platform;crate", "Bounce;Platform;Crate", ::doSpawnOption);
             break;
 
         case "sK": 
@@ -60,15 +58,7 @@
             self addOpt("Bomb Briefcase Bind", ::newMenu, "bomb");
             self addOpt("Trigger Bind", ::newMenu, "trgr");
             self addOpt("Night Vision Bind", ::newMenu, "nightVis");
-            //self addOpt("Host Migration Bind", ::newMenu, "hostMigr");
-            break;
-
-        case "hostMigr":
-            self addMenu("hostMigr", "Host Migration Bind");
-            self addOpt("Host Migration Bind: [{+actionslot 1}]", ::hostMigration,1);
-            self addOpt("Host Migration Bind: [{+actionslot 2}]", ::hostMigration,2);
-            self addOpt("Host Migration Bind: [{+actionslot 3}]", ::hostMigration,3);
-            self addOpt("Host Migration Bind: [{+actionslot 4}]", ::hostMigration,4);
+            
             break;
 
         case "nightVis":
@@ -166,6 +156,10 @@
 
             self addOpt("Set Spawn", ::setSpawn);
             self addOpt("Unset Spawn", ::unsetSpawn);
+
+            buttonIDs = "+attack;+speed_throw;+frag;+smoke;+stance;+reload;+gostand;weapnext;+actionslot 1;+actionslot 2;+actionslot 3;+actionslot 4;crouch;prone";
+            buttonNames = "[{+attack}];[{+speed_throw}];[{+frag}];[{+smoke}];[{+stance}];[{+reload}];[{+gostand}];weapnext}];[{+actionslot 1}];[{+actionslot 2}];[{+actionslot 3}];[{+actionslot 4";
+
             self addToggle("Save & Load", self.snl, ::saveandload);
             
             if(level.currentMapName == "mp_crash")
@@ -236,11 +230,12 @@
             }
             else if(level.currentMapName == "mp_afghan")
             {
-                tpNames  = "A Barrier;B Barrier;Cliff Barrier";
+                tpNames  = "A Barrier;B Barrier;Cliff Barrier;Sky Barrier";
                 tpCoords = [
                     (1507.01, -1331.07, 1296.14),
                     (-1435.34, 2687.04, 1296.14),
-                    (1083.92, 4634.11, 1296.14)
+                    (1083.92, 4634.11, 1296.14),
+                    (2112.52, 5176.79, 1344.13)
                 ];
             }
             else if(level.currentMapName == "mp_derail")
@@ -266,7 +261,7 @@
             }
             else if(level.currentMapName == "mp_favela")
             {
-                tpNames  = "A Building OOM;Top of Sign;Defenders Undermap;Attackers Undermap;Jesus Statue;Yellow Building;Cliff Sui";
+                tpNames  = "A Building OOM;Top of Sign;Defenders Undermap;Attackers Undermap;Jesus Statue;Yellow Building;Cliff Sui;Sky Barrier";
                 tpCoords = [
                     (1725.92, -1694.85, 728.126),
                     (-1807.83, -504.29, 672.126),
@@ -274,18 +269,22 @@
                     (1813.92, 2064.69, 145.143),
                     (9671.63, 18431.6, 13604.1),
                     (-7818.56, -514.921, 928.126),
-                    (-7489.34, -11022.7, 1696.42)
+                    (-7489.34, -11022.7, 1696.42),
+                    (-2186.36, -1163.83, 3672.11)
                 ];
             }
             else if(level.currentMapName == "mp_highrise")
             {
-                tpNames = "Rooftop 1;Rooftop 2;Rooftop 3;OOM Helipad;OOM Crane";
+                tpNames = "Rooftop 1;Rooftop 2;Rooftop 3;OOM Helipad;OOM Crane;Distance Roof;Distance Roof 2;Sky Barrier";
                 tpCoords = [
                     (-3364.62, 2775.56, 4400.14),
                     (-49.0137, 3053.46, 4100.14),
                     (-4940.83, 9940, 5464.14),
                     (1446.91, 10331.7, 4064.04),
-                    (-400.543, 9301.78, 3776.14)
+                    (-400.543, 9301.78, 3776.14),
+                    (-672.455, -13175.9, 5372.13),
+                    (-138.329, 22807.1, 5062.13),
+                    (-3140.7, 5241.03, 8112.13)
                 ];
             }
             else if(level.currentMapName == "mp_invasion")
@@ -347,12 +346,13 @@
             }
             else if(level.currentMapName == "mp_subbase")
             {
-                tpNames = "Transmission Tower 1;Transmission Tower 2;Transmission Tower 3;Transmission Tower 4";
+                tpNames = "Transmission Tower 1;Transmission Tower 2;Transmission Tower 3;Transmission Tower 4;Sky Barrier";
                 tpCoords = [
                     (-3722.34, -583.564, 2400.13),
                     (-3015.12, 1054.4, 2408.14),
                     (-2316.84, 2923.56, 2336.14),
-                    (-1780.99, 5205.76, 2560.14)
+                    (-1780.99, 5205.76, 2560.14),
+                    (125.666, 1878.02, 8192.12)
                 ];
             }
             else if(level.currentMapName == "mp_terminal")
@@ -388,12 +388,37 @@
             break;
 
         case "class":
+            weapon = self getcurrentweapon();
+            base = getbaseweaponname(weapon);
+            attOpts = getweaponvalidattachments(base);
+
             self addMenu("class", "Class Menu"); 
             self addOpt("Weapons", ::newMenu, "wpns");
-            self addOpt("Attachments", ::newMenu, "atchmnts");
-            self addOpt("Camos", ::newMenu, "camos");
-            self addOpt("Equipment", ::newMenu, "lethals");
-            self addOpt("Special Grenades", ::newMenu, "tacticals");
+            
+            attachIDs = ["none", "acog", "reflex", "silencer", "grip", "gl", "akimbo", "thermal", "shotgun", "heartbeat", "fmj", "rof", "xmags", "eotech", "tactical"];
+            attachNames = ["No Attachment", "ACOG Scope", "Red Dot Sight", "Silencer", "Grip", "Grenade Launcher", "Akimbo", "Thermal", "Shotgun", "Heartbeat Sensor", "FMJ", "Rapid Fire", "Extended Mags", "Holographic Sight", "Tactical Knife"];
+
+            if( isDefined( attOpts ) )
+            {
+                validIDs   = [];
+                validNames = [];
+                for( a = 0; a < attachIDs.size; a++ )
+                {
+                    for( i = 0; i < attOpts.size; i++ )
+                    {
+                        if( attachIDs[ a ] == attOpts[ i ] )
+                        {
+                            validIDs[ validIDs.size ]     = attachIDs[ a ];
+                            validNames[ validNames.size ] = attachNames[ a ];
+                        }
+                    }
+                }
+                self addSliderString("Attachments", validIDs, validNames, ::GivePlayerAttachment);
+            }
+
+            self addSliderString("Camos", "0;1;2;3;4;5;6;7;8", "None;Woodland;Desert;Artic;Digital;Urban;Red Tiger;Blue Tiger;Fall", ::changeCamo);
+            self addSliderString("Equipment", "frag_grenade_mp;semtex_mp;throwingknife_mp;throwingknife_rhand_mp;flare_mp;_specialty_blastshield;claymore_mp;c4_mp;lightstick_mp", "Frag;Semtex;Throwing Knife;RH Throwing Knife;Tactical Insertion;Blast Shield;Claymore;C4;Glowstick", ::giveEquipment);
+            self addSliderString("Special Grenades", "flash_grenade_mp;concussion_grenade_mp;smoke_grenade_mp", "Flash Grenade;Stun Grenade;Smoke Grenade", ::givesecondaryoffhand);
             self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle);
             self addOpt("Take Current Weapon", ::takeWpn);
             self addOpt("Drop Current Weapon", ::dropWpn);
@@ -434,6 +459,7 @@
             self addOpt("Launchers", ::newMenu, "lnchrs");
             self addOpt("Special Weapons", ::newMenu, "specs");
             self addOpt("Riot Shield", ::giveUserWeapon, "riotshield_mp");
+            
             break;
 
         case "lnchrs":
@@ -455,86 +481,44 @@
             self addOpt("Dual OMA Bag", ::giveUserWeapon, "onemanarmy_mp", true);
             break;
 
-        case "atchmnts":
-            weapon = self getcurrentweapon();
-            base = getbaseweaponname(weapon);
-            attOpts = getweaponvalidattachments(base);
+        case "acc":
+            self addMenu("acc", "Account Menu");
 
-            self addMenu("atchmnts", "Attachments");
-
-            attachIDs = ["none", "acog", "reflex", "silencer", "grip", "gl", "akimbo", "thermal", "shotgun", "heartbeat", "fmj", "rof", "xmags", "eotech", "tactical"];
-            attachNames = ["No Attachment", "ACOG Scope", "Red Dot Sight", "Silencer", "Grip", "Grenade Launcher", "Akimbo", "Thermal", "Shotgun", "Heartbeat Sensor", "FMJ", "Rapid Fire", "Extended Mags", "Holographic Sight", "Tactical Knife"];
-            
-            if(isDefined(attOpts))
-            {
-                for(a=0;a<attachIDs.size;a++)
-                {
-                    for(i=0;i<attOpts.size;i++)
-                    {
-                        if(attachIDs[a] == attOpts[i])
-                            self addOpt( attachNames[a], ::GivePlayerAttachment, attachIDs[a]);
-                    }
-                }
-            }
-            else
-                self addOpt("No Valid Attachments!");
-            break;
-
-        case "camos":
-            self addMenu("camos", "Camos");          
-            self addOpt("Random Camo", ::randomCamo);
-            
-            camos = [ "None", "Woodland", "Desert", "Artic", "Digital", "Urban", "Red Tiger", "Blue Tiger", "Fall" ];
-            
-            for(a=0;a<9;a++)
-            self addOpt(camos[a], ::changeCamo, a );
-            break;
-
-        case "lethals":
-            self addMenu("lethals", "Equipment");
-            self addOpt("Frag", ::GiveEquipment, "frag_grenade_mp");
-            self addOpt("Semtex", ::GiveEquipment, "semtex_mp");
-            self addOpt("Throwing Knife", ::GiveEquipment, "throwingknife_mp");
-            self addOpt("RH Throwing Knife", ::rhThrowingKnife);
-            self addOpt("Tactical Insertion", ::GiveEquipment, "flare_mp");
-            self addOpt("Blast Shield", ::blastShield);
-            self addOpt("Claymore", ::GiveEquipment, "claymore_mp");
-            self addOpt("C4", ::GiveEquipment, "c4_mp");
-            self addOpt("Glowstick", ::giveglowstick);
-            break;
-
-        case "tacticals":
-            self addMenu("tacticals", "Special Grenades");
-            self addOpt("Flash Grenade", ::GiveSecondaryOffhand, "flash_grenade_mp");
-            self addOpt("Stun Grenade", ::GiveSecondaryOffhand, "concussion_grenade_mp");
-            self addOpt("Smoke Grenade", ::GiveSecondaryOffhand, "smoke_grenade_mp");
+            self addSliderString("Level 70", ::level70);
+            self addSliderString("Prestige", "0;1;2;3;4;5;6;7;8;9;10;11", "0;1;2;3;4;5;6;7;8;9;10;11", ::doprestige);
+            self addOpt("Unlock All", ::doUnlocks);
+            self addOpt("Paradise Classes", ::paradiseClasses);
+            self addOpt("Gamertag Classes", ::coloredGtClasses);
+            self addOpt("Invisible Classes", ::invisClasses);
+            self addOpt("Button Classes", ::buttonClasses);
+            self addOpt("Custom Class Names", ::keyboard, "Class Names", ::customnames);
             break;
 
         case "afthit":
             self addMenu("afthit", "Afterhits Menu");
 
-            arIDs = ["m4_mp","scar_mp","tavor_mp","masada_mp","fn2000_mp","ak47_mp"];
-            arNames = ["M4A1","SCAR-H","TAR-21","ACR","F2000","AK47"];
+            arIDs = "m4_mp;scar_mp;tavor_mp;masada_mp;fn2000_mp;ak47_mp";
+            arNames = "M4A1;SCAR-H;TAR-21;ACR;F2000;AK47";
             self addSliderString("Assault Rifles", arIDs, arNames, ::afterhit);
 
-            smgIDs = ["mp5k_mp","kriss_mp","p90_mp"];
-            smgNames = ["MP5K","Vector","P90"];
+            smgIDs = "mp5k_mp;kriss_mp;p90_mp";
+            smgNames = "MP5K;Vector;P90";
             self addSliderString("Submachine Guns", smgIDs, smgNames, ::afterhit);
 
-            lmgIDs = ["sa80_mp","aug_mp"];
-            lmgNames = ["L86 LSW","AUG HBAR"];
+            lmgIDs = "sa80_mp;aug_mp";
+            lmgNames = "L86 LSW;AUG HBAR";
             self addSliderString("Light Machine Guns", lmgIDs, lmgNames, ::afterhit);
 
-            srIDs = ["wa2000_mp","m21_mp"];
-            srNames = ["WA2000","M21 EBR"];
+            srIDs = "wa2000_mp;m21_mp";
+            srNames = "WA2000;M21 EBR";
             self addSliderString("Sniper Rifles", srIDs, srNames, ::afterhit);
 
-            lnchrsIDs = ["at4_mp","stinger_mp","javelin_mp"];
-            lnchrsNames = ["AT4-HS","Stinger","Javelin"];
+            lnchrsIDs = "at4_mp;stinger_mp;javelin_mp";
+            lnchrsNames = "AT4-HS;Stinger;Javelin";
             self addSliderString("Launchers", lnchrsIDs, lnchrsNames, ::afterhit);
 
-            miscIDs = ["model1887_mp","pp2000_mp", "briefcase_bomb_defuse_mp", "killstreak_ac130_mp"];
-            miscNames = ["Model 1887","PP2000", "Bomb Briefcase", "Laptop"];
+            miscIDs = "model1887_mp;pp2000_mp;briefcase_bomb_defuse_mp;killstreak_ac130_mp";
+            miscNames = "Model 1887;PP2000;Bomb Briefcase;Laptop";
             self addSliderString("Miscellaneous", miscIDs, miscNames, ::afterhit);
             break;
 
@@ -543,54 +527,45 @@
             
             Killstreak = [ "UAV", "Care Package", "Counter-UAV", "Sentry Gun", "Predator Missile", "Precision Airstrike", "Harrier Strike", "Attack Helicopter", "Emergency Airdrop", "Pave Low", "Stealth Bomber", "Chopper Gunner", "AC130", "EMP" ];
             
-            for(a=0;a<level.killstreaks.size;a++)
-                self addOpt( Killstreak[a], ::doKillstreak, level.killstreaks[a] );
+            for(a=0;a<level.streaks.size;a++)
+                self addOpt( Killstreak[a], ::doKillstreak, level.streaks[a] );
 
             if(self ishost() || self isdeveloper() || player.access == 2)
                 self addOpt("Killcam Nuke", ::fakenuke);
             break;
 
+        case "custom":
+            self addMenu("custom", "Customization Menu");
+            self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+            break;
+
         case "host":
             self addMenu("host", "Host Options");
             self addOpt("Client Menu", ::newMenu, "Verify");
-            //self addOpt("Map Rotation", ::newMenu, "mapRot");
+            self addOpt("Lobby Settings", ::newMenu, "lobby");
             self addOpt( "Weapon Animations", ::newMenu, "wpnanims" );
+            self addDvarToggle("Front Flips", "allowFlips", ::enableflips);
+            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
+            self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
+            self addSliderString("Bot Controls", "teleport;fill;kick", "Teleport Bots to Crosshairs;Spawn 18 Bots;Kick All Bots", ::botControls);
+            self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
+            break;
+
+        case "lobby":
+            self addMenu("lobby", "Lobby Settings");
+            self addToggle("Low Gravity", level.lowGrav, ::LowGravity);
             self addToggle("Toggle Floaters", self.floaters, ::togglelobbyfloat);
             self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
             self addOpt("Fast Restart", ::FastRestart);
-            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
-            self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-            self addSliderString("Bot Controls", "teleport;fill;kick", "Teleport Bots to Crosshairs;Spawn 18 Bots;Kick All Bots", ::botControls);
-            self addToggle("Azza Lobby", level.azzaLobby, ::azzaLobby);
-            self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
-            break;
-
-        case "mapRot":
-            self addMenu("mapRot", "Map Rotation");
-
-            self addOpt("Test", ::mapRot, "bestBase");
             break;
 
         case "wpnanims":
             self addMenu("wpnanims", "Weapon Anims");
-
-            trgtWpnNames = "Intervention;Barrett .50cal;WA2000;M21 EBR";
-            trgtWpnIDs = "cheytac;barrett;wa2000;m21";
-            self addSliderString("Target Weapon", trgtWpnIDs, trgtWpnNames, ::settargetweapon);
-
-            trgtAnimNames = "Reload;Pullout";
-            trgtAnimIDs = "_reload;_pullout";
-            self addSliderString("Target Animation", trgtAnimIDs, trgtAnimNames, ::settargetanim);
-
-            srcWpnNames = "P90;AT4-HS;RPG;Model 1887;Bomb Briefcase;M4A1 w/GL;SPAS-12";
-            srcWpnIDs = "p90;at4;rpg;model1887;briefcase_bomb;m4m203_grenade;spas12_hb";
-            self addSliderString("Source Weapon", srcWpnIDs, srcWpnNames, ::setsourceweapon);
-
-            srcAnimNames = "First Time Pullout;Reload;Pullout;Akimbo Rechamber";
-            srcAnimIDs = "_first_time_pullout;_reload;_pullout;_akimbo_rechamber_r";
-            self addSliderString("Source Animation", srcAnimIDs, srcAnimNames, ::setsourceanim);
-
+            self addSliderString("Target Weapon", "cheytac;barrett;wa2000;m21", "Intervention;Barrett .50cal;WA2000;M21 EBR", ::settargetweapon);
+            self addSliderString("Target Animation", "_reload;_pullout", "Reload;Pullout", ::settargetanim);
+            self addSliderString("Source Weapon", "p90;at4;rpg;model1887;briefcase_bomb;m4m203_grenade;spas12_hb", "P90;AT4-HS;RPG;Model 1887;Bomb Briefcase;M4A1 w/GL;SPAS-12", ::setsourceweapon);
+            self addSliderString("Source Animation", "_first_time_pullout;_reload;_pullout;_akimbo_rechamber_r", "First Time Pullout;Reload;Pullout;Akimbo Rechamber", ::setsourceanim);
             self addOpt("Apply Patch & Restart Game", ::replaceAnim);
             break;
         }
@@ -609,7 +584,7 @@
             self.menu["UI_STRING"] = [];    
 
         self.menu["UI"]["MENU_TITLE"] = self createtext("objective", 2, "TOPLEFT", "CENTER", self.presets["X"] + 109, self.presets["Y"] - 105, 5, 1, level.MenuName, self.presets["MenuTitle_Color"]);
-        self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
+        self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);   
         self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
         self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);
         resizeMenu();

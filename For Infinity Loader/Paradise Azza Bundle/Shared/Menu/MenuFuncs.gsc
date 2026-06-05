@@ -29,7 +29,8 @@
                 self addMenu("Verify_" + player getXUID(), player getName() + " [" + perm2 + "^7]");
                 self addOpt("Change Access Level", ::newMenu, "access", undefined);
                 self addOpt("Give 28 Kills", ::ffafastlast, player, undefined);
-                self addOpt("Ban Menu", ::newMenu, "banSM", undefined);
+                self addOpt("Ban Player", ::banSped, player, undefined);
+                //self addOpt("Ban Menu", ::newMenu, "banSM", undefined);
                 self addOpt("Kick Player", ::kickSped, player, undefined);  
                 self addOpt("Teleport to Crosshairs", ::teleportToCrosshair, player, undefined);  
                 
@@ -37,10 +38,12 @@
                 for(a=0;a<level.status.size-1;a++)
                     self addOpt("Give: " + level.status[a], ::initializesetup, a, player);
 
+                /*
                 self addMenu("banSM", "Ban Menu");
                 self addOpt("Ban Player", ::banSped, player, undefined);
                 self addOpt("Add to Ban List", ::banList, "add", player);
                 self addOpt("Clear Ban List", ::banList, "clear", undefined);
+                */
             }
         }
     }
@@ -56,180 +59,177 @@
         while( self.access != 0 )
         #endif
         {
-            if(!self.menu["isLocked"])
+            if(!self.menu["isOpen"])
             {
-                if(!self.menu["isOpen"])
+                #ifdef BO1 || BO2 || BO3
+                if( self actionslottwobuttonpressed() && self adsButtonPressed() )
                 {
-                    #ifdef BO1 || BO2 || BO3
-                    if( self actionslottwobuttonpressed() && self adsButtonPressed() )
-                    {
-                        self menuOpen();
-                        wait .2;
-                    }
-                    #endif
-
-                    #ifdef MW2 || MW3 || Ghosts || MWR
-                    if( self isbuttonpressed("+actionslot 2") && self adsButtonPressed() )
-                    {
-                        self menuOpen();
-                        wait .2;
-                    }          
-                    #endif
-
-                    #ifdef WAW || MW1 || IW
-                    if( self meleebuttonpressed() && self adsButtonPressed() )
-                    {
-                        self menuOpen();
-                        wait .2;
-                    }
-                    #endif  
+                    self menuOpen();
+                    wait .2;
                 }
-                else
+                #endif
+
+                #ifdef MW2 || MW3 || Ghosts || MWR
+                if( self isbuttonpressed("+actionslot 2") && self adsButtonPressed() )
                 {
-                    #ifdef BO1 || BO2 || BO3
-                    if(self actionslotonebuttonpressed() || self actionslottwobuttonpressed())
-                    {
-                        if(!self actionslotonebuttonpressed() || !self actionslottwobuttonpressed())
-                        {
-                            if(!self actionslotonebuttonpressed())
-                                self.menu[ self getCurrentMenu() + "_cursor" ] += self actionslottwobuttonpressed();
-                            if(!self actionslottwobuttonpressed())
-                                self.menu[ self getCurrentMenu() + "_cursor" ] -= self actionslotonebuttonpressed();
+                    self menuOpen();
+                    wait .2;
+                }          
+                #endif
 
-                            self scrollingSystem();
-                            wait .08;
+                #ifdef WAW || MW1 || IW
+                if( self meleebuttonpressed() && self adsButtonPressed() )
+                {
+                    self menuOpen();
+                    wait .2;
+                }
+                #endif  
+            }
+            else
+            {
+                #ifdef BO1 || BO2 || BO3
+                if(self actionslotonebuttonpressed() || self actionslottwobuttonpressed())
+                {
+                    if(!self actionslotonebuttonpressed() || !self actionslottwobuttonpressed())
+                    {
+                        if(!self actionslotonebuttonpressed())
+                            self.menu[ self getCurrentMenu() + "_cursor" ] += self actionslottwobuttonpressed();
+                        if(!self actionslottwobuttonpressed())
+                            self.menu[ self getCurrentMenu() + "_cursor" ] -= self actionslotonebuttonpressed();
+
+                        self scrollingSystem();
+                        wait .08;
+                    }
+                }
+                else if(self actionslotthreebuttonpressed() || self actionslotfourbuttonpressed()){
+                    if(!self actionslotthreebuttonpressed() || !self actionslotfourbuttonpressed())
+                    {
+                        if(isDefined(self.eMenu[ self getCursor() ].val) || IsDefined( self.eMenu[ self getCursor() ].ID_list ))
+                        {
+                            if( self actionslotthreebuttonpressed() )   
+                                self updateSlider( "L2" );
+                            if( self actionslotfourbuttonpressed() )    
+                                self updateSlider( "R2" );
+                            wait .1;
                         }
                     }
-                    else if(self actionslotthreebuttonpressed() || self actionslotfourbuttonpressed()){
-                        if(!self actionslotthreebuttonpressed() || !self actionslotfourbuttonpressed())
+                }
+                #endif
+
+                #ifdef MW2 || MW3 || Ghosts || MWR || IW
+                if(self isButtonPressed("+actionslot 1") || self isButtonPressed("+actionslot 2"))
+                {
+                    if(!self isButtonPressed("+actionslot 1") || !self isButtonPressed("+actionslot 2"))
+                    {
+                        if(!self isButtonPressed("+actionslot 1"))
+                            self.menu[ self getCurrentMenu() + "_cursor" ] += self isButtonPressed("+actionslot 2");
+                        if(!self isButtonPressed("+actionslot 2"))
+                            self.menu[ self getCurrentMenu() + "_cursor" ] -= self isButtonPressed("+actionslot 1");
+
+                        self scrollingSystem();
+                        wait .08;
+                    }
+                }
+                else if(self isButtonPressed("+actionslot 3") || self isButtonPressed("+actionslot 4"))
+                {
+                    if(!self isButtonPressed("+actionslot 3") || !self isButtonPressed("+actionslot 4"))
+                    {
+                        if(isDefined(self.eMenu[ self getCursor() ].val) || IsDefined( self.eMenu[ self getCursor() ].ID_list ))
                         {
-                            if(isDefined(self.eMenu[ self getCursor() ].val) || IsDefined( self.eMenu[ self getCursor() ].ID_list ))
-                            {
-                                if( self actionslotthreebuttonpressed() )   
-                                    self updateSlider( "L2" );
-                                if( self actionslotfourbuttonpressed() )    
-                                    self updateSlider( "R2" );
-                                wait .1;
-                            }
+                            if( self isButtonPressed("+actionslot 3") )   
+                                self updateSlider( "L2" );
+                            if( self isButtonPressed("+actionslot 4") )    
+                                self updateSlider( "R2" );
+                            wait .1;
                         }
                     }
-                    #endif
+                }
+                #endif
 
-                    #ifdef MW2 || MW3 || Ghosts || MWR || IW
-                    if(self isButtonPressed("+actionslot 1") || self isButtonPressed("+actionslot 2"))
+                #ifdef WAW || MW1
+                if(self adsbuttonpressed() || self attackbuttonpressed())
+                {
+                    if(!self adsbuttonpressed() || !self attackbuttonpressed())
                     {
-                        if(!self isButtonPressed("+actionslot 1") || !self isButtonPressed("+actionslot 2"))
-                        {
-                            if(!self isButtonPressed("+actionslot 1"))
-                                self.menu[ self getCurrentMenu() + "_cursor" ] += self isButtonPressed("+actionslot 2");
-                            if(!self isButtonPressed("+actionslot 2"))
-                                self.menu[ self getCurrentMenu() + "_cursor" ] -= self isButtonPressed("+actionslot 1");
+                        if(!self adsbuttonpressed())
+                            self.menu[ self getCurrentMenu() + "_cursor" ] += self attackbuttonpressed();
+                        if(!self attackbuttonpressed())
+                            self.menu[ self getCurrentMenu() + "_cursor" ] -= self adsbuttonpressed();
 
-                            self scrollingSystem();
-                            wait .08;
-                        }
+                        self scrollingSystem();
+                        wait .25;
                     }
-                    else if(self isButtonPressed("+actionslot 3") || self isButtonPressed("+actionslot 4"))
+                }
+                else if(self fragButtonPressed() || self secondaryOffhandButtonPressed()){
+                    if(!self fragButtonPressed() || !self secondaryOffhandButtonPressed())
                     {
-                        if(!self isButtonPressed("+actionslot 3") || !self isButtonPressed("+actionslot 4"))
+                        if(isDefined(self.eMenu[ self getCursor() ].val) || IsDefined( self.eMenu[ self getCursor() ].ID_list ))
                         {
-                            if(isDefined(self.eMenu[ self getCursor() ].val) || IsDefined( self.eMenu[ self getCursor() ].ID_list ))
-                            {
-                                if( self isButtonPressed("+actionslot 3") )   
-                                    self updateSlider( "L2" );
-                                if( self isButtonPressed("+actionslot 4") )    
-                                    self updateSlider( "R2" );
-                                wait .1;
-                            }
-                        }
-                    }
-                    #endif
-
-                    #ifdef WAW || MW1
-                    if(self adsbuttonpressed() || self attackbuttonpressed())
-                    {
-                        if(!self adsbuttonpressed() || !self attackbuttonpressed())
-                        {
-                            if(!self adsbuttonpressed())
-                                self.menu[ self getCurrentMenu() + "_cursor" ] += self attackbuttonpressed();
-                            if(!self attackbuttonpressed())
-                                self.menu[ self getCurrentMenu() + "_cursor" ] -= self adsbuttonpressed();
-
-                            self scrollingSystem();
+                            if( self secondaryOffhandButtonPressed() )   
+                                self updateSlider( "L2" );
+                            if( self fragButtonPressed())    
+                                self updateSlider( "R2" );
                             wait .25;
                         }
                     }
-                    else if(self fragButtonPressed() || self secondaryOffhandButtonPressed()){
-                        if(!self fragButtonPressed() || !self secondaryOffhandButtonPressed())
-                        {
-                            if(isDefined(self.eMenu[ self getCursor() ].val) || IsDefined( self.eMenu[ self getCursor() ].ID_list ))
-                            {
-                                if( self secondaryOffhandButtonPressed() )   
-                                    self updateSlider( "L2" );
-                                if( self fragButtonPressed())    
-                                    self updateSlider( "R2" );
-                                wait .25;
-                            }
-                        }
-                    }
-                    #endif
+                }
+                #endif
 
-                    else if( self useButtonPressed() )
+                else if( self useButtonPressed() )
+                {
+                    player = self.selected_player;
+                    menu = self.eMenu[self getCursor()];
+
+                    if( player != self && self isHost() )
                     {
-                        player = self.selected_player;
-                        menu = self.eMenu[self getCursor()];
+                        player.was_edited = true;
+                        self iPrintLnBold( menu.opt + " Has Been Activated" );
+                    }
+                    
+                    if( self.eMenu[ self getCursor() ].func == ::newMenu && self != player )
+                        self iPrintLnBold( "^1ERROR: ^7Cannot Access Menus While In A Selected Player" );
+                    else if(isDefined(self.sliders[ self getCurrentMenu() + "_" + self getCursor() ])){
+                        slider = self.sliders[ self getCurrentMenu() + "_" + self getCursor() ];
+                        slider = (IsDefined( menu.ID_list ) ? menu.ID_list[slider] : slider);
+                        player thread doOption( menu.func, slider, menu.p1, menu.p2, menu.p3, menu.p4, menu.p5 );
+                    }
+                    else 
+                        player thread doOption( menu.func, menu.p1, menu.p2, menu.p3, menu.p4, menu.p5, undefined );
 
-                        if( player != self && self isHost() )
-                        {
-                            player.was_edited = true;
-                            self iPrintLnBold( menu.opt + " Has Been Activated" );
-                        }
-                        
-                        if( self.eMenu[ self getCursor() ].func == ::newMenu && self != player )
-                            self iPrintLnBold( "^1ERROR: ^7Cannot Access Menus While In A Selected Player" );
-                        else if(isDefined(self.sliders[ self getCurrentMenu() + "_" + self getCursor() ])){
-                            slider = self.sliders[ self getCurrentMenu() + "_" + self getCursor() ];
-                            slider = (IsDefined( menu.ID_list ) ? menu.ID_list[slider] : slider);
-                            player thread doOption( menu.func, slider, menu.p1, menu.p2, menu.p3, menu.p4, menu.p5 );
-                        }
-                        else 
-                            player thread doOption( menu.func, menu.p1, menu.p2, menu.p3, menu.p4, menu.p5, undefined );
-
-                        wait .05;
-                        if(IsDefined( menu.toggle ))
-                            self setMenuText();
-                        if( player != self )
-                            #ifndef BO3
-                                #ifdef MW1 || Ghosts || MWR || IW
-                                    #ifdef MW1
-                                    self.menu["OPT"]["MENU_TITLE"] _settext( self.menuTitle + " ("+ player getName() +")");  
-                                    #else
-                                    self.menu["OPT"]["MENU_TITLE"] setsafetext( self.menuTitle + " ("+ player getName() +")");  
-                                    #endif
+                    wait .05;
+                    if(IsDefined( menu.toggle ))
+                        self setMenuText();
+                    if( player != self )
+                        #ifndef BO3
+                            #ifdef MW1 || Ghosts || MWR || IW
+                                #ifdef MW1
+                                self.menu["OPT"]["MENU_TITLE"] _settext( self.menuTitle + " ("+ player getName() +")");  
                                 #else
-                                self.menu["OPT"]["MENU_TITLE"] settext( self.menuTitle + " ("+ player getName() +")");
-                                #endif 
+                                self.menu["OPT"]["MENU_TITLE"] setsafetext( self.menuTitle + " ("+ player getName() +")");  
+                                #endif
                             #else
-                            self.menu["OPT"]["MENU_TITLE"] settextstring( self.menuTitle + " ("+ player getName() +")");
-                            #endif
-                        wait .15;
-                        if( isDefined(player.was_edited) && self isHost() )
-                            player.was_edited = undefined;
-                    }
-                    else if( self meleeButtonPressed() )
+                            self.menu["OPT"]["MENU_TITLE"] settext( self.menuTitle + " ("+ player getName() +")");
+                            #endif 
+                        #else
+                        self.menu["OPT"]["MENU_TITLE"] settextstring( self.menuTitle + " ("+ player getName() +")");
+                        #endif
+                    wait .15;
+                    if( isDefined(player.was_edited) && self isHost() )
+                        player.was_edited = undefined;
+                }
+                else if( self meleeButtonPressed() )
+                {
+                    if( self.selected_player != self )
                     {
-                        if( self.selected_player != self )
-                        {
-                            self.selected_player = self;
-                            self setMenuText();
-                            self refreshTitle();
-                        }
-                        else if( self getCurrentMenu() == "main" )
-                            self menuClose();
-                        else 
-                            self newMenu(undefined);
-                        wait .2;
+                        self.selected_player = self;
+                        self setMenuText();
+                        self refreshTitle();
                     }
+                    else if( self getCurrentMenu() == "main" )
+                        self menuClose();
+                    else 
+                        self newMenu(undefined);
+                    wait .2;
                 }
             }
             wait .05;

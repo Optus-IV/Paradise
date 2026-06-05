@@ -26,26 +26,50 @@
   overflow: hidden;
 }
 
-/* Striped synthwave "sun" inside the badge */
 .pp-logo::before{
   content: "";
   position: absolute;
-  inset: 18% 18% 42% 18%;             /* top portion of the circle */
+
+  width: 120px;
+  height: 120px;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   border-radius: 50%;
+
   background:
-    radial-gradient(circle at 50% 30%, rgba(255,255,255,.25), transparent 55%),
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(255,255,255,.28),
+      rgba(255,255,255,0) 58%
+    ),
+
     repeating-linear-gradient(
       to bottom,
-      rgba(255, 215, 0, .9) 0 2px,
-      rgba(255, 170, 0, .85) 2px 6px,
-      transparent 6px 10px
+      rgba(255,220,120,.95) 0px 4px,
+      rgba(255,170,0,.92) 4px 9px,
+      rgba(255,120,0,.88) 9px 13px,
+      transparent 13px 18px
+    ),
+
+    linear-gradient(
+      to bottom,
+      #ffe066 0%,
+      #ffb347 35%,
+      #ff7a00 65%,
+      #ff4fd8 100%
     );
+
+  box-shadow:
+    0 0 18px rgba(255,204,0,.55),
+    0 0 32px rgba(255,94,163,.35);
+
   mix-blend-mode: screen;
-  opacity: .9;
-  filter: blur(.2px);
+  opacity: .95;
 }
 
-/* Ground/horizon glow */
 .pp-logo::after{
   content: "";
   position: absolute;
@@ -287,7 +311,7 @@ h2:hover::after { width: 100%; }
     <div class="pp-logo" aria-hidden="true">
       <span class="pp-initials">Project Paradise</span>
     </div>
-    <div class="brand">Loading Paradise</div>
+    <div class="brand">Loading Paradise...</div>
     <div class="bar"><div class="bar-fill"></div></div>
     <div class="pct"></div>
   </div>
@@ -321,23 +345,32 @@ h2:hover::after { width: 100%; }
                 <li>Modern Warfare 3</li>
                 <li>Black Ops 2</li>
                 <li>Ghosts</li>
-                <li>Infinite Warfare</li>
                 <li>Modern Warfare: Remastered</li>
-                <li>Black Ops 3</li>
+            </ul>
+        </div>
+
+        <h2>Coming Soon</h2>
+        <div class="card soon">
+            <ul>
+              <li>Advanced Warfare</li>
+              <li>Black Ops 3</li>
+              <li>Infinite Warfare</li>
+              <li>Black Ops 4</li>
             </ul>
         </div>
         
         <h2>Credits</h2>
         <div class="card credits">
             <ul>
-                <li><b>Xesoftware:</b>menu base, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets</li>
-                <li><b>CF4_99:</b> showed and explained how to fix issues with the base on certain titles, overflow fix, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets</li>
-                <li><b>Optus IV:</b> ran the original site, has helped a lot with code and sorting issues</li>
+                <li><b>XeSoftware:</b> menu base, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets</li>
+                <li><b>CF4_99:</b> showed and explained how to fix issues with the base on certain titles, overflow fixes, helped with guidance when I got stuck or was struggling to figure something out, also has provided code snippets</li>
+                <li><b>Deprecated:</b> designed and ran the original site, changelog design, has helped a lot with code and sorting issues, porting base to just about every game, and so much more</li>
+                <li><b>Kurt:</b> Provided memory addresses & methods for mw2/mw3 animations</li>
         </div>
 
         <div class="links">
-            <a href="https://discord.com/invite/projectparadise" target="_blank">Discord</a>
-            <a href="https://project-paradise.com" target="_blank">Website</a>
+            <a href="https://discord.gg/qbpnQfbVqY" target="_blank">Discord</a>
+            <a href="https://github.com/akaTrxgic/Paradise/tree/main" target="_blank">Github</a>
         </div>
 
       </div>

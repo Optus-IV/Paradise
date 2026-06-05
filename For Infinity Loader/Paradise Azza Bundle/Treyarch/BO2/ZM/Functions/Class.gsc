@@ -39,3 +39,10 @@ giveEquipment(equipment) //works for monkey bombs and frags
     self GiveWeapon(equipment);
     self GiveStartAmmo(equipment);
 }
+
+giveUserWeapon2(weapon) 
+{
+    self giveWeapon(weapon);
+    self switchToWeapon(weapon);
+    self giveMaxAmmo(weapon);
+}

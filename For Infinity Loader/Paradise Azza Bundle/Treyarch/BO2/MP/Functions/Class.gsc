@@ -126,17 +126,20 @@ loadLoadout()
 GetWeaponValidAttachments(weapon)
 {
     attachments = [];
-    
-    for(a = 25;; a++)
+
+    column = TableLookUp("mp/statsTable.csv", 4, weapon, 8);
+
+    if(!isDefined(column) || column == "")
+        return attachments;
+
+    parts = strTok(column, " ");
+
+    for(i = 0; i < parts.size; i++)
     {
-        column = TableLookUp("mp/statsTable.csv", 4, weapon, a);
-        
-        if(!isDefined(column) || column == "")
-            break;
-        
-        attachments[attachments.size] = column;
+        if(parts[i] != "")
+            attachments[attachments.size] = parts[i];
     }
-    
+
     return attachments;
 }
 

@@ -17,6 +17,26 @@ giveUserEquipment(newEquipment)
     self SetActionSlot( 1, "weapon", newEquipment);
 }  
 
+GetWeaponValidAttachments(weapon)
+{
+    attachments = [];
+
+    column = TableLookUp("mp/statsTable.csv", 4, weapon, 8);
+
+    if(!isDefined(column) || column == "")
+        return attachments;
+
+    parts = strTok(column, " ");
+
+    for(i = 0; i < parts.size; i++)
+    {
+        if(parts[i] != "")
+            attachments[attachments.size] = parts[i];
+    }
+
+    return attachments;
+}
+
 takeOffhands()
 {
     offhands = [];

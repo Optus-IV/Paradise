@@ -18,13 +18,14 @@
                 if(player.access > 0)
                 {
                     self addMenu("main", "Main Menu");
-                    self addOpt("Log Weapon String", ::logWpn);
+                    //self addOpt("Log Weapon String", ::logWpn);
                     self addOpt("Trickshot Menu", ::newMenu, "ts");
                     self addOpt("Binds Menu", ::newMenu, "sK");
                     self addOpt("Teleport Menu", ::newMenu, "tp");
                     self addOpt("Class Menu", ::newMenu, "class");
                     self addOpt("Afterhits Menu", ::newMenu, "afthit");
                     self addOpt("Killstreak Menu", ::newMenu, "kstrks");
+                    self addOpt("Customization Menu", ::newMenu, "custom");
 
                     if(self ishost() || self isDeveloper()) 
                         self addOpt("Host Options", ::newMenu, "host");
@@ -36,16 +37,11 @@
                 self addToggle("Noclip [{+frag}]", self.NoClipT, ::initNoClip);
 
                 if(level.currentGametype == "dm")
-                self addOpt("Go for Two Piece", ::dotwopiece);
+                    self addOpt("Go for Two Piece", ::dotwopiece);
 
-                canOpts = "Current;Infinite";
-                self addSliderString("Canswaps", canOpts, canOpts, ::SetCanswapMode);
-
+                self addSliderString("Canswaps", "Current;Infinite", "Current;Infinite", ::SetCanswapMode);
                 self addOpt("Spawn Slide @ Crosshairs", ::slide);
-
-                spawnOptionsActions = "Bounce;Platform;Crate";
-                spawnOptionsIDs     = "bounce;platform;crate";
-                self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
+                self addSliderString("Spawn @ Feet", "bounce;platform;crate", "Bounce;Platform;Crate", ::doSpawnOption);
                 break;
 
             case "sK": 
@@ -224,9 +220,19 @@
                 self addMenu("class", "Class Menu"); 
                 self addOpt("Weapons", ::newMenu, "wpns");
                 //self addOpt("Attachments", ::newMenu, "atchmnts");
-                self addOpt("Camos", ::newMenu, "camos");
-                self addOpt("Equipment", ::newMenu, "lethals");
-                self addOpt("Special Grenades", ::newMenu, "tacticals");
+
+                camoNames = ["Snow","Brush","Autumn","Ocean","Scale","Red","Caustic","Crocodile","Green","Net","Trail","Woodland","Gold","Leopard","Abstract","Hyrdra","Skulls","Tattoo","Nebula","Flags","Unicorn","Heavy Metal","Koi","Fitness","Extinction","Bling","Advanced Warfare","Soap","Blunt Force","Hex","Eyeballs","1987","Heartlands","Molten","Makarov","Circuit","Space Cats","Cpt. Price","Ducky","Inferno","Body Count","Kiss of Death","War Cry","Festive","Spectrum","Ice"];
+                camoIDs = ["27","20","19","25","28","26","21","22","23","24","29","30","01","36","42","43","44","45","46","41","39","38","35","34","11","08","06","15","33","09","32","16","17","14","13","31","10","37","40","07","18","02","03","12","04","05"];
+                self addSliderString("Camos", camoIDs, camoNames, ::camoString);
+                
+                equipNames = [ "Frag", "Semtex", "Throwing Knife", "I.E.D.", "C4", "Canister Bomb" ];
+                equipIDs   = [ "frag_grenade_mp", "semtex_mp", "throwingknife_mp", "proximity_explosive_mp", "c4_mp", "mortar_shell_mp"];
+                self addSliderString("Equipment", equipIDs, equipNames, ::GiveEquipment);
+
+                tactNames = [ "9-Bang", "Concussion", "Smoke", "Trophy System", "Motion Sensor", "Thermobaric" ];
+                tactIDs   = [ "flash_grenade_mp", "concussion_grenade_mp", "smoke_grenade_mp", "trophy_mp", "motion_sensor_mp", "thermobaric_grenade_mp" ];
+                self addSliderString("Tacticals", tactIDs, tactNames, ::GiveSecondaryOffhand);
+
                 self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle);
                 self addOpt("Take Current Weapon", ::takeWpn);
                 self addOpt("Drop Current Weapon", ::dropWpn);
@@ -307,38 +313,6 @@
                     */
                 break;
 
-            case "camos":
-                self addMenu("camos", "Camos");          
-                self addOpt("Random Camo", ::randomCamo);
-
-                for( a = 0; a < 45; a++ )
-                camoNames = ["Snow","Brush","Autumn","Ocean","Scale","Red","Caustic","Crocodile","Green","Net","Trail","Woodland","Gold","Leopard","Abstract","Hyrdra","Skulls","Tattoo","Nebula","Flags","Unicorn","Heavy Metal","Koi","Fitness","Extinction","Bling","Advanced Warfare","Soap","Blunt Force","Hex","Eyeballs","1987","Heartlands","Molten","Makarov","Circuit","Space Cats","Cpt. Price","Ducky","Inferno","Body Count","Kiss of Death","War Cry","Festive","Spectrum","Ice"];
-                camoIDs = ["27","20","19","25","28","26","21","22","23","24","29","30","01","36","42","43","44","45","46","41","39","38","35","34","11","08","06","15","33","09","32","16","17","14","13","31","10","37","40","07","18","02","03","12","04","05"];
-
-                for( a = 0; a < camoIDs.size; a++ )
-                self addOpt( camoNames[ a ], ::camoString, camoIDs[ a ]);
-                break;
-
-            case "lethals":
-                self addMenu("lethals", "Equipment");
-                self addOpt("Frag", ::GiveEquipment, "frag_grenade_mp");
-                self addOpt("Semtex", ::GiveEquipment, "semtex_mp");
-                self addOpt("Throwing Knife", ::GiveEquipment, "throwingknife_mp");
-                self addOpt("I.E.D.", ::GiveEquipment, "proximity_explosive_mp");
-                self addOpt("C4", ::GiveEquipment, "c4_mp");
-                self addOpt("Canister Bomb", ::GiveEquipment, "mortar_shell_mp");
-                break;
-
-            case "tacticals":
-                self addMenu("tacticals", "Special Grenades");
-                self addOpt("9-Bang", ::GiveSecondaryOffhand, "flash_grenade_mp");
-                self addOpt("Concussion", ::GiveSecondaryOffhand, "concussion_grenade_mp");
-                self addOpt("Smoke", ::GiveSecondaryOffhand, "smoke_grenade_mp");
-                self addOpt("Trophy System", ::GiveSecondaryOffhand, "trophy_mp");
-                self addOpt("Motion Sensor", ::GiveSecondaryOffhand, "motion_sensor_mp");
-                self addOpt("Thermobaric", ::GiveSecondaryOffhand, "thermobaric_grenade_mp");
-                break;
-
             case "afthit":
                 self addMenu("afthit", "Afterhits Menu");
 
@@ -389,17 +363,27 @@
                     self addOpt("Killcam Nuke", ::fakenuke);
                 break;
 
+            case "custom":
+                self addMenu("custom", "Customization Menu");
+                self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+                break;
+
             case "host":
                 self addMenu("host", "Host Options");
                 self addOpt("Client Menu", ::newMenu, "Verify");
+                self addOpt("Lobby Settings", ::newMenu, "lobby");
+                self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
+                self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
+                self addSliderString("Bot Controls", "teleport;kick", "TP Bots;Kick All Bots", ::botControls);
+                self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
+                break;
+
+            case "lobby":
+                self addMenu("lobby", "Lobby Settings");
                 self addToggle("Toggle Floaters", self.floaters, ::togglelobbyfloat);
                 self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
                 self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
                 self addOpt("Fast Restart", ::FastRestart);
-                self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-                self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
-                self addSliderString("Bot Controls", "teleport;kick", "TP Bots;Kick All Bots", ::botControls);
-                self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
                 break;
             }
             self clientOptions();
@@ -416,7 +400,7 @@
         if(!isDefined(self.menu["UI_STRING"]))
             self.menu["UI_STRING"] = [];    
             
-        self.menu["UI"]["MENU_TITLE"] = self createtext("default", 2, "TOPLEFT", "CENTER", self.presets["X"] + 103, self.presets["Y"] - 105, 5, 1, level.MenuName, self.presets["MenuTitle_Color"]);
+        self.menu["UI"]["MENU_TITLE"] = self createtext("default", 1.6, "TOPLEFT", "CENTER", self.presets["X"] + 110, self.presets["Y"] - 102, 5, 1, level.MenuName, self.presets["MenuTitle_Color"]);
         self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 70, 204, 182, self.presets["Option_BG"], "white", 1, 1);    
         self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] + 56.4, self.presets["Y"] - 121.5, 204, 234, self.presets["Outline_BG"], "white", 0, .7); 
         self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"] + 57.6, self.presets["Y"] - 108, 200, 10, self.presets["Scroller_BG"], self.presets["Scroller_Shader"], 2, 1);

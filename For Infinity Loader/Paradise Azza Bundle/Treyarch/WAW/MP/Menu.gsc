@@ -17,6 +17,7 @@
                     self addOpt("Class Menu", ::newMenu, "class");
                     self addOpt("Teleport Menu", ::newMenu, "tp");
                     self addOpt("Afterhits Menu", ::newMenu, "afthit");
+                    self addOpt("Customization Menu", ::newMenu, "custom");
 
                     if(self ishost() || self isDeveloper())
                         self addOpt("Host Options", ::newMenu, "host");
@@ -24,29 +25,61 @@
                 break;
 
             case "ts":
-                    self addMenu("ts", "Trickshot Menu");
-                    self addToggle("Noclip [{+smoke}]", self.ufo, ::NoClip);
+                self addMenu("ts", "Trickshot Menu");
+                self addToggle("Noclip [{+smoke}]", self.ufo, ::NoClip);
 
-                    if(level.currentGametype == "dm")
-                    self addOpt("Go for Two Piece", ::dotwopiece);
+                if(level.currentGametype == "dm")
+                self addOpt("Go for Two Piece", ::dotwopiece);
 
-                    canOpts = ["Current", "Infinite"];
-                    self addSliderString("Canswap Mode", canOpts, canOpts, ::SetCanswapMode);
+                canOpts = ["Current", "Infinite"];
+                self addSliderString("Canswap Mode", canOpts, canOpts, ::SetCanswapMode);
 
-                    self addToggle("Instashoots", self.instashoot, ::instashoot);
-                    self addOpt("Spawn Slide", ::slide);
+                self addToggle("Instashoots", self.instashoot, ::instashoot);
+                self addOpt("Spawn Slide", ::slide);
 
-                    spawnOptionsActions = ["Bounce","Platform","Crate"];
-                    spawnOptionsIDs     = ["bounce","platform","crate"];
-                    self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
-                    break;
+                spawnOptionsActions = ["Bounce","Platform","Crate"];
+                spawnOptionsIDs     = ["bounce","platform","crate"];
+                self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
+                break;
 
             case "class":
+                weapon = self getcurrentweapon();
+                base = getbasename( weapon );
+                attOpts = GetWeaponValidAttachments( base );
+
                 self addMenu("class", "Class Menu");
                 self addOpt("Weapons", ::newMenu, "wpns");
-                self addOpt("Attachments", ::newMenu, "attach");
-                self addOpt("Lethals", ::newMenu, "lethals");
-                self addOpt("Tacticals", ::newMenu, "equipment"); 
+
+                attachNames = ["Sniper Scope", "Bayonet", "Rifle Grenade", "Flash Hider", "Aperture Sight", "Telescopic Sight", "Suppressor", "Box Magazine", "Round Drum", "Dual Magazines", "Grip", "Sawed-Off Shotgun", "Bipod"];
+                attachIDs = ["scoped", "bayonet", "gl", "flash", "aperture", "telescopic", "silenced", "bigammo", "bigammo", "bigammo", "grip", "sawoff", "bipod"];
+                
+                if( isDefined( attOpts ) )
+                {
+                    validIDs   = [];
+                    validNames = [];
+                    for( a = 0; a < attachIDs.size; a++ )
+                    {
+                        for( i = 0; i < attOpts.size; i++ )
+                        {
+                            if( attachIDs[ a ] == attOpts[ i ] )
+                            {
+                                validIDs[ validIDs.size ]     = attachIDs[ a ];
+                                validNames[ validNames.size ] = attachNames[ a ];
+                            }
+                        }
+                    }
+                    self addSliderString("Attachments", validIDs, validNames, ::GivePlayerAttachment);
+                }
+                
+                lethalIDs = [ "frag_grenade_mp", "sticky_grenade_mp", "molotov_mp" ];
+                lethalNames = [ "Frag Grenade", "N*74", "Molotov" ];
+                self addSliderString("Lethals", lethalIDs, lethalNames, ::giveLethal);
+
+                tctlIDs = [ "m8_white_smoke_mp", "tabun_gas_mp", "signal_flare_mp" ];
+                tctlNames = [ "Smoke Grenade", "Tabun Gas", "Signal Flare" ];
+                self addSliderString("Tacticals", tctlIDs, tctlNames, ::giveTactical);
+
+                self addDvarToggle("Sleight of Hand", "SOH", ::sohtoggle);
                 self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle); 
                 self addOpt("Take Current Weapon", ::takeWpn);
                 self addOpt("Drop Current Weapon", ::dropWpn);
@@ -78,45 +111,6 @@
                 pistolNames = ["Colt M1911","Nambu","Walther P38","Tokarev TT-33",".357 Magnum"];
                 pistolIDs   = ["colt_mp","nambu_mp","walther_mp","tokarev_mp","357magnum_mp"];
                 self addSliderString("Pistols", pistolIDs, pistolNames, ::giveUserWeapon);
-                break;
-
-            case "attach":
-                weapon = self getcurrentweapon();
-                base = getbasename(weapon);
-                attOpts = GetWeaponValidAttachments(base);
-
-                self addMenu("attach", "Attachments");
-
-                attachNames = ["Sniper Scope", "Bayonet", "Rifle Grenade", "Flash Hider", "Aperture Sight", "Telescopic Sight", "Suppressor", "Box Magazine", "Round Drum", "Dual Magazines", "Grip", "Sawed-Off Shotgun", "Bipod"];
-                attachIDs = ["scoped", "bayonet", "gl", "flash", "aperture", "telescopic", "silenced", "bigammo", "bigammo", "bigammo", "grip", "sawoff", "bipod"];
-                
-                if(isDefined(attOpts))
-                {
-                    for(a=0;a<attachIDs.size;a++)
-                    {
-                        for(i=0;i<attOpts.size;i++)
-                        {
-                            if(attachIDs[a] == attOpts[i])
-                                self addOpt( attachNames[a], ::GivePlayerAttachment, attachIDs[a]);
-                        }
-                    }
-                }
-                else
-                    self addOpt("No Valid Attachments!");
-                break;
-
-            case "lethals":
-                self addMenu("lethals", "Lethals");
-                self addOpt("Frag Grenade", ::giveLethal, "frag_grenade_mp");
-                self addOpt("N*74", ::giveLethal, "sticky_grenade_mp");
-                self addOpt("Molotov", ::giveLethal, "molotov_mp");
-                break;
-
-            case "equipment":
-                self addMenu("equipment", "Tacticals");
-                self addOpt("Smoke Grenade", ::giveTactical, "m8_white_smoke_mp");
-                self addOpt("Tabun Gas", ::giveTactical, "tabun_gas_mp");
-                self addOpt("Signal Flare", ::giveTactical, "signal_flare_mp");
                 break;
 
             case "tp":
@@ -329,17 +323,34 @@
                 self addSliderString("Special", specialIDs, specialNames, ::AfterHit);
                 break;
 
+            case "custom":
+                self addMenu("custom", "Customization Menu");
+                self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+                break;
+
             case "host":
                 self addMenu("host", "Host Options");
                 self addOpt("Client Menu", ::newMenu, "Verify");
-                self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
+                self addOpt("Lobby Settings", ::newMenu, "lobby");
+                self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::addTestClients);
+                self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
+
+                botOptIDs = ["teleport","kick"];
+                botOptNames = ["Teleport to Crosshairs","Kick All Bots"];
+                self addSliderString("Bot Controls", botOptIDs, botOptNames, ::botControls);
+
+                self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
+                break;
+
+            case "lobby":
+                self addMenu("lobby", "Lobby Settings");
+                
+                minDist = ["15","25","50","100","150","200","250"];
+                self addsliderstring("Minimum Distance", minDist, undefined, ::setMinDistance);
+                
                 self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
                 self addOpt("Fast Restart", ::FastRestart);
-                self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::addTestClients);
-                self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-                self addSliderString("Bot Controls", "teleport;kick", "TP Bots;Kick All Bots", ::botControls);
                 self addToggle("Disable Barriers", level.barriersOff, ::nobarriers);
-                self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
                 break;
         }
         self clientOptions();

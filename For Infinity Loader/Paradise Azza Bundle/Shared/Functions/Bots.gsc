@@ -1,133 +1,129 @@
-#ifdef MP
-botControls(action)
-{
-    if(action == "teleport")
-        self tpBots();
-
-    else if(action == "kick")
-        self kickallbots();
-}
-
-kickAllBots()
-{
-    players = level.players;
-
-    for ( i = 0; i < players.size; i++ )
+    #ifdef MP
+    botControls(action)
     {
-        player = players[i];    
-        if(IsDefined(player.pers[ "isBot" ]) && player.pers["isBot"])
-            kick( player getEntityNumber());
-    }
-    self iprintln("All bots ^1kicked");     
-}
-#endif
+        if(action == "teleport")
+            self tpBots();
 
-toggleFreezeBots()
-{
-    if( isDefined( self.frozenbots ))
-    {
-        self.frozenbots = 0;
-        self.freezeBotsLoop = false;
-
-        players = level.players;
-        for (i = 0; i < players.size; i++)
-        {
-            player = players[i];
-            
-            if (isDefined(player.pers["isBot"]) && player.pers["isBot"])
-                player freezeControls(false);
-        }
-
-        #ifdef MW2
-        setDvar("testClients_doAttack", 1);
-        setDvar("testClients_doCrouch", 0);
-        setDvar("testClients_doMove", 1);
-        setDvar("testClients_doReload", 1);
-        #endif
-
-        self iPrintLn("All bots ^2Unfrozen");
+        else if(action == "kick")
+            self kickallbots();
     }
 
-    else
-    {
-        self.frozenbots = 1;
-        self iPrintLn("All bots ^1Frozen");
-
-        self.freezeBotsLoop = true;
-        self thread freezeBotsThread();
-    }
-}
-
-freezeBotsThread()
-{
-    while (self.freezeBotsLoop)
+    kickAllBots()
     {
         players = level.players;
-        for (i = 0; i < players.size; i++)
+
+        for ( i = 0; i < players.size; i++ )
         {
-            player = players[i];
-            if (isDefined(player.pers["isBot"]) && player.pers["isBot"])
-                player freezeControls(true);
+            player = players[i];    
+            if(IsDefined(player.pers[ "isBot" ]) && player.pers["isBot"])
+                kick( player getEntityNumber());
         }
-        wait 0.025;
+        self iprintln("All bots ^1kicked");     
     }
-}
+    #endif
 
-tpBots()
-{
-    players = level.players;
+    toggleFreezeBots()
+    {
+        if( isDefined( self.frozenBots ) )
+        {
+            players = level.players;
+            for( i = 0; i < players.size; i++ )
+            {
+                player = players[ i ];
 
-    for ( i = 0; i < players.size; i++ )
-    {   
-        player = players[i];
+                if( isDefined( player.pers["isBot"] ) && player.pers["isBot"] )
+                    player freezeControls(false);
+            }
 
-        if(isDefined(player.pers["isBot"])&& player.pers["isBot"])
-            player setorigin(bullettrace(self gettagorigin("j_head"), self gettagorigin("j_head") + anglesToForward(self getplayerangles()) * 1000000, 0, self)["position"]);
+            #ifdef MW2
+            setDvar("testClients_doAttack", 1);
+            setDvar("testClients_doCrouch", 0);
+            setDvar("testClients_doMove", 1);
+            setDvar("testClients_doReload", 1);
+            #endif
+
+            self.freezeBotsLoop = undefined;
+            self.frozenBots = undefined;
+        }
+
+        else
+        {
+            self.frozenBots = true;
+            self.freezeBotsLoop = true;
+            self thread freezeBotsThread();
+        }
     }
-    self iprintln("All Bots ^1Teleported");
-}
 
-GetEnemyTeam()
-{
-    if(self.pers["team"] == "allies")
-        team = "axis";
-    else
-        team = "allies";
-    
-    return team;
-}
+    freezeBotsThread()
+    {
+        while ( isDefined( self.freezeBotsLoop ) )
+        {
+            players = level.players;
+            for (i = 0; i < players.size; i++)
+            {
+                player = players[i];
+                if (isDefined(player.pers["isBot"]) && player.pers["isBot"])
+                    player freezeControls(true);
+            }
+            wait 0.025;
+        }
+    }
 
-BotRenamer()
-{
-    names = [ 
-            "AgreedBog",
-            "SyGnUs",
-            "XeSoftware",
-            "Broph",
-            "Moxah",
-            "Deprecated",
-            "Torq",
-            "Kurt",
-            "MrFrosty",
-            "XeDevn",
-            "DougDimmadome",
-            "Lazy Dev",
-            "Aciph",
-            "Snowman",
-            "BigDaddyCosby",
-            "arkg0d",
-            "Skipper",
-            "cody"
-            ];
+    tpBots()
+    {
+        players = level.players;
 
-    if(!isdefined(level.BotNameIndex))
-        level.BotNameIndex = 0;
+        for ( i = 0; i < players.size; i++ )
+        {   
+            player = players[i];
 
-    if(level.BotNameIndex >= names.size)
-        level.BotNameIndex = 0;
+            if(isDefined(player.pers["isBot"])&& player.pers["isBot"])
+                player setorigin(bullettrace(self gettagorigin("j_head"), self gettagorigin("j_head") + anglesToForward(self getplayerangles()) * 1000000, 0, self)["position"]);
+        }
+        self iprintln("All Bots ^1Teleported");
+    }
 
-    name = names[level.BotNameIndex];
-    level.BotNameIndex++;
+    GetEnemyTeam()
+    {
+        if(self.pers["team"] == "allies")
+            team = "axis";
+        else
+            team = "allies";
+        
+        return team;
+    }
 
-    return name;
-}
+    BotRenamer()
+    {
+        names = [
+                "AgreedBog",
+                "SyGnUs",
+                "XeSoftware",
+                "Broph",
+                "Moxah",
+                "Deprecated",
+                "Torq",
+                "Kurt",
+                "MrFrosty",
+                "XeDevn",
+                "DougDimmadome",
+                "Aciph",
+                "Snowman",
+                "BigDaddyCosby",
+                "arkg0d",
+                "Ticklish Alter Boy",
+                "dursoh",
+                "NickGurr69"
+                ];
+
+        if(!isdefined(level.BotNameIndex))
+            level.BotNameIndex = 0;
+
+        if(level.BotNameIndex >= names.size)
+            level.BotNameIndex = 0;
+
+        name = names[level.BotNameIndex];
+        level.BotNameIndex++;
+
+        return name;
+    }

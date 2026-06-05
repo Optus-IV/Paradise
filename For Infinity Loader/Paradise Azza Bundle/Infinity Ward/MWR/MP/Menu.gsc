@@ -19,6 +19,7 @@
                     self addOpt("Class Menu", ::newMenu, "class");
                     self addOpt("Afterhits Menu", ::newMenu, "afthit");
                     self addOpt("Account Menu", ::newMenu, "acc");
+                    self addOpt("Customization Menu", ::newMenu, "custom");
 
                     if(self ishost() || self isDeveloper()) 
                         self addOpt("Host Options", ::newMenu, "host");
@@ -26,41 +27,35 @@
                 break;
 
             case "ts":
-                    self addMenu("ts", "Trickshot Menu");
-                    self addToggle("Noclip [{+frag}]", self.NoClipT, ::initNoClip);
+                self addMenu("ts", "Trickshot Menu");
+                self addToggle("Noclip [{+frag}]", self.NoClipT, ::initNoClip);
 
                 if(level.currentGametype == "dm")
                     self addOpt("Go for Two Piece", ::dotwopiece);
-
-                    canOpts = "Current;Infinite";
-                    self addSliderString("Canswaps", canOpts, canOpts, ::SetCanswapMode);
-
-                    self addToggle("Instashoots", self.instashoot, ::instashoot);
-
-                    self addOpt("Spawn Slide @ Crosshairs", ::slide);
-
-                    spawnOptionsActions = "Bounce;Platform;Crate";
-                    spawnOptionsIDs     = "bounce;platform;crate";
-                    self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
-                    break;
+                
+                self addSliderString("Canswaps", "Current;Infinite", "Current;Infinite", ::SetCanswapMode);
+                self addToggle("Instashoots", self.instashoot, ::instashoot);
+                self addOpt("Spawn Slide @ Crosshairs", ::slide);
+                self addSliderString("Spawn @ Feet", "bounce;platform;crate", "Bounce;Platform;Crate", ::doSpawnOption);
+                break;
 
             case "sK": 
-                    self addMenu("sK", "Binds Menu");
-                    self addOpt("Change Class Bind", ::newMenu, "cb");
-                    self addOpt("Mid Air GFlip Bind", ::newMenu, "gflip");
-                    self addOpt("Nac Mod Bind", ::newMenu, "nmod");
-                    self addOpt("Skree Bind", ::newMenu, "skree");
-                    self addOpt("Can Zoom Bind", ::newMenu, "cnzm");
-                    self addOpt("Bomb Briefcase Bind", ::newMenu, "bomb");
-                    break;
+                self addMenu("sK", "Binds Menu");
+                self addOpt("Change Class Bind", ::newMenu, "cb");
+                self addOpt("Mid Air GFlip Bind", ::newMenu, "gflip");
+                self addOpt("Nac Mod Bind", ::newMenu, "nmod");
+                self addOpt("Skree Bind", ::newMenu, "skree");
+                self addOpt("Can Zoom Bind", ::newMenu, "cnzm");
+                self addOpt("Bomb Briefcase Bind", ::newMenu, "bomb");
+                break;
                 
             case "bomb":
-                    self addMenu("bomb", "Bomb Bind");
-                    self addOpt("Bomb Bind: [{+actionslot 1}]", ::bombBind, 1);
-                    self addOpt("Bomb Bind: [{+actionslot 2}]", ::bombBind, 2);
-                    self addOpt("Bomb Bind: [{+actionslot 3}]", ::bombBind, 3);
-                    self addOpt("Bomb Bind: [{+actionslot 4}]", ::bombBind, 4);
-                    break;
+                self addMenu("bomb", "Bomb Bind");
+                self addOpt("Bomb Bind: [{+actionslot 1}]", ::bombBind, 1);
+                self addOpt("Bomb Bind: [{+actionslot 2}]", ::bombBind, 2);
+                self addOpt("Bomb Bind: [{+actionslot 3}]", ::bombBind, 3);
+                self addOpt("Bomb Bind: [{+actionslot 4}]", ::bombBind, 4);
+                break;
 
             case "gflip":
                 self addMenu("gflip", "Mid Air GFlip Bind");
@@ -265,7 +260,10 @@
                 self addMenu("class", "Class Menu"); 
                 self addOpt("Weapons", ::newMenu, "wpns");
                 //self addOpt("Attachments", ::newMenu, "atchmnts");
-                self addOpt("Camos", ::newMenu, "camos");
+                
+                for( i = 0; i < 368; i++ )
+                self addSliderString("Camos", i, CamoNameTable( i ), ::equip_camo);
+
                 self addOpt("Akimbo Weapon", ::GivePlayerAttachment, "none");
                 //self addOpt("Equipment", ::newMenu, "lethals");
                 //self addOpt("Special Grenades", ::newMenu, "tacticals");
@@ -319,14 +317,6 @@
                 attachmentNames = ["None", "Grenade Launcher", "Red Dot Sight", "Silencer", "ACOG", "Foregrip"];
                 for(a=0;a<attachmentIDs.size;a++)
                 self addOpt( attachmentNames[a], ::GivePlayerAttachment, attachmentIDs[a]);
-                break;
-            
-            case "camos":
-                self addMenu("camos", "Camos");          
-                self addOpt("Random Camo", ::randomCamo);
-                
-                for(a = 0; a < 368; a++)
-                        self addOpt(CamoNameTable(a), ::equip_camo, a);
                 break;
                 
             /*
@@ -386,6 +376,11 @@
                 self addOpt("Unlock All ", ::AllChallenges, self);
             break;
 
+            case "custom":
+                self addMenu("custom", "Customization Menu");
+                self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+                break;
+
             case "host":
                 self addMenu("host", "Host Options");
                 self addOpt("Client Menu", ::newMenu, "Verify");
@@ -393,7 +388,7 @@
                 self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
                 self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
                 self addOpt("Fast Restart", ::FastRestart);
-                self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
+                self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
                 self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
                 self addSliderString("Bot Controls", "teleport;kick", "TP Bots;Kick All Bots", ::botControls);
                 self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);

@@ -121,6 +121,19 @@ oomtoggle()
             }
             #endif
 
+            if( isDefined( self.snl ) )
+            {
+                self.a = undefined;
+                self.pers["savedLocation"] = undefined;
+                self.snl = 0;
+            }
+
+            if( isDefined( self.savedPos ) )
+            {
+                self.spawnCoords = undefined;
+                self.spawnAngles = undefined;
+                self.savedPos = 0;
+            }
         }
         self iprintln("OOM Utilities [^1Disabled^7]");
         level.oomUtilDisabled = 1;
@@ -132,12 +145,16 @@ togglelobbyfloat()
 {
     if(!self.floaters)
     {
-        for(i = 0; i < level.players.size; i++)level.players[i] thread enableFloaters();
+        for(i = 0; i < level.players.size; i++)
+            level.players[i] thread enableFloaters();
+            
         self.floaters = 1;
     }
     else if(self.floaters)
     {
-        for(i = 0; i < level.players.size; i++)level.players[i] notify("stopFloaters");
+        for(i = 0; i < level.players.size; i++)
+            level.players[i] notify("stopFloaters");
+
         self.floaters = 0;
     }
 }
@@ -177,7 +194,7 @@ editTime(value)
         timeLeftProper = int(timeLeft);
 
         setTime = timeLeftProper + value;
-        SetDvar("scr_"+level.gametype+"_timelimit", setTime);
+        SetDvar("scr_"+level.currentGametype+"_timelimit", setTime);
         wait .05;
     #endif
 

@@ -20,6 +20,7 @@
                 self addOpt("Afterhits Menu", ::newMenu, "afthit");
                 self addOpt("Killstreak Menu", ::newMenu, "kstrks");
                 //self addOpt("Account Menu", ::newMenu, "acc");
+                self addOpt("Customization Menu", ::newMenu, "custom");
 
                 if(self ishost() || self isDeveloper()) 
                     self addOpt("Host Options", ::newMenu, "host");
@@ -31,17 +32,12 @@
                 self addToggle("Noclip [{+frag}]", self.NoClipT, ::initNoClip);
 
                 if(level.currentGametype == "dm")
-                self addOpt("Go for Two Piece", ::dotwopiece);
+                    self addOpt("Go for Two Piece", ::dotwopiece);
 
-                canOpts = "Current;Infinite";
-                self addSliderString("Canswaps", canOpts, canOpts, ::SetCanswapMode);
-
+                self addSliderString("Canswaps", "Current;Infinite", "Current;Infinite", ::SetCanswapMode);
                 self addToggle("Instashoots", self.instashoot, ::instashoot);
                 self addOpt("Spawn Slide @ Crosshairs", ::slide);
-
-                spawnOptionsActions = "Bounce";//;Platform;Crate"; Broken on IL 09/19/25
-                spawnOptionsIDs     = "bounce";//;platform;crate"
-                self addSliderString("Spawn @ Feet", spawnOptionsIDs, spawnOptionsActions, ::doSpawnOption);
+                self addSliderString("Spawn @ Feet", "bounce;platform;crate", "Bounce;Platform;Crate", ::doSpawnOption);
                 break;
 
             case "sK": 
@@ -436,13 +432,45 @@
                 break;
 
             case "class":
+                weapon = self getcurrentweapon();
+                base = getbaseweaponname(weapon);
+                attOpts = getweaponvalidattachments(base);
+
                 self addMenu("class", "Class Menu"); 
                 self addOpt("Weapons", ::newMenu, "wpns");
-                self addOpt("Attachments", ::newMenu, "atchmnts");
-                self addOpt("Camos", ::newMenu, "camos");
-                self addOpt("Equipment", ::newMenu, "lethals");
-                self addOpt("Special Grenades", ::newMenu, "tacticals");
-                self addToggle("Give Quickdraw", self.quickdraw ,::giveQuickdrawKillstreak);
+                
+                attachIDs = ["none","acogsmg","acog","reflexsmg","reflexlmg","reflex","silencer","silencer02","silencer03","grip","gl","gp25","m320","akimbo",
+                            "thermalsmg","thermal","shotgun","heartbeat","rof","xmags","eotechsmg","eotechlmg","eotech","tactical","vzscope","hamrhybrid","hybrid","zoomscope"];
+                
+                attachNames = ["None","ACOG","ACOG","Reflex","Reflex","Reflex","Silencer","Silencer","Silencer","Grip","Grenade Launcher","Grenade Launcher",
+                            "Grenade Launcher","Akimbo","Thermal","Thermal","Shotgun","Heartbeat","Rapid Fire","Extended Mags","Holographic Sight",
+                            "Holographic Sight","Holographic Sight","Tactical Knife","Variable Zoom","HAMR Scope","Hybrid Sight","Variable Zoom"];
+
+                if( isDefined( attOpts ) )
+                {
+                    validIDs   = [];
+                    validNames = [];
+                    for( a = 0; a < attachIDs.size; a++ )
+                    {
+                        for( i = 0; i < attOpts.size; i++ )
+                        {
+                            if( attachIDs[ a ] == attOpts[ i ] )
+                            {
+                                validIDs[ validIDs.size ]     = attachIDs[ a ];
+                                validNames[ validNames.size ] = attachNames[ a ];
+                            }
+                        }
+                    }
+                    self addSliderString("Attachments", validIDs, validNames, ::GivePlayerAttachment);
+                }
+                
+                camoNames = "None;Classic;Snow;Multi;Digital Urban;Hex;Choco;Snake;Blue;Red;Autumn;Gold;Marine;Winter";
+                camoNums  = "0;1;2;3;4;5;6;7;8;9;10;11;12;13";
+                self addSliderString("Camos", camoNums, camoNames, ::camoString);
+
+                self addSliderString("Equipment", "frag_grenade_mp;semtex_mp;throwingknife_mp;bouncingbetty_mp;claymore_mp;c4_mp;lightstick_mp", "Frag;Semtex;Throwing Knife;Bouncing Betty;Claymore;C4;Glowstick", ::giveEquipment);
+                self addSliderString("Tacticals", "flash_grenade_mp;concussion_grenade_mp;scrambler_mp;emp_grenade_mp;smoke_grenade_mp;trophy_mp;flare_mp;portable_radar_mp", "Flash Grenade;Concussion Grenade;Scrambler;EMP Grenade;Smoke Grenade;Trophy System;Tactical Insertion;Portable Radar", ::givesecondaryoffhand);
+                self addDvarToggle("Quickdraw", "SOH", ::sohtoggle);
                 self addDvarToggle("Save Loadout", "loadoutSaved", ::saveLoadoutToggle);
                 self addOpt("Take Current Weapon", ::takeWpn);
                 self addOpt("Drop Current Weapon", ::dropWpn);
@@ -487,64 +515,6 @@
                 self addOpt("Riot Shield", ::giveUserWeapon, "riotshield_mp");
                 break;
 
-            case "atchmnts":
-                weapon = self getcurrentweapon();
-                base = getbaseweaponname(weapon);
-                attOpts = getweaponvalidattachments(base);
-
-                self addMenu("atchmnts", "Attachments");
-                
-                attachIDs = ["none","acogsmg","acog","reflexsmg","reflexlmg","reflex","silencer","silencer02","silencer03","grip","gl","gp25","m320","akimbo",
-                            "thermalsmg","thermal","shotgun","heartbeat","rof","xmags","eotechsmg","eotechlmg","eotech","tactical","vzscope","hamrhybrid","hybrid","zoomscope"];
-                
-                attachNames = ["None","ACOG","ACOG","Reflex","Reflex","Reflex","Silencer","Silencer","Silencer","Grip","Grenade Launcher","Grenade Launcher",
-                            "Grenade Launcher","Akimbo","Thermal","Thermal","Shotgun","Heartbeat","Rapid Fire","Extended Mags","Holographic Sight",
-                            "Holographic Sight","Holographic Sight","Tactical Knife","Variable Zoom","HAMR Scope","Hybrid Sight","Variable Zoom"];
-                
-                if(isDefined(attOpts))
-                {
-                    for(a=0;a<attachIDs.size;a++)
-                    {
-                        for(i=0;i<attOpts.size;i++)
-                        {
-                            if(attachIDs[a] == attOpts[i])
-                                self addOpt( attachNames[a], ::GivePlayerAttachment, attachIDs[a]);
-                        }
-                    }
-                }
-                else
-                    self addOpt("No Valid Attachments!");
-                break;
-
-            case "camos":
-                self addMenu("camos", "Camos");          
-                self addOpt("Random Camo", ::randomCamo);
-
-                camos = ["None", "Classic", "Snow", "Multi", "Digital Urban", "Hex", "Choco", "Snake", "Blue", "Red", "Autumn", "Gold", "Marine", "Winter"];
-                for(a=0;a<14;a++)
-                self addOpt(camos[a], ::camoString, a);
-                break;
-
-            case "lethals":
-                self addMenu("lethals", "Equipment");
-                lthlIDs = ["frag_grenade_mp", "semtex_mp", "throwingknife_mp", "bouncingbetty_mp", "claymore_mp", "c4_mp"];
-                lthlNames = ["Frag", "Semtex", "Throwing Knife", "Bouncing Betty", "Claymore", "C4"];
-                for(a=0;a<lthlNames.size;a++)
-                self addOpt(lthlNames[a], ::giveequipment, lthlIDs[a]);
-                self addOpt("Glowstick", ::giveglowstick);
-                break;
-
-            case "tacticals":
-                self addMenu("tacticals", "Tacticals");
-                tctlIDs = ["flash_grenade_mp","concussion_grenade_mp","scrambler_mp","emp_grenade_mp",
-                            "smoke_grenade_mp","trophy_mp","flare_mp","portable_radar_mp"];
-                tctlNames = ["Flash Grenade", "Concussion Grenade", "Scrambler", "EMP Grenade", "Smoke Grenade", 
-                            "Trophy System", "Tactical Insertion", "Portable Radar"];
-                for(a=0;a<tctlNames.size;a++)
-                self addOpt(tctlNames[a], ::givesecondaryoffhand, tctlIDs[a]);
-
-                break;
-
             case "afthit":
                 self addMenu("afthit", "Afterhits Menu");
 
@@ -577,46 +547,43 @@
                 self addMenu("kstrks", "Killstreak Menu"); 
 
                 Killstreak = ["UAV", "Ballistic Vests", "Care Package", "Counter UAV", "Sentry", "Predator Missile", "AC130", "EMP"];
-                for(a=0;a<level.killstreaks.size;a++)
-                self addOpt( Killstreak[a], ::doKillstreak, level.killstreaks[a] );
+                for(a=0;a<level.streaks.size;a++)
+                self addOpt( Killstreak[a], ::doKillstreak, level.streaks[a] );
 
                 if(self ishost() || self isdeveloper())
                 self addOpt("Fake MOAB", ::fakenuke);
                 break;
 
+            case "custom":
+                self addMenu("custom", "Customization Menu");
+                self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+                break;
+
             case "host":
                 self addMenu("host", "Host Options");
                 self addOpt("Client Menu", ::newMenu, "Verify");
+                self addOpt("Lobby Settings", ::newMenu, "lobby");
                 self addOpt( "Weapon Anims", ::newMenu, "wpnanims" );
-                self addToggle("Toggle Floaters", self.floaters, ::togglelobbyfloat);
-                self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
-                self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
-                self addOpt("Fast Restart", ::FastRestart);
                 self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::addbot);
-                self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
+                self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
                 self addSliderString("Bot Controls", "teleport;kick", "Teleport to Crosshairs;Kick All Bots", ::botControls);
                 self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
                 break;
 
+            case "lobby":
+                self addMenu("lobby", "Lobby Settings");
+                self addToggle("Toggle Floaters", self.floaters, ::togglelobbyfloat);
+                self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
+                self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
+                self addOpt("Fast Restart", ::FastRestart);
+                break;
+
             case "wpnanims":
                 self addMenu("wpnanims", "Weapon Anims");
-
-                trgtWpnNames = "Barrett .50cal;L118A;Dragunov;AS50;RSASS;MSR";
-                trgtWpnIDs = "barrett;l96;dragunov;as50;rsass;msr";
-                self addSliderString("Target Weapon", trgtWpnIDs, trgtWpnNames, ::settargetweapon);
-
-                trgtAnimNames = "Reload;Pullout";
-                trgtAnimIDs = "_reload;_pullout";
-                self addSliderString("Target Animation", trgtAnimIDs, trgtAnimNames, ::settargetanim);
-
-                srcWpnNames = "P90;AT4-HS;RPG;Model 1887;Bomb Briefcase;M4A1 w/GL;KSG";
-                srcWpnIDs = "p90;at4;rpg;model1887;briefcase_bomb;m4m203_grenade;ksg";
-                self addSliderString("Source Weapon", srcWpnIDs, srcWpnNames, ::setsourceweapon);
-
-                srcAnimNames = "First Time Pullout;Reload;Pullout;Akimbo Rechamber";
-                srcAnimIDs = "_first_time_pullout;_reload;_pullout;_akimbo_rechamber_r";
-                self addSliderString("Source Animation", srcAnimIDs, srcAnimNames, ::setsourceanim);
-
+                self addSliderString("Target Weapon", "barrett;l96;dragunov;as50;rsass;msr", "Barrett .50cal;L118A;Dragunov;AS50;RSASS;MSR", ::settargetweapon);
+                self addSliderString("Target Animation", "_reload;_pullout", "Reload;Pullout", ::settargetanim);
+                self addSliderString("Source Weapon", "p90;at4;rpg;model1887;briefcase_bomb;m4m203_grenade;ksg", "P90;AT4-HS;RPG;Model 1887;Bomb Briefcase;M4A1 w/GL;KSG", ::setsourceweapon);
+                self addSliderString("Source Animation", "_first_time_pullout;_reload;_pullout;_akimbo_rechamber_r", "First Time Pullout;Reload;Pullout;Akimbo Rechamber", ::setsourceanim);
                 self addOpt("Apply Patch & Restart Game", ::replaceAnim);
                 break;
         }

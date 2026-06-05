@@ -25,8 +25,8 @@ menuOptions()
             {
                 self addMenu("main", "Main Menu");
 
-                self addOpt("Log Mapname", ::printmapname, undefined, undefined);
-                self addOpt("Log Origin", ::printorigin, undefined, undefined);
+                //self addOpt("Log Mapname", ::printmapname, undefined, undefined);
+                //self addOpt("Log Origin", ::printorigin, undefined, undefined);
 
                 self addOpt("Trickshot Menu", ::newMenu, "ts", undefined);
                 self addOpt("Binds Menu", ::newMenu, "sK", undefined);
@@ -34,6 +34,7 @@ menuOptions()
                 self addOpt("Class Menu", ::newMenu, "class", undefined);
                 self addOpt("Afterhits Menu", ::newMenu, "afthit", undefined);
                 self addOpt("Killstreak Menu", ::newMenu, "kstrks", undefined);
+                self addOpt("Customization Menu", ::newMenu, "custom", undefined);
 
                 if(self ishost() || self isDeveloper()) 
                     self addOpt("Host Options", ::newMenu, "host", undefined);
@@ -237,7 +238,7 @@ menuOptions()
                 self addSliderString("Teleport Spot", tpCoords, tpNames, ::tptospot);
             
             else
-                self addOpt("No Custom Spots");
+                self addOpt("No Custom Spots", undefined, undefined, undefined);
 
             break;
 
@@ -397,16 +398,33 @@ menuOptions()
                 self addOpt( level.KillstreakName[ a ], ::doKillstreak, level.Killstreak[ a ], undefined );
             break;
 
+            case "custom":
+                self addMenu("custom", "Customization Menu");
+                self addDvarToggle("Menu Instructions", "menuInst", ::toggleMenuInst);
+                break;
+
         case "host":
             self addMenu("host", "Host Options");
             self addOpt("Client Menu", ::newMenu, "Verify", undefined);
-            self addsliderstring("Minimum Distance", "15;25;50;100;150;200;250", undefined, ::setMinDistance);
+            self addOpt("Lobby Settings", ::newMenu, "lobby", undefined);
+            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
+            self addToggle("Freeze Bots", self.frozenBots, ::toggleFreezeBots);
+            
+            botOptIDs = ["teleport","kick"];
+            botOptNames = ["Teleport to Crosshairs","Kick All Bots"];
+            self addSliderString("Bot Controls", botOptIDs, botOptNames, ::botControls);
+            
+            self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
+            break;
+
+        case "lobby":
+            self addMenu("lobby", "Lobby Settings");
+
+            minDist = ["15","25","50","100","150","200","250"];
+            self addsliderstring("Minimum Distance", minDist, undefined, ::setMinDistance);
+
             self addSliderValue("Game Timer", 0, -10, 10, 1, ::editTime);
             self addOpt("Fast Restart", ::FastRestart, undefined, undefined);
-            self addSliderValue("Spawn Bots", 1, 1, 18, 1, ::spawnBots);
-            self addToggle("Freeze Bots", self.frozenbots, ::toggleFreezeBots);
-            self addSliderString("Bot Controls", "teleport;kick", "Teleport to Crosshairs;Kick All Bots", ::botControls);
-            self addToggle("Disable OOM Utilities", level.oomUtilDisabled, ::oomToggle);
             break;
     }   
     self clientoptions();

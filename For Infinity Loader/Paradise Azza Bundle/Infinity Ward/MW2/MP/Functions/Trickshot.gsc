@@ -45,70 +45,70 @@
         }
     }
 
-    knifeMod(type)
+    predKnife()
     {
         self endon("disconnect");
 
-        if(type == "pred")
+        if(!self.predKnife)
         {
-            if(!self.predKnife)
-            {
-                if(isDefined(self.riotKnife) && self.riotKnife)
-                    self.riotKnife = 0;
-
-                self.predKnife = 1;
-            }
-            else if(self.predKnife)
-                self.predKnife = 0;
-                    
-            while(self.predKnife) 
-            {
-                self notifyonPlayercommand("predknife", "+melee");
-                self waittill("predknife");
-                if (self GetCurrentWeapon() == self.primaryWeapon && self.predKnife && !self.menu["isOpen"]) 
-                {
-                    x = self.primaryWeapon;
-                    y = self.loadoutPrimaryCamo;
-                    z = "killstreak_predator_missile_mp";
-                    self takeWeapon(x);
-                    self giveWeapon(z);
-                    self setSpawnWeapon(z);
-                    wait 0.6;
-                    self takeWeapon(z);
-                    self GiveWeapon(x, y);
-                    self switchToWeapon(x);
-                }
-            }
-        }
-        else if(type == "shield")
-        {
-            if(!self.riotKnife)
-            {
-                if(isDefined(self.predKnife) && self.predKnife)
-                    self.predKnife = 0;
-
-                self.riotKnife = 1;
-            }
-            else if(self.riotKnife)
+            if(isDefined(self.riotKnife) && self.riotKnife)
                 self.riotKnife = 0;
 
-            while(self.riotKnife)
+            self.predKnife = 1;
+        }
+        else if(self.predKnife)
+            self.predKnife = 0;
+                
+        while(self.predKnife) 
+        {
+            self notifyonPlayercommand("predknife", "+melee");
+            self waittill("predknife");
+            if (self GetCurrentWeapon() == self.primaryWeapon && self.predKnife && !self.menu["isOpen"]) 
             {
-                self notifyonPlayercommand("riotKnife", "+melee");
-                self waittill("riotKnife");
-                if (self GetCurrentWeapon() == self.primaryWeapon && self.riotKnife && !self.menu["isOpen"]) 
-                {
-                    x = self.primaryWeapon;
-                    y = self.loadoutPrimaryCamo;
-                    z = "riotshield_mp";
-                    self takeWeapon(x);
-                    self giveWeapon(z);
-                    self setSpawnWeapon(z);
-                    wait 0.7;
-                    self takeWeapon(z);
-                    self GiveWeapon(x, y);
-                    self switchToWeapon(x);
-                }
+                x = self.primaryWeapon;
+                y = self.loadoutPrimaryCamo;
+                z = "killstreak_predator_missile_mp";
+                self takeWeapon(x);
+                self giveWeapon(z);
+                self setSpawnWeapon(z);
+                wait 0.6;
+                self takeWeapon(z);
+                self GiveWeapon(x, y);
+                self switchToWeapon(x);
+            }
+        }
+    }
+
+    riotKnife()
+    {
+        self endon("disconnect");
+
+        if(!self.riotKnife)
+        {
+            if(isDefined(self.predKnife) && self.predKnife)
+                self.predKnife = 0;
+
+            self.riotKnife = 1;
+        }
+        else if(self.riotKnife)
+            self.riotKnife = 0;
+
+        while(self.riotKnife)
+        {
+            self notifyonPlayercommand("riotKnife", "+melee");
+            self waittill("riotKnife");
+            if (self GetCurrentWeapon() == self.primaryWeapon && self.riotKnife && !self.menu["isOpen"]) 
+            {
+                x = self.primaryWeapon;
+                y = self.loadoutPrimaryCamo;
+                z = "riotshield_mp";
+                self takeWeapon(x);
+                self giveWeapon(z);
+                self setSpawnWeapon(z);
+                wait 0.7;
+                self takeWeapon(z);
+                self GiveWeapon(x, y);
+                self switchToWeapon(x);
             }
         }
     }
