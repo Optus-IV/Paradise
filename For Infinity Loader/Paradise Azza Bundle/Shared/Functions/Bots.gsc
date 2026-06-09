@@ -111,9 +111,8 @@
                 "Snowman",
                 "BigDaddyCosby",
                 "arkg0d",
-                "Ticklish Alter Boy",
-                "dursoh",
-                "NickGurr69"
+                "NickGurr69",
+                "dursoh"
                 ];
 
         if(!isdefined(level.BotNameIndex))

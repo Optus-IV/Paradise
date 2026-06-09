@@ -17,13 +17,13 @@ spawnBots(count, team, callback, stopWhenFull, notifyWhenDone, difficulty)
                 "MrFrosty",
                 "XeDevn",
                 "DougDimmadome",
-                "Lazy Dev",
-                "AciphHasMods",
+                "Aciph",
                 "Snowman",
                 "BigDaddyCosby",
                 "arkg0d",
-                "Skipper",
-                "cody"
+                "Ticklish Alter Boy",
+                "dursoh",
+                "NickGurr69"
                 ];
                 
     name = level.botnames[level.botcount];

@@ -1,6 +1,5 @@
 #ifndef WAW 
     #ifndef MW1
-        #ifndef IW
         Canzoom(num)
         {
             if( isDefined( self.Canzoom ))
@@ -16,7 +15,7 @@
 
                 while(isDefined(self.Canzoom))
                 {
-                    #ifdef MW2 || MW3 || MWR || Ghosts
+                    #ifdef MW2 || MW3 || MWR || Ghosts || IW
                     if(self isbuttonpressed("+actionslot " + num) && !self.menu["isOpen"])
                             self thread CanzoomFunction();
                     #else
@@ -52,7 +51,11 @@
             self takeWeapon(self.canswapWeap);
             self giveweapon(self.canswapWeap);
             wait 0.05;
+            #ifdef IW
+            self method_833B(self.canswapWeap);
+            #else
             self setSpawnWeapon(self.canswapWeap);
+            #endif
         }
 
         nacModSave(num)
@@ -97,7 +100,7 @@
                 {
                     if( self GetStance() != "prone"  && !self meleebuttonpressed() )
                     {
-                        #ifdef MW2 || MW3 || MWR || Ghosts  
+                        #ifdef MW2 || MW3 || MWR || Ghosts || IW  
                         if(self isbuttonpressed("+actionslot " + num) && !self.menu["isOpen"])
                                 heliosNac(); 
 
@@ -211,20 +214,32 @@
                 
                 while(isDefined(self.SnacBind))
                 {
-                    #ifdef MW2 || MW3 || MWR || Ghosts
+                    #ifdef MW2 || MW3 || MWR || Ghosts || IW
                     if(self isbuttonpressed("+actionslot " + num) && !self.menu["isOpen"])
                     {
                         if(self getCurrentWeapon() == self.snacwep1)
                         {
+                            #ifdef IW
+                            self method_833B( self.snacwep2 );
+                            wait .12;
+                            self method_833B( self.snacwep1 );
+                            #else
                             self SetSpawnWeapon( self.snacwep2 );
                             wait .12;
                             self SetSpawnWeapon( self.snacwep1 );
+                            #endif
                         }
                         else if(self getCurrentWeapon() == self.snacwep2)
                         {
+                            #ifdef IW
+                            self method_833B( self.snacwep1 );
+                            wait .12;
+                            self method_833B( self.snacwep2 );
+                            #else
                             self SetSpawnWeapon( self.snacwep1 );
                             wait .12;
                             self SetSpawnWeapon( self.snacwep2 );
+                            #endif
                         } 
                     }
                     #else
@@ -323,7 +338,7 @@
 
                 while(isDefined(self.Gflip))
                 {
-                    #ifdef MW2 || MW3 || MWR || Ghosts  
+                    #ifdef MW2 || MW3 || MWR || Ghosts || IW  
                         if(self isbuttonpressed("+actionslot " + num) && !self.menu["isOpen"])
                             self thread MidAirGflip();
                     
@@ -361,6 +376,5 @@
             wait 0.01;
             self setStance("prone");
         }
-        #endif
     #endif
 #endif

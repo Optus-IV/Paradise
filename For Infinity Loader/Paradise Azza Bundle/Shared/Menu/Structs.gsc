@@ -38,7 +38,9 @@
 
             #ifdef MP
             player dowelcomemessage();
+            #ifndef BO3
             player thread changeClass();
+            #endif
             #endif
 
             player thread menuInst();
@@ -48,13 +50,9 @@
             #endif
 
             #ifdef MW2 
-                #ifdef STEAM
-                    player thread maps\mp\killstreaks\_uav::launchUav(player, getDvar("host_team"), 999, false);
-                #else
-                    player setClientDvar("g_compassShowEnemies", 1);
-                    player setClientDvar("scr_game_forceuav", 1);
-                    player setClientDvar("compassEnemyFootstepEnabled", 1);
-                #endif
+            player setClientDvar("g_compassShowEnemies", 1);
+            player setClientDvar("scr_game_forceuav", 1);
+            player setClientDvar("compassEnemyFootstepEnabled", 1);
             #endif
 
             #ifdef MW3
@@ -63,13 +61,17 @@
             player setClientDvar( "compassEnemyFootstepEnabled", 1);
             #endif
 
-            #ifdef BO2
+            #ifdef BO2 || BO3
             player setclientuivisibilityflag("g_compassShowEnemies", 1);
             player.uav = false;
             #endif
 
             player thread mainBinds();
-            player thread wallbangeverything();                    
+
+            #ifdef WAW || BO1 || BO2 || Ghosts || BO3 || IW || MWR
+            player thread wallbangeverything();   
+            #endif
+                             
             player thread bulletImpactMonitor();
             player thread trackstats();
 

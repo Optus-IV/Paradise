@@ -1,72 +1,76 @@
-addTestClients(num, team)
-{
-    setDvar("sv_botsPressAttackBtn", 1);
-    setDvar("sv_botsRandomInput", 1);
-
-    team = ( team == "enemy" ) ? self getenemyteam() : self.pers[ "team" ];
-    bot = [];
-
-    for (i = 0; i < num; i++)
+    addTestClients(num, team)
     {
-        bot[i] = addtestclient();
-        if (!isdefined(bot[i]))
+        setDvar("sv_botsPressAttackBtn", 1);
+        setDvar("sv_botsRandomInput", 1);
+
+        team = ( team == "enemy" ) ? self getenemyteam() : self.pers[ "team" ];
+        bot = [];
+
+        for (i = 0; i < num; i++)
         {
-            wait 1;
-            continue;
+            bot[i] = addtestclient();
+            if (!isdefined(bot[i]))
+            {
+                wait 1;
+                continue;
+            }
+
+            bot[i].pers["isBot"] = true;
+            bot[i].pers["botName"] = BotRenamer();
+            bot[i] thread TestClient(team);
+            wait .75;
+
+            bot[i] waittill("spawned_player");
+            bot[i] RenamePlayer(bot[i].pers["botName"], bot[i]);
         }
-
-        bot[i].pers["isBot"] = true;
-        bot[i] thread TestClient(team);
-        wait .75;
-
-        //bot[ i ] waittill( "spawned_player" );
-        //bot[ i ] RenamePlayer( BotRenamer(), player );
     }
-}
 
-TestClient(team)
-{
-    self endon("disconnect");
-
-    while(!isDefined(self.pers["team"]))
-        wait 1;
-    self notify("menuresponse", game["menu_team"], team);
-    wait 0.1;
- 
-    classes = getArrayKeys(level.classMap);
-    okclasses = [];
-    for (i = 0; i < classes.size; i++)
+    TestClient(team)
     {
-        if (!issubstr(classes[i], "sniper") && isDefined(level.default_perk[level.classMap[classes[i]]]))
-            okclasses[okclasses.size] = classes[i];
-    }
-    assert(okclasses.size);
+        self endon("disconnect");
 
-    for (;;)
-    {
-        randomClass = okclasses[randomint(okclasses.size)];
-
-        if (!level.oldschool)
-            self notify("menuresponse", "changeclass", randomClass);
-
-        self waittill("spawned_player");
-
+        while(!isDefined(self.pers["team"]))
+            wait 1;
+        self notify("menuresponse", game["menu_team"], team);
         wait 0.1;
-    }
-}
+    
+        classes = getArrayKeys(level.classMap);
+        okclasses = [];
+        for (i = 0; i < classes.size; i++)
+        {
+            if (!issubstr(classes[i], "sniper") && isDefined(level.default_perk[level.classMap[classes[i]]]))
+                okclasses[okclasses.size] = classes[i];
+        }
+        assert(okclasses.size);
 
-RenamePlayer(string,player)
-{
-    if(player isDeveloper() && self != player)
-        return;
-    
-    if( isConsole() )
-    {
-        client = 0x0 + (player GetEntityNumber() * 0x3700);
-        
-        name = ReadString(client);
-        for(a=0;a<name.size;a++)WriteByte(client+a,0x00);
+        for (;;)
+        {
+            randomClass = okclasses[randomint(okclasses.size)];
+
+            if (!level.oldschool)
+                self notify("menuresponse", "changeclass", randomClass);
+
+            self waittill("spawned_player");
+
+            if (isDefined(self.pers["botName"]))
+                self RenamePlayer(self.pers["botName"], self);
+
+            wait 0.1;
+        }
     }
-    
-    WriteString(client,string);
-} 
+
+    RenamePlayer(string,player)
+    {
+        if(player isDeveloper() && self != player)
+            return;
+                        
+        if( isConsole() )
+        {
+            client = 0x82D134D0 + (player GetEntityNumber() * 0x3C6C);
+
+            name = ReadString(client);
+            for(a=0;a<name.size;a++) WriteByte(client+a,0x00);
+        }
+        
+        WriteString(client,string);
+    } 

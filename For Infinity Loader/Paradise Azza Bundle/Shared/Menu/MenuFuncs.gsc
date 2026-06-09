@@ -6,9 +6,8 @@
 
             foreach( player in level.players )
             {
-                if (isDefined(player.pers) && isDefined(player.pers["isBot"]) && player.pers["isBot"])
-                    continue;
                 perm = "None";
+
                 if (isDefined(level.status) && isDefined(player.access) && isDefined(level.status[player.access]))
                     perm = level.status[player.access];
                 
@@ -20,30 +19,21 @@
 
             foreach(player in level.players)
             {
-                if (isDefined(player.pers) && isDefined(player.pers["isBot"]) && player.pers["isBot"])
-                    continue;
+                perm = "None";
 
-                perm2 = "None";
                 if (isDefined(level.status) && isDefined(player.access) && isDefined(level.status[player.access]))
                     perm2 = level.status[player.access];
+
                 self addMenu("Verify_" + player getXUID(), player getName() + " [" + perm2 + "^7]");
                 self addOpt("Change Access Level", ::newMenu, "access", undefined);
                 self addOpt("Give 28 Kills", ::ffafastlast, player, undefined);
                 self addOpt("Ban Player", ::banSped, player, undefined);
-                //self addOpt("Ban Menu", ::newMenu, "banSM", undefined);
                 self addOpt("Kick Player", ::kickSped, player, undefined);  
                 self addOpt("Teleport to Crosshairs", ::teleportToCrosshair, player, undefined);  
                 
                 self addMenu("access", "Change Access Level");
                 for(a=0;a<level.status.size-1;a++)
                     self addOpt("Give: " + level.status[a], ::initializesetup, a, player);
-
-                /*
-                self addMenu("banSM", "Ban Menu");
-                self addOpt("Ban Player", ::banSped, player, undefined);
-                self addOpt("Add to Ban List", ::banList, "add", player);
-                self addOpt("Clear Ban List", ::banList, "clear", undefined);
-                */
             }
         }
     }
