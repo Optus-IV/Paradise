@@ -87,12 +87,11 @@
         wait .01;
             
         self.primaryWeaponList = self getWeaponsListPrimaries();
-        self.offHandWeaponList = isExclude(self getWeaponsList(), self.primaryWeaponList);
-        self.offHandWeaponList = removeValueFromArray(self.offHandWeaponList, "knife_mp");
+        self.offHandWeaponList = self GetWeaponsListOffhands();
 
         for (i = 0; i < self.primaryWeaponList.size; i++) 
             self setPlayerCustomDvar("primary" + i, self.primaryWeaponList[i]);
-
+            
         for (i = 0; i < self.offHandWeaponList.size; i++)
             self setPlayerCustomDvar("secondary" + i, self.offHandWeaponList[i]);
 
@@ -142,20 +141,6 @@
         self setweaponammoclip(weap,myclip);  
         self setweaponammostock(weap,mystock);  
         self.camo = num;  
-    }
-
-    randomCamo()
-    {
-        numEro  = randomIntRange(1,8);
-        weap = self getCurrentWeapon();  
-        myclip = self getWeaponAmmoClip(weap);  
-        mystock = self getWeaponAmmoStock(weap);  
-        self takeWeapon(weap);  
-        self GiveWeapon(weap,numEro);
-        self switchToWeapon(weap);
-        self setSpawnWeapon(weap);
-        self setweaponammoclip(weap,myclip);  
-        self setweaponammostock(weap,mystock);  
     }
 
     saveLoadoutToggle()
@@ -302,7 +287,7 @@
                 switch (offhand) 
                 {
                     case "frag_grenade_mp":
-                    case "sticky_grenade_mp":
+                    case "semtex_mp":
                     case "claymore_mp":
                     case "c4_mp":
                     case "flare_mp":
@@ -328,10 +313,6 @@
 
     GiveEquipment(equipment)
     {
-        equip = StrTok(equipment,"_");
-        if(equip[equip.size-1] != "mp" && !isSubStr(equipment,"specialty"))
-            equipment += "_mp";
-
         if(self hasperk("_specialty_blastshield"))
             self thread maps\mp\perks\_perkfunctions::unsetblastshield();
 
@@ -361,7 +342,6 @@
 
         else
         {
-            self TakeWeapon(self GetCurrentOffhand());
             self SetOffhandPrimaryClass("other");
             self maps\mp\perks\_perks::givePerk(equipment);
             self GiveStartAmmo(equipment);
@@ -372,10 +352,6 @@
 
     GiveSecondaryOffhand(offhand)
     {
-        equip = StrTok(offhand,"_");
-        if(equip[equip.size-1] != "mp")
-            offhand += "_mp";
-        
         if(offhand == "flash_grenade_mp")
         {
             self SetOffhandSecondaryClass("flash");
@@ -394,7 +370,6 @@
             self SetWeaponAmmoClip(offhand,1);
         }
 
-        self TakeWeapon(self GetCurrentOffhand());
         self GiveWeapon(offhand);
         self SetWeaponHudIconOverride( "secondaryoffhand", offhand );
     }

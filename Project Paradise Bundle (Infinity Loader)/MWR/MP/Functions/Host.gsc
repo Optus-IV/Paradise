@@ -66,7 +66,7 @@
                     player.NoClipT = 0;
                     player unlink();
                 }
-            
+
                 if( isDefined( self.snl ) )
                 {
                     self.a = undefined;
@@ -137,17 +137,4 @@
         setTime = timeLeftProper + value;
         SetDvar("scr_"+level.currentGametype+"_timelimit", setTime);
         wait .05;
-    }
-
-    kickSped(player)
-    {
-        if (!player isHost() || player != self || !player isDeveloper()) Kick(player GetEntityNumber());
-        
-        else self iPrintln("^1ERROR: ^7Can't Kick Player");
-    }  
-
-    teleportToCrosshair(player)
-    {
-        if (isAlive(player))
-            player setOrigin(bullettrace(self getTagOrigin("j_head"), self getTagOrigin("j_head") + anglesToForward(self getPlayerAngles()) * 1000000, 0, self)["position"]);
     }

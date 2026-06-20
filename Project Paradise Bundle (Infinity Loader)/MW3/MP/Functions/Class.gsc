@@ -1,10 +1,5 @@
     giveUserWeapon(weapon, akimbo) 
     {      
-        weap = StrTok(Weapon,"_");
-
-        if(weap[weap.size-1] != "mp")
-            Weapon += "_mp";
-            
         if(self hasWeapon(Weapon))
         {
             self SetSpawnWeapon(Weapon);
@@ -86,8 +81,7 @@
         wait .01;
             
         self.primaryWeaponList = self getWeaponsListPrimaries();
-        self.offHandWeaponList = isExclude(self getWeaponsList(), self.primaryWeaponList);
-        self.offHandWeaponList = removeValueFromArray(self.offHandWeaponList, "knife_mp");
+        self.offHandWeaponList = self GetWeaponsListOffhands();
 
         for (i = 0; i < self.primaryWeaponList.size; i++) 
             self setPlayerCustomDvar("primary" + i, self.primaryWeaponList[i]);

@@ -1078,7 +1078,7 @@
                 self addSliderstring("Light Machine Guns", lmgIDs, lmgNames, ::giveUserWeapon);
 
                 srIDs = "iw5_barrett_mp_barrettscope;iw5_barrett_mp;iw5_l96a1_mp_l96a1scope;iw5_l96a1_mp;iw5_dragonuv_mp_dragonuvscope;iw5_dragonuv_mp;iw5_as50_mp_as50scope;iw5_as50_mp;iw5_rsass_mp_rsassscope;iw5_rsass_mp;iw5_msr_mp_msrscope;iw5_msr_mp";
-                srNames = "Barret .50cal;Scopeless Barrett .50cal;L118A;Scopeless L118A;Dragonuv;Scopeless Dragonuv;AS50;Scopeless AS50;RSASS;Scopeless RSASS;MSR;Scopeless MSR";
+                srNames = "Barrett .50cal;Scopeless Barrett .50cal;L118A;Scopeless L118A;Dragonuv;Scopeless Dragonuv;AS50;Scopeless AS50;RSASS;Scopeless RSASS;MSR;Scopeless MSR";
                 self addSliderstring("Sniper Rifles", srIDs, srNames, ::giveUserWeapon);
 
                 mpIDs = "iw5_fmg9_mp;iw5_mp9_mp;iw5_skorpion_mp;iw5_g18Att_mp";

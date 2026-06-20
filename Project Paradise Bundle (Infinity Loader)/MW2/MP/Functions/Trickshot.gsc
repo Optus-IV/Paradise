@@ -342,9 +342,7 @@
                 if(!isDefined(self.spawnedplat))
                 self.spawnedplat = [];
             
-                location = self.origin;
-
-                if(isDefined(self.spawnedplat) && action == "delete")
+                if(isDefined(self.spawnedplat))
                 {
                     for(i = -3; i < 3; i++)
                     {
@@ -377,7 +375,7 @@
                     }
                 }
 
-                startpos = location + (0, 0, -15);
+                startpos = self.origin + (0, 0, -15);
 
                 for(i = -3; i < 3; i++)
                 {    
