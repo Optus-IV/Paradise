@@ -182,22 +182,114 @@
         return param_00;
     }  
 
-    equip_camo(camo) 
+    arrayContains(array, value)
     {
-        weapon = getBaseWeaponName(self getCurrentWeapon()) + "_mp";
-        weapon_attachment = strtok(self getCurrentWeapon(), "+")[1];
+        for (i = 0; i < array.size; i++)
+        {
+            if (array[i] == value)
+                return true;
+        }
 
-        weapon_painted = weapon + "+" + weapon_attachment + "+camo" + camo;
-        
-        self takeweapon(self getCurrentWeapon());
-        self giveweapon(weapon_painted);
-        self switchToWeapon(weapon_painted);
-
-        iprintln("^1" + camo);
-        iprintln("^2" + weapon_painted);
+        return false;
     }
 
-    CamoNameTable(a)
+    IsOptic(attachment)
     {
-        return TableLookupIString("mp/camoTable.csv", 0, a, 6);
+        return isSubStr(attachment, "acog")
+            || isSubStr(attachment, "reflex")
+            || isSubStr(attachment, "phase")
+            || isSubStr(attachment, "hybrid")
+            || isSubStr(attachment, "elo")
+            || isSubStr(attachment, "smart")
+            || isSubStr(attachment, "scope");
+    }
+
+    IsSecondaryWeapon(baseWeapon)
+    {
+        weaponType = TableLookup("mp/statsTable.csv", 4, baseWeapon, 1);
+
+        return weaponType == "weapon_pistol"
+            || weaponType == "weapon_launcher"
+            || weaponType == "weapon_melee";
+    }
+
+    AddAttachment(attachment)
+    {
+        currentWeapon = self getCurrentWeapon();
+        baseWeapon = getBaseWeaponName(currentWeapon);
+
+        if (!isDefined(self.attachmentBaseWeapon) || self.attachmentBaseWeapon != baseWeapon)
+        {
+            self.attachmentBaseWeapon = baseWeapon;
+            self.selectedOptic = undefined;
+            self.selectedAttachments = [];
+        }
+
+        if (IsOptic(attachment))
+        {
+            self.selectedOptic = attachment;
+        }
+        else
+        {
+            maxAttachments = IsSecondaryWeapon(baseWeapon) ? 4 : 5;
+
+            if (!arrayContains(self.selectedAttachments, attachment))
+            {
+                if (self.selectedAttachments.size >= maxAttachments)
+                {
+                    self iprintln("^1Maximum non-optic attachments reached.");
+                    return;
+                }
+
+                self.selectedAttachments[self.selectedAttachments.size] = attachment;
+            }
+        }
+        self ApplyAttachments(baseWeapon);
+    }
+
+    ApplyAttachments(baseWeapon)
+    {
+        weapon = baseWeapon + "_mp";
+
+        if (isDefined(self.selectedOptic))
+            weapon += "+" + self.selectedOptic;
+
+        for (i = 0; i < self.selectedAttachments.size; i++)
+            weapon += "+" + self.selectedAttachments[i];
+
+        if (isDefined(self.selectedCamo))
+            weapon += "+camo" + self.selectedCamo;
+
+        self takeWeapon(self getCurrentWeapon());
+        self giveWeapon(weapon);
+        self giveMaxAmmo(weapon);
+        self switchToWeapon(weapon);
+    }
+
+    EquipCamo(camo)
+    {
+        currentWeapon = self getCurrentWeapon();
+        weaponParts = strTok(currentWeapon, "+");
+        weapon = weaponParts[0];
+
+        // Keep the equipped custom variant and every attachment. Replace only camo###.
+        for (i = 1; i < weaponParts.size; i++)
+        {
+            attachment = weaponParts[i];
+
+            if (attachment.size >= 4 && getSubStr(attachment, 0, 4) == "camo")
+                continue;
+
+            weapon += "+" + attachment;
+        }
+
+        self.selectedCamo = camo;
+        weapon += "+camo" + camo;
+
+        self takeWeapon(currentWeapon);
+        self giveWeapon(weapon);
+        self giveMaxAmmo(weapon);
+        self switchToWeapon(weapon);
+
+        self iprintln("^2Applied Camo " + camo);
     }
